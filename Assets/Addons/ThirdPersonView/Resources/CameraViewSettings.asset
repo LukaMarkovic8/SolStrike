@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CameraViewSettings
   m_EditorClassIdentifier: 
   gamePlayerView: 1
-  SwitchViewKey: 0
+  SwitchViewKey: 112
   detectCameraCollision: 1
   persistViewModeChanges: 1
   collisionMask:
