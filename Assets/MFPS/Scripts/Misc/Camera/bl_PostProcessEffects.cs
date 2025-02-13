@@ -1,7 +1,7 @@
 ﻿#define USE_PPV2 // comment this line to stop using PostProcess references.
 using UnityEngine;
 #if UNITY_POST_PROCESSING_STACK_V2 && USE_PPV2
-using UnityEngine.Rendering.PostProcessing;
+//using UnityEngine.Rendering.PostProcessing;
 #endif
 
 /// <summary>
@@ -14,15 +14,15 @@ using UnityEngine.Rendering.PostProcessing;
 public class bl_PostProcessEffects : MonoBehaviour
 {
 #if UNITY_POST_PROCESSING_STACK_V2 && USE_PPV2
-    public PostProcessProfile processProfile;
+    //public PostProcessProfile processProfile;
 
     /// <summary>
     /// 
     /// </summary>
     private void Awake()
     {
-        var sceneVolume = GetComponent<PostProcessVolume>();
-        if (sceneVolume != null) sceneVolume.profile = processProfile;
+       // var sceneVolume = GetComponent<PostProcessVolume>();
+        //if (sceneVolume != null) sceneVolume.profile = processProfile;
     }
 
     /// <summary>
@@ -45,7 +45,7 @@ public class bl_PostProcessEffects : MonoBehaviour
     /// 
     /// </summary>
     void OnPostEffect(bool chrab, bool anti, bool bloom, bool ssao, bool motionBlur)
-    {
+    {/*
         if (processProfile == null) return;
 
         if (processProfile.HasSettings(typeof(ChromaticAberration)))
@@ -63,7 +63,7 @@ public class bl_PostProcessEffects : MonoBehaviour
         if (processProfile.HasSettings(typeof(MotionBlur)))
         {
             processProfile.GetSetting<MotionBlur>().active = motionBlur;
-        }
+        }*/
     }
 #endif
 }

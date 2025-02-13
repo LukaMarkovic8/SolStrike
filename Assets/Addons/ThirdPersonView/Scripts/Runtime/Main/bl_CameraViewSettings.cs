@@ -1,7 +1,7 @@
 ﻿using MFPS.ThirdPerson;
 using UnityEngine;
 #if UNITY_POST_PROCESSING_STACK_V2
-using UnityEngine.Rendering.PostProcessing;
+//using UnityEngine.Rendering.PostProcessing;
 #endif
 
 public class bl_CameraViewSettings : ScriptableObject
@@ -16,7 +16,7 @@ public class bl_CameraViewSettings : ScriptableObject
     public AnimationCurve transitionCurve;
     public AnimationCurve aimTransitionCurve;
 #if UNITY_POST_PROCESSING_STACK_V2
-    public PostProcessResources postProcessResources;
+    //public PostProcessResources postProcessResources;
 #endif
     public bl_TPViewData[] customViews;
 

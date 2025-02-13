@@ -5,7 +5,7 @@ using System.Collections;
 using UnityEngine;
 using MFPS.ThirdPerson;
 #if UNITY_POST_PROCESSING_STACK_V2
-using UnityEngine.Rendering.PostProcessing;
+//using UnityEngine.Rendering.PostProcessing;
 #endif
 
 public class bl_PlayerCameraSwitcher : bl_MonoBehaviour
@@ -31,8 +31,8 @@ public class bl_PlayerCameraSwitcher : bl_MonoBehaviour
     private TPViewOverrideState m_viewOverrideState = TPViewOverrideState.None;
     public bl_TPViewData m_overrideViewState = null;
 #if UNITY_POST_PROCESSING_STACK_V2
-    private PostProcessLayer weaponCameraEffects;
-    private PostProcessLayer playerCameraEffects;
+ //   private PostProcessLayer weaponCameraEffects;
+ //   private PostProcessLayer playerCameraEffects;
 #endif
     private bool isAiming = false;
     private bool initialized = false;
@@ -78,7 +78,7 @@ public class bl_PlayerCameraSwitcher : bl_MonoBehaviour
             defaultFPPosition = playerCamera.localPosition;
             defaultFPRotation = playerCamera.localEulerAngles;
 #if UNITY_POST_PROCESSING_STACK_V2
-            weaponCameraEffects = weaponCamera.GetComponent<PostProcessLayer>();
+         //   weaponCameraEffects = weaponCamera.GetComponent<PostProcessLayer>();
 #endif
             cacheReferences = true;
         }
@@ -293,7 +293,7 @@ public class bl_PlayerCameraSwitcher : bl_MonoBehaviour
         playerReferences.playerAnimations.GetComponent<bl_PlayerRagdollBase>().SetActiveRagdollPhysics(false);
 
 #if UNITY_POST_PROCESSING_STACK_V2
-        if (weaponCameraEffects != null)
+     /*   if (weaponCameraEffects != null)
         {
             if (playerCameraEffects == null) playerCameraEffects = playerCamera.GetComponent<PostProcessLayer>();
             if (playerCameraEffects == null)
@@ -307,7 +307,7 @@ public class bl_PlayerCameraSwitcher : bl_MonoBehaviour
             }
             playerCameraEffects.enabled = true;
             weaponCameraEffects.enabled = false;
-        }
+        }*/
 #endif
     }
 
@@ -392,8 +392,8 @@ public class bl_PlayerCameraSwitcher : bl_MonoBehaviour
             playerReferences.gunManager.GetCurrentWeapon()?.ResetDefaultMuzzlePoint();
 
 #if UNITY_POST_PROCESSING_STACK_V2
-            if (playerCameraEffects != null) playerCameraEffects.enabled = false;
-            if (weaponCameraEffects != null) weaponCameraEffects.enabled = true;
+          /*  if (playerCameraEffects != null) playerCameraEffects.enabled = false;
+            if (weaponCameraEffects != null) weaponCameraEffects.enabled = true;*/
 #endif
         }
     }
