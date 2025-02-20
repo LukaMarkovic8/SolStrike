@@ -150,6 +150,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8029027132386834915}
     m_Modifications:
+    - target: {fileID: 1694764215402173158, guid: 67e9df294b842b04fa05740268591a87, type: 3}
+      propertyPath: m_Size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1694764215402173158, guid: 67e9df294b842b04fa05740268591a87, type: 3}
+      propertyPath: m_Value
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1694764215759469453, guid: 67e9df294b842b04fa05740268591a87, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
@@ -238,6 +246,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1694764216062038939, guid: 67e9df294b842b04fa05740268591a87, type: 3}
+      propertyPath: viewPortContent
+      value: 
+      objectReference: {fileID: 8029027132157631011}
     - target: {fileID: 1694764216146408981, guid: 67e9df294b842b04fa05740268591a87, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -263,6 +275,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 67e9df294b842b04fa05740268591a87, type: 3}
+--- !u!224 &8029027132157631011 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 1694764215759469453, guid: 67e9df294b842b04fa05740268591a87, type: 3}
+  m_PrefabInstance: {fileID: 8712731006237958574}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &8029027133600018996 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1694764216062038938, guid: 67e9df294b842b04fa05740268591a87, type: 3}

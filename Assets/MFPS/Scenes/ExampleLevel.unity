@@ -38,7 +38,6 @@ RenderSettings:
   m_ReflectionIntensity: 0.917
   m_CustomReflection: {fileID: 8900000, guid: c0b81a02106c14d07b1b3cc8d8b816ff, type: 2}
   m_Sun: {fileID: 1999781368}
-  m_IndirectSpecularColor: {r: 0.7539539, g: 0.735573, b: 0.84334636, a: 0.917}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &4
 LightmapSettings:
@@ -5020,6 +5019,7 @@ Terrain:
   m_DetailObjectDensity: 1
   m_HeightmapPixelError: 6
   m_SplatMapDistance: 1000
+  m_HeightmapMinimumLODSimplification: 0
   m_HeightmapMaximumLOD: 0
   m_ShadowCastingMode: 1
   m_DrawHeightmap: 1
@@ -8079,23 +8079,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5675445748718136199, guid: c3c2b2b588061954dbb6044474df0805, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5675445748718136199, guid: c3c2b2b588061954dbb6044474df0805, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5675445748718136199, guid: c3c2b2b588061954dbb6044474df0805, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 89.84
       objectReference: {fileID: 0}
     - target: {fileID: 5675445748718136199, guid: c3c2b2b588061954dbb6044474df0805, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 54.92
       objectReference: {fileID: 0}
     - target: {fileID: 5675445748718136199, guid: c3c2b2b588061954dbb6044474df0805, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

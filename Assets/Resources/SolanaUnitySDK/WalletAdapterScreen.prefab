@@ -546,7 +546,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c6f044899034844b7b569b2f1875501, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonPrefab: {fileID: 0}
+  buttonPrefab: {fileID: 2788795083137714619, guid: 4f4f5e086af7b834eb26704c7dc7cdbd, type: 3}
   viewPortContent: {fileID: 0}
 --- !u!1 &1694764216120893880
 GameObject:
