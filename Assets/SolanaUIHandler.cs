@@ -36,18 +36,18 @@ public class SolanaUIHandler : MonoBehaviour
 
     public void OnLogin(Account account)
     {
-        TextMeshProUGUI.text = account.PublicKey;
-        GameObject gameObject =  Instantiate(walletElementPref,walletElementHolder.transform);
-        gameObject.GetComponentInChildren<TextMeshProUGUI>().text = account.PublicKey;
+        TextMeshProUGUI.text = "public key: "+account.PublicKey;
+        //GameObject gameObject =  Instantiate(walletElementPref,walletElementHolder.transform);
+      //  gameObject.GetComponentInChildren<TextMeshProUGUI>().text = "public key: "+account.PublicKey;
         closeButton.SetActive(true);
-        StartCoroutine(GetRequest(EndpointName + Web3.Account.PublicKey));
+       // StartCoroutine(GetRequest(EndpointName + Web3.Account.PublicKey));
        // account.PublicKey.FindProgramAdress
        // bl_Lobby.Instance.ChangeWindow("server");
     }
 
     public void OnBalanceChange(double amount)
     {
-        balance.text = amount.ToString();
+        balance.text = "SOL:"+ amount.ToString();
     }
 
 
