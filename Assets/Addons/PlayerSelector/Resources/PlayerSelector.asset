@@ -35,9 +35,9 @@ MonoBehaviour:
       NoAllowedCoins: 
     ID: 1
     team: 1
-  - Name: West Soldier
+  - Name: Gecko Geek
     Preview: {fileID: 21300000, guid: bf24a65d9e31d5642a6b0ff511ee58ef, type: 3}
-    Prefab: {fileID: 7101680813762821585, guid: 51aa405c8c9dcb04c836a9f300aee26f, type: 3}
+    Prefab: {fileID: 4115931837949691504, guid: 897d2e05ec64c5349a057309702e9960, type: 3}
     Unlockability:
       UnlockMethod: 1
       ItemType: 2

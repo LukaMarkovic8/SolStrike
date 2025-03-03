@@ -9,17 +9,26 @@ using TMPro;
 public class bl_PhotonStatistics : bl_PhotonHelper, IConnectionCallbacks, ILobbyCallbacks
 
 {
+    public GameObject ServerStatsHolder;
+    public GameObject ServerButtonHolder;
+    public TextMeshProUGUI ServerButtoText;
+    public TextMeshProUGUI ServerWarningText;
+    //  public TextMeshProUGUI PingText;
+
+
+
     [Header("Settings")]
-    [Range(1,5)]public float RandomTime = 2;
-    [Range(1,5)]public float UpdateEach = 10;
-	[Header("References")]
-    [SerializeField]private GameObject RootUI = null;
-    [SerializeField]private TextMeshProUGUI AllRoomText = null;
-    [SerializeField]private TextMeshProUGUI AllPlayerText = null;
-    [SerializeField]private TextMeshProUGUI AllPlayerInRoomText = null;
-    [SerializeField]private TextMeshProUGUI AllPlayerInLobbyText = null;
-    [SerializeField]private TextMeshProUGUI PingText = null;
-    [SerializeField]private Image PingImage = null;
+    [Range(1, 5)] public float RandomTime = 2;
+    //TODO LUKA HOW OFTEN WE REFRESH PING
+    [Range(1, 5)] private float UpdateEach = 3;
+    [Header("References")]
+    [SerializeField] private GameObject RootUI = null;
+    [SerializeField] private TextMeshProUGUI AllRoomText = null;
+    [SerializeField] private TextMeshProUGUI AllPlayerText = null;
+    [SerializeField] private TextMeshProUGUI AllPlayerInRoomText = null;
+    [SerializeField] private TextMeshProUGUI AllPlayerInLobbyText = null;
+    [SerializeField] private TextMeshProUGUI PingText = null;
+    [SerializeField] private Image PingImage = null;
 
     private float GetTime;
     private int AllRooms;
@@ -50,6 +59,7 @@ public class bl_PhotonStatistics : bl_PhotonHelper, IConnectionCallbacks, ILobby
     /// </summary>
     void OnEnable()
     {
+        ServerButtonHolder.gameObject.SetActive(false);
 #if LOCALIZATION
         LocalizedTexts = bl_Localization.Instance.GetTextArray(LocalizatedKeysID);
         bl_Localization.Instance.OnLanguageChange += OnLangChange;
@@ -106,17 +116,30 @@ public class bl_PhotonStatistics : bl_PhotonHelper, IConnectionCallbacks, ILobby
         {
             PingImage.color = Color.green;
         }
-        else if (ping > 150 && ping < 225)
+        else if (ping > 150 && ping < 250)
         {
             PingImage.color = Color.yellow;
         }
-        else if (ping > 225)
+        else if (ping > 250)
         {
             PingImage.color = Color.red;
         }
         float percet = ping * 100 / 500;
         PingImage.fillAmount = 1 - (percet * 0.01f);
         PingText.text = ping.ToString();
+
+        if(ping > 250)
+        {
+            ServerWarningText.gameObject.SetActive(true);
+            ServerButtonHolder.gameObject.SetActive(false);
+
+        }
+        else
+        {
+            ServerWarningText.gameObject.SetActive(false);
+            ServerButtonHolder.gameObject.SetActive(true);
+
+        }
     }
 
     /// <summary>
@@ -126,7 +149,7 @@ public class bl_PhotonStatistics : bl_PhotonHelper, IConnectionCallbacks, ILobby
     IEnumerator GetStaticsIE()
     {
         GetTime = RandomTime;
-        while(GetTime > 0)
+        while (GetTime > 0)
         {
             GetTime -= Time.deltaTime;
             AllRooms = Random.Range(0, 9999);
@@ -186,17 +209,17 @@ public class bl_PhotonStatistics : bl_PhotonHelper, IConnectionCallbacks, ILobby
 
     public void OnRegionListReceived(RegionHandler regionHandler)
     {
-      
+
     }
 
     public void OnCustomAuthenticationResponse(Dictionary<string, object> data)
     {
-     
+
     }
 
     public void OnCustomAuthenticationFailed(string debugMessage)
     {
-       
+
     }
 
     public void OnJoinedLobby()
@@ -218,4 +241,11 @@ public class bl_PhotonStatistics : bl_PhotonHelper, IConnectionCallbacks, ILobby
     {
         Refresh();
     }
+
+
+    public void OnJoinServer()
+    {
+        ServerStatsHolder.SetActive(false);
+    }
+   
 }

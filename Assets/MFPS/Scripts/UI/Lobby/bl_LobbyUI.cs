@@ -330,10 +330,14 @@ public class bl_LobbyUI : MonoBehaviour
     /// <summary>
     /// 
     /// </summary>
+    /// TODO LUKA CHANGE NAME VIA HTTP if the name is the same as in field don't set new name
+    /// SOLANA NAME
     public void EnterName(TMP_InputField field = null)
     {
         if (field == null || string.IsNullOrEmpty(field.text))
+        {
             return;
+        }
 
         int check = bl_GameData.Instance.CheckPlayerName(field.text);
         if (check == 1)

@@ -359,8 +359,8 @@ MonoBehaviour:
   Team1Color: {r: 0.23529412, g: 0.27450982, b: 0.3137255, a: 1}
   Team2Name: Recon
   Team2Color: {r: 1, g: 0.89019614, b: 0, a: 1}
-  Player1: {fileID: 148232367451769757, guid: 353d635db0698974b963c4153ac19a5d, type: 3}
-  Player2: {fileID: 114797454524261884, guid: 8b43b97c50cac1d43a7c27ca8b6a6cdf, type: 3}
+  Player1: {fileID: 7625971361051194321, guid: 897d2e05ec64c5349a057309702e9960, type: 3}
+  Player2: {fileID: 7625971361051194321, guid: 897d2e05ec64c5349a057309702e9960, type: 3}
   BotTeam1: {fileID: 114101145339246268, guid: 424e7da58c2e1de49aef138757fca69a, type: 3}
   BotTeam2: {fileID: 1562605632882424370, guid: e8aa4daeae861cd4d98c01198ff31061, type: 3}
   mouseLookSettings: {fileID: 11400000, guid: 68ddc6624e6fafd41b8349be7933fcc9, type: 2}
