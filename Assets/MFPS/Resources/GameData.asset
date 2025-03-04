@@ -25,7 +25,7 @@ MonoBehaviour:
   CanChangeTeam: 1
   ShowBlood: 1
   DetectAFK: 0
-  MasterCanKickPlayers: 1
+  MasterCanKickPlayers: 0
   ArriveKitsCauseDamage: 1
   CalculateNetworkFootSteps: 1
   ShowNetworkStats: 0
@@ -76,10 +76,10 @@ MonoBehaviour:
   OnDisconnectScene: MainMenu
   highLightColor: {r: 0.44827604, g: 0, b: 1, a: 1}
   AllScenes:
-  - ShowName: Guanaco Desert
+  - ShowName: SOLSTRIKE ARENA
     m_Scene: {fileID: 102900000, guid: 7b433244bb0354246a7c6a8c682e5441, type: 3}
     RealSceneName: ExampleLevel
-    Preview: {fileID: 21300000, guid: 6566c02619a33c04b83af91ef6aa5026, type: 3}
+    Preview: {fileID: 21300000, guid: 2bfa08422adb605449d78ef0c21faec5, type: 3}
     NoAllowedGameModes: 
   AllWeapons:
   - Name: Rifle
@@ -220,141 +220,21 @@ MonoBehaviour:
     GunIcon: {fileID: 21300000, guid: f22b479294de3414e987ba1cb0e2e81f, type: 3}
   defaultSettings: {fileID: 11400000, guid: 5fadfa78dabe7f6429f21e8ed3cc747b, type: 2}
   gameModes:
-  - ModeName: Team Death Match
-    gameMode: 0
-    isEnabled: 1
-    supportBots: 1
-    AutoTeamSelection: 0
-    UnlistGameAfterStarted: 0
-    RequiredPlayersToStart: 1
-    onRoundStartedSpawn: 0
-    onPlayerDie: 0
-    RoundModeAllowed: 0
-    GoalName: Kills
-    allowedPickupWeapons: 1
-    maxPlayers: 060000000200000004000000080000000a00000010000000
-    GameGoalsOptions: 320000006400000096000000c8000000
-    timeLimits: 8403000058020000b00400002c010000
   - ModeName: Free For All
     gameMode: 1
     isEnabled: 1
-    supportBots: 1
-    AutoTeamSelection: 0
-    UnlistGameAfterStarted: 0
+    supportBots: 0
+    AutoTeamSelection: 1
+    UnlistGameAfterStarted: 1
     RequiredPlayersToStart: 1
     onRoundStartedSpawn: 0
     onPlayerDie: 0
     RoundModeAllowed: 0
     GoalName: Kills
     allowedPickupWeapons: 1
-    maxPlayers: 060000000200000004000000080000000c000000
-    GameGoalsOptions: 19000000320000004b0000000a000000
-    timeLimits: 8403000058020000b00400002c010000
-  - ModeName: Capture Of Flag
-    gameMode: 2
-    isEnabled: 1
-    supportBots: 0
-    AutoTeamSelection: 1
-    UnlistGameAfterStarted: 0
-    RequiredPlayersToStart: 2
-    onRoundStartedSpawn: 0
-    onPlayerDie: 0
-    RoundModeAllowed: 0
-    GoalName: Captures
-    allowedPickupWeapons: 1
-    maxPlayers: 06000000020000000400000008000000
-    GameGoalsOptions: 05000000070000000b00000003000000
-    timeLimits: 8403000058020000b00400002c010000
-  - ModeName: Elimination
-    gameMode: 7
-    isEnabled: 0
-    supportBots: 1
-    AutoTeamSelection: 1
-    UnlistGameAfterStarted: 1
-    RequiredPlayersToStart: 2
-    onRoundStartedSpawn: 1
-    onPlayerDie: 1
-    RoundModeAllowed: 3
-    GoalName: Rounds
-    allowedPickupWeapons: 1
-    maxPlayers: 06000000020000000400000008000000
-    GameGoalsOptions: 05000000070000000b00000003000000
-    timeLimits: 8403000058020000b00400002c010000
-  - ModeName: Covert Point
-    gameMode: 4
-    isEnabled: 0
-    supportBots: 0
-    AutoTeamSelection: 1
-    UnlistGameAfterStarted: 0
-    RequiredPlayersToStart: 2
-    onRoundStartedSpawn: 0
-    onPlayerDie: 0
-    RoundModeAllowed: 0
-    GoalName: Tickets
-    allowedPickupWeapons: 1
-    maxPlayers: 06000000020000000400000008000000
-    GameGoalsOptions: f4010000e8030000dc050000d0070000
-    timeLimits: 8403000058020000b00400002c010000
-  - ModeName: Gun Race
-    gameMode: 5
-    isEnabled: 0
-    supportBots: 0
-    AutoTeamSelection: 0
-    UnlistGameAfterStarted: 0
-    RequiredPlayersToStart: 1
-    onRoundStartedSpawn: 0
-    onPlayerDie: 0
-    RoundModeAllowed: 0
-    GoalName: First Player
-    allowedPickupWeapons: 0
-    maxPlayers: 06000000020000000400000008000000
-    GameGoalsOptions: 
-    timeLimits: 8403000058020000b00400002c010000
-  - ModeName: Demolition
-    gameMode: 8
-    isEnabled: 0
-    supportBots: 0
-    AutoTeamSelection: 1
-    UnlistGameAfterStarted: 1
-    RequiredPlayersToStart: 2
-    onRoundStartedSpawn: 1
-    onPlayerDie: 1
-    RoundModeAllowed: 1
-    GoalName: Rounds
-    allowedPickupWeapons: 1
-    maxPlayers: 06000000020000000400000008000000
-    GameGoalsOptions: 0500000007000000030000000d000000
-    timeLimits: 7800000058020000b00400002c010000
-  - ModeName: Battle Royal
-    gameMode: 6
-    isEnabled: 0
-    supportBots: 0
-    AutoTeamSelection: 1
-    UnlistGameAfterStarted: 1
-    RequiredPlayersToStart: 16
-    onRoundStartedSpawn: 1
-    onPlayerDie: 1
-    RoundModeAllowed: 2
-    GoalName: Alives
-    allowedPickupWeapons: 1
-    maxPlayers: 06000000020000000400000008000000
-    GameGoalsOptions: 
-    timeLimits: 8403000058020000b00400002c010000
-  - ModeName: Kill Confirmed
-    gameMode: 9
-    isEnabled: 0
-    supportBots: 1
-    AutoTeamSelection: 1
-    UnlistGameAfterStarted: 0
-    RequiredPlayersToStart: 1
-    onRoundStartedSpawn: 0
-    onPlayerDie: 0
-    RoundModeAllowed: 0
-    GoalName: Kills
-    allowedPickupWeapons: 1
-    maxPlayers: 06000000020000000400000008000000
-    GameGoalsOptions: 1e0000003200000064000000c8000000
-    timeLimits: 8403000058020000b00400002c010000
+    maxPlayers: 01000000
+    GameGoalsOptions: 14000000
+    timeLimits: 58020000
   Team1Name: Delta
   Team1Color: {r: 0.23529412, g: 0.27450982, b: 0.3137255, a: 1}
   Team2Name: Recon

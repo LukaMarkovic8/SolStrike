@@ -83,7 +83,7 @@ public class bl_WaitingRoomUI : bl_WaitingRoomUIBase
             {
                 if (bl_PhotonNetwork.IsMasterClient)
                 {
-                    if(list[i].GetPlayerTeam() != Team.All)
+                    if (list[i].GetPlayerTeam() != Team.All)
                     {
                         list[i].SetPlayerTeam(Team.All);
                     }
@@ -94,7 +94,7 @@ public class bl_WaitingRoomUI : bl_WaitingRoomUIBase
             {
                 if (list[i].GetPlayerTeam() == Team.Team1)
                 {
-                    SetPlayerToList(list[i]);   
+                    SetPlayerToList(list[i]);
                 }
                 else if (list[i].GetPlayerTeam() == Team.Team2)
                 {
@@ -104,7 +104,7 @@ public class bl_WaitingRoomUI : bl_WaitingRoomUIBase
         }
         if (!otm) { PlayerListHeaders[1].SetAsLastSibling(); }
         if (secondTeam.Count > 0)
-        {          
+        {
             for (int i = 0; i < secondTeam.Count; i++)
             {
                 SetPlayerToList(secondTeam[i]);
@@ -124,7 +124,7 @@ public class bl_WaitingRoomUI : bl_WaitingRoomUIBase
         g.transform.SetParent(PlayerListPanel, false);
         playerListCache.Add(wp);
     }
-   
+
     /// <summary>
     /// 
     /// </summary>
@@ -133,7 +133,7 @@ public class bl_WaitingRoomUI : bl_WaitingRoomUIBase
         GameMode mode = GetGameModeUpdated;
         Room room = PhotonNetwork.CurrentRoom;
         RoomNameText.text = room.Name.ToUpper();
-        string mapName = (string)room.CustomProperties[PropertiesKeys.SceneNameKey];    
+        string mapName = (string)room.CustomProperties[PropertiesKeys.SceneNameKey];
         var si = bl_GameData.Instance.AllScenes.Find(x => x.RealSceneName == mapName);
         MapPreview.sprite = si.Preview;
         MapNameText.text = si.ShowName.ToUpper();
@@ -141,7 +141,7 @@ public class bl_WaitingRoomUI : bl_WaitingRoomUIBase
         int t = (int)room.CustomProperties[PropertiesKeys.TimeRoomKey];
         TimeText.text = (t / 60).ToString().ToUpper() + ":00";
         BotsText.text = string.Format("BOTS: {0}", (bool)room.CustomProperties[PropertiesKeys.WithBotsKey] ? "ON" : "OFF");
-        FriendlyFireText.text = string.Format("FRIENDLY FIRE: {0}", (bool)room.CustomProperties[PropertiesKeys.RoomFriendlyFire] ? "ON" : "OFF");       
+        FriendlyFireText.text = string.Format("FRIENDLY FIRE: {0}", (bool)room.CustomProperties[PropertiesKeys.RoomFriendlyFire] ? "ON" : "OFF");
         UpdatePlayerCount();
         readyButtons[0].gameObject.SetActive(bl_PhotonNetwork.IsMasterClient);
         readyButtons[1].gameObject.SetActive(!bl_PhotonNetwork.IsMasterClient);
@@ -165,7 +165,7 @@ public class bl_WaitingRoomUI : bl_WaitingRoomUIBase
     public override void UpdatePlayerCount()
     {
         int required = GetGameModeUpdated.GetGameModeInfo().RequiredPlayersToStart;
-        if(required > 1)
+        if (required > 1)
         {
             bool allRequired = (PhotonNetwork.PlayerList.Length >= required);
             readyButtons[0].interactable = (bl_PhotonNetwork.IsMasterClient && PhotonNetwork.PlayerList.Length >= required);
@@ -180,9 +180,15 @@ public class bl_WaitingRoomUI : bl_WaitingRoomUIBase
         }
 
         int spectatorsCount = GetSpectatorsCount();
-        if(spectatorsCount > 0)
+        if (spectatorsCount > 0)
         {
             PlayerCountText.text += $" SPECTATORS {spectatorsCount}";
+        }
+
+
+        if (bl_PhotonNetwork.IsMasterClient && PhotonNetwork.PlayerList.Length == PhotonNetwork.CurrentRoom.MaxPlayers)
+        {
+            MasterStartTheGame();
         }
     }
 
@@ -191,7 +197,7 @@ public class bl_WaitingRoomUI : bl_WaitingRoomUIBase
     /// </summary>
     public override void UpdateAllPlayersStates()
     {
-        playerListCache.ForEach(x => { if(x != null) x.UpdateState(); });
+        playerListCache.ForEach(x => { if (x != null) x.UpdateState(); });
     }
 
     /// <summary>
@@ -233,7 +239,7 @@ public class bl_WaitingRoomUI : bl_WaitingRoomUIBase
         var players = PhotonNetwork.PlayerList;
         foreach (var player in players)
         {
-            if(player.GetPlayerTeam() == Team.None)
+            if (player.GetPlayerTeam() == Team.None)
             {
                 count++;
             }
@@ -257,8 +263,8 @@ public class bl_WaitingRoomUI : bl_WaitingRoomUIBase
             {
                 LeaveRoom(true);
             });
-        }      
+        }
     }
 
-  
+
 }
