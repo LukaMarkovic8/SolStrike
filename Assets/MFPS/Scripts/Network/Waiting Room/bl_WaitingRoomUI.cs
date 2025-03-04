@@ -169,7 +169,7 @@ public class bl_WaitingRoomUI : bl_WaitingRoomUIBase
         {
             bool allRequired = (PhotonNetwork.PlayerList.Length >= required);
             readyButtons[0].interactable = (bl_PhotonNetwork.IsMasterClient && PhotonNetwork.PlayerList.Length >= required);
-            PlayerCountText.text = string.Format("{0} OF {2} PLAYERS ({1} MAX)", PhotonNetwork.PlayerList.Length, PhotonNetwork.CurrentRoom.MaxPlayers, required);
+            PlayerCountText.text = string.Format("{0} OF {2}", PhotonNetwork.PlayerList.Length, PhotonNetwork.CurrentRoom.MaxPlayers, required);
             waitingRequiredPlayersUI?.SetActive(!allRequired);
         }
         else
@@ -186,8 +186,9 @@ public class bl_WaitingRoomUI : bl_WaitingRoomUIBase
         }
 
 
-        if (bl_PhotonNetwork.IsMasterClient && PhotonNetwork.PlayerList.Length == PhotonNetwork.CurrentRoom.MaxPlayers)
+        if (bl_PhotonNetwork.IsMasterClient && PhotonNetwork.PlayerList.Length == required)
         {
+            Debug.Log(PhotonNetwork.PlayerList.Length.ToString()+"  "+ PhotonNetwork.CurrentRoom.MaxPlayers.ToString()+"  "+ required.ToString());
             MasterStartTheGame();
         }
     }
