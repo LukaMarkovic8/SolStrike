@@ -67,8 +67,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Player Name Here [CLAN NAME]
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 9a88bdf4e0577c54095e97f187197340, type: 2}
-  m_sharedMaterial: {fileID: -4344200340605112947, guid: 9a88bdf4e0577c54095e97f187197340, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 15af7d91731a66b4d84ec8e7298a535b, type: 2}
+  m_sharedMaterial: {fileID: -1045801189953071212, guid: 15af7d91731a66b4d84ec8e7298a535b, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -735,8 +735,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: READY!
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 65bab3a880c5c3a4dbf6d1c8afb8de16, type: 2}
-  m_sharedMaterial: {fileID: 3906779889605611924, guid: 65bab3a880c5c3a4dbf6d1c8afb8de16, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 15af7d91731a66b4d84ec8e7298a535b, type: 2}
+  m_sharedMaterial: {fileID: -1045801189953071212, guid: 15af7d91731a66b4d84ec8e7298a535b, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

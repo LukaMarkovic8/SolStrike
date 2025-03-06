@@ -243,7 +243,7 @@ public class bl_UIReferences : bl_PhotonHelper, IInRoomCallbacks
         if (!v)
         {
             bl_PauseMenuBase.Instance.CloseMenu();
-            bl_SpectatorModeBase.Instance.SetActiveUI(false);
+            //bl_SpectatorModeBase.Instance.SetActiveUI(false);
             SpectatorButton.SetActive(false);
             inTeam = true;
         }

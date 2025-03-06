@@ -185,6 +185,9 @@ public class bl_WaitingRoomUI : bl_WaitingRoomUIBase
             PlayerCountText.text += $" SPECTATORS {spectatorsCount}";
         }
 
+        if (!bl_PhotonNetwork.IsMasterClient) {
+            SetLocalReady();
+        }
 
         if (bl_PhotonNetwork.IsMasterClient && PhotonNetwork.PlayerList.Length == required)
         {

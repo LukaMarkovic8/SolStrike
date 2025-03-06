@@ -24,7 +24,7 @@ MonoBehaviour:
       NoAllowedCoins: 
     ID: 0
     team: 2
-  - Name: Delta Soldier
+  - Name: Mad Lad
     Preview: {fileID: 21300000, guid: fe8dd5eb451d51540b9478032e877276, type: 3}
     Prefab: {fileID: 1568668014787886, guid: 8b43b97c50cac1d43a7c27ca8b6a6cdf, type: 3}
     Unlockability:
@@ -46,7 +46,7 @@ MonoBehaviour:
       NoAllowedCoins: 
     ID: 2
     team: 2
-  - Name: Winter Soldier
+  - Name: BONK
     Preview: {fileID: 21300000, guid: 1b06f477d90517943a96dca5f666ffa5, type: 3}
     Prefab: {fileID: 8990095237878209855, guid: bcf32f8651fa94c4eb781cc08f1423ee, type: 3}
     Unlockability:
@@ -59,7 +59,7 @@ MonoBehaviour:
     team: 1
   Team1Players: 0000000003000000
   Team2Players: 0100000002000000
-  FFAPlayers: 01000000000000000200000003000000
+  FFAPlayers: 02000000020000000200000002000000
   Team1Bots:
   - {fileID: 114101145339246268, guid: 424e7da58c2e1de49aef138757fca69a, type: 3}
   Team2Bots:

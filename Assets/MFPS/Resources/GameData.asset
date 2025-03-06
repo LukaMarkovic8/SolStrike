@@ -15,14 +15,14 @@ MonoBehaviour:
   offlineMode: 0
   verifySingleSession: 1
   UseLobbyChat: 0
-  UseVoiceChat: 1
+  UseVoiceChat: 0
   BulletTracer: 1
   DropGunOnDeath: 1
   SelfGrenadeDamage: 1
   CanFireWhileRunning: 1
   HealthRegeneration: 1
-  ShowTeamMateHealthBar: 1
-  CanChangeTeam: 1
+  ShowTeamMateHealthBar: 0
+  CanChangeTeam: 0
   ShowBlood: 1
   DetectAFK: 0
   MasterCanKickPlayers: 0
@@ -232,7 +232,7 @@ MonoBehaviour:
     RoundModeAllowed: 0
     GoalName: Kills
     allowedPickupWeapons: 1
-    maxPlayers: 01000000010000000100000001000000
+    maxPlayers: 04000000
     GameGoalsOptions: 14000000
     timeLimits: 58020000
   Team1Name: Delta

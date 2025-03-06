@@ -251,7 +251,8 @@ public class bl_PlayerNetwork : bl_MonoBehaviour, IPunObservable
     void OnEnemyPlayer()
     {
         playerHealthManager.DamageEnabled = true;
-        DrawName.SetActive(bl_SpectatorModeBase.Instance.isActive);
+        //TODO LUKA
+        //DrawName.SetActive(bl_SpectatorModeBase.Instance.isActive);
 #if UMM
         if (bl_MiniMapData.Instance.showEnemysWhenFire)
         {
