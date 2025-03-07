@@ -2006,7 +2006,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 50, y: -50.00006}
+  m_AnchoredPosition: {x: 50, y: -50.000122}
   m_SizeDelta: {x: -1270, y: -603.16003}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1159926890
@@ -3697,7 +3697,7 @@ MonoBehaviour:
   maxExplosionDistance: 100
   maxFootstepDistance: 30
   audioRolloffMode: 0
-  BackgroundClip: {fileID: 8300000, guid: 38d0d6c0fb54e734eb5a19e7d90a5f1a, type: 3}
+  BackgroundClip: {fileID: 8300000, guid: d618951296c0e0c419be35a2b8b26821, type: 3}
   MaxBackgroundVolume: 0.3
   backgroundSource: {fileID: 2807997518123693127}
 --- !u!114 &2760225041660500599
