@@ -3697,7 +3697,7 @@ MonoBehaviour:
   maxExplosionDistance: 100
   maxFootstepDistance: 30
   audioRolloffMode: 0
-  BackgroundClip: {fileID: 8300000, guid: d618951296c0e0c419be35a2b8b26821, type: 3}
+  BackgroundClip: {fileID: 8300000, guid: 4e7721e7562b9f642b007d4cd258a50d, type: 3}
   MaxBackgroundVolume: 0.3
   backgroundSource: {fileID: 2807997518123693127}
 --- !u!114 &2760225041660500599

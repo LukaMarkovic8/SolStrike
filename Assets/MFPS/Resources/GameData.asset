@@ -20,7 +20,7 @@ MonoBehaviour:
   DropGunOnDeath: 1
   SelfGrenadeDamage: 1
   CanFireWhileRunning: 1
-  HealthRegeneration: 1
+  HealthRegeneration: 0
   ShowTeamMateHealthBar: 0
   CanChangeTeam: 0
   ShowBlood: 1
@@ -33,7 +33,7 @@ MonoBehaviour:
   ShowWeaponLoadout: 1
   useCountDownOnStart: 1
   showCrosshair: 1
-  showDamageIndicator: 1
+  showDamageIndicator: 0
   doSpawnHandMeshEffect: 1
   playerCameraWiggle: 1
   showDeathIcons: 1
@@ -226,13 +226,13 @@ MonoBehaviour:
     supportBots: 0
     AutoTeamSelection: 1
     UnlistGameAfterStarted: 1
-    RequiredPlayersToStart: 4
+    RequiredPlayersToStart: 1
     onRoundStartedSpawn: 0
     onPlayerDie: 0
     RoundModeAllowed: 0
     GoalName: Kills
     allowedPickupWeapons: 1
-    maxPlayers: 04000000
+    maxPlayers: 01000000
     GameGoalsOptions: 14000000
     timeLimits: 58020000
   Team1Name: Delta
