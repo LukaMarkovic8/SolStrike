@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: PlayerSelector
   m_EditorClassIdentifier: 
   AllPlayers:
-  - Name: Recon Soldier
-    Preview: {fileID: 21300000, guid: d52ded93aba596d4a958d709c14113b2, type: 3}
+  - Name: BONK
+    Preview: {fileID: 21300000, guid: 9b415c04a131e6f4dbc0896006161b57, type: 3}
     Prefab: {fileID: 1353458154535538, guid: 353d635db0698974b963c4153ac19a5d, type: 3}
     Unlockability:
       UnlockMethod: 0
@@ -24,8 +24,8 @@ MonoBehaviour:
       NoAllowedCoins: 
     ID: 0
     team: 2
-  - Name: Mad Lad
-    Preview: {fileID: 21300000, guid: fe8dd5eb451d51540b9478032e877276, type: 3}
+  - Name: dogWTF
+    Preview: {fileID: 21300000, guid: 5c73be8e98302214daf3fcdfb7229b47, type: 3}
     Prefab: {fileID: 1568668014787886, guid: 8b43b97c50cac1d43a7c27ca8b6a6cdf, type: 3}
     Unlockability:
       UnlockMethod: 0
@@ -39,27 +39,27 @@ MonoBehaviour:
     Preview: {fileID: 21300000, guid: 176bf7c465c60564a825dcc19b5abcd1, type: 3}
     Prefab: {fileID: 4115931837949691504, guid: 897d2e05ec64c5349a057309702e9960, type: 3}
     Unlockability:
-      UnlockMethod: 1
+      UnlockMethod: 0
       ItemType: 2
       Price: 500
       UnlockAtLevel: 0
       NoAllowedCoins: 
     ID: 2
     team: 2
-  - Name: BONK
-    Preview: {fileID: 21300000, guid: 1b06f477d90517943a96dca5f666ffa5, type: 3}
-    Prefab: {fileID: 8990095237878209855, guid: bcf32f8651fa94c4eb781cc08f1423ee, type: 3}
+  - Name: MAD LAD
+    Preview: {fileID: 21300000, guid: fd338ea9c99d26a4dbca7f6b1826ca1d, type: 3}
+    Prefab: {fileID: 3911763547697171685, guid: 404e320e0f64fbc4081dcec1ce6e30eb, type: 3}
     Unlockability:
-      UnlockMethod: 1
+      UnlockMethod: 0
       ItemType: 2
       Price: 500
       UnlockAtLevel: 0
       NoAllowedCoins: 
     ID: 3
     team: 1
-  Team1Players: 0000000003000000
-  Team2Players: 0100000002000000
-  FFAPlayers: 02000000020000000200000002000000
+  Team1Players: 01000000030000000200000000000000
+  Team2Players: 01000000030000000200000000000000
+  FFAPlayers: 01000000030000000200000000000000
   Team1Bots:
   - {fileID: 114101145339246268, guid: 424e7da58c2e1de49aef138757fca69a, type: 3}
   Team2Bots:
