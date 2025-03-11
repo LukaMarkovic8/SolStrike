@@ -226,13 +226,13 @@ MonoBehaviour:
     supportBots: 0
     AutoTeamSelection: 1
     UnlistGameAfterStarted: 1
-    RequiredPlayersToStart: 1
+    RequiredPlayersToStart: 4
     onRoundStartedSpawn: 0
     onPlayerDie: 0
     RoundModeAllowed: 0
     GoalName: Kills
     allowedPickupWeapons: 1
-    maxPlayers: 01000000
+    maxPlayers: 04000000
     GameGoalsOptions: 14000000
     timeLimits: 58020000
   Team1Name: Delta

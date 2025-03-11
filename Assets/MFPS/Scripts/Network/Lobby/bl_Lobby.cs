@@ -865,6 +865,7 @@ public class bl_Lobby : bl_PhotonHelper, IConnectionCallbacks, ILobbyCallbacks, 
 
     public void OnJoinRandomFailed(short returnCode, string message)
     {
+        Debug.Log(message);
         OnNoRoomsToJoin(returnCode, message);
     }
 
