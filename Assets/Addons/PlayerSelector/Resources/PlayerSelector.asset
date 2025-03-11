@@ -15,7 +15,7 @@ MonoBehaviour:
   AllPlayers:
   - Name: BONK
     Preview: {fileID: 21300000, guid: 9b415c04a131e6f4dbc0896006161b57, type: 3}
-    Prefab: {fileID: 1353458154535538, guid: 353d635db0698974b963c4153ac19a5d, type: 3}
+    Prefab: {fileID: 9136156321554127628, guid: 61253c88396dcde489e460729b709451, type: 3}
     Unlockability:
       UnlockMethod: 0
       ItemType: 2
@@ -26,7 +26,7 @@ MonoBehaviour:
     team: 2
   - Name: dogWTF
     Preview: {fileID: 21300000, guid: 5c73be8e98302214daf3fcdfb7229b47, type: 3}
-    Prefab: {fileID: 1568668014787886, guid: 8b43b97c50cac1d43a7c27ca8b6a6cdf, type: 3}
+    Prefab: {fileID: 4811422019803324394, guid: e05147c568b0f88479d07a33e470740d, type: 3}
     Unlockability:
       UnlockMethod: 0
       ItemType: 2
@@ -37,7 +37,7 @@ MonoBehaviour:
     team: 1
   - Name: Gecko Geek
     Preview: {fileID: 21300000, guid: 176bf7c465c60564a825dcc19b5abcd1, type: 3}
-    Prefab: {fileID: 4115931837949691504, guid: 897d2e05ec64c5349a057309702e9960, type: 3}
+    Prefab: {fileID: 8573728130409336226, guid: 27a8e7ddb8737a843a24f9657f48340d, type: 3}
     Unlockability:
       UnlockMethod: 0
       ItemType: 2

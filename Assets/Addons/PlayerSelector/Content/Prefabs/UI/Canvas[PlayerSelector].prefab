@@ -743,7 +743,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: -43}
-  m_SizeDelta: {x: 0, y: 52.314}
+  m_SizeDelta: {x: 0, y: 67.7}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &317739688542677833
 CanvasRenderer:
@@ -775,17 +775,17 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'SELECT AN PLAYER TO PLAY
 
-    <size=8>(YOU CAN''T CHANGE IN GAME)</size>'
+    <size=12>(YOU CAN''T CHANGE IN GAME)</size>'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: aef6d07b6f4e2534280ef0a3947115aa, type: 2}
-  m_sharedMaterial: {fileID: -6994997861283142655, guid: aef6d07b6f4e2534280ef0a3947115aa, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: a57ebd016dc2a0343a2b801643ea858e, type: 2}
+  m_sharedMaterial: {fileID: 2346962903794538181, guid: a57ebd016dc2a0343a2b801643ea858e, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4293717228
-  m_fontColor: {r: 0.9264706, g: 0.9264706, b: 0.9264706, a: 1}
+    rgba: 4293914431
+  m_fontColor: {r: 0.24705882, g: 0.9372549, b: 0.9372549, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -802,10 +802,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 14
-  m_fontSizeBase: 14
+  m_fontSize: 29.25
+  m_fontSizeBase: 48
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -814,7 +814,7 @@ MonoBehaviour:
   m_textAlignment: 65535
   m_characterSpacing: 8
   m_wordSpacing: 0
-  m_lineSpacing: -43.41
+  m_lineSpacing: 45
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -1013,7 +1013,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 1.6500015, y: -5.18}
+  m_AnchoredPosition: {x: 1.6500015, y: -37.28}
   m_SizeDelta: {x: -3.300003, y: 16.054752}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2998119878754362788
@@ -1046,15 +1046,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: GREEN SOLDIER
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 65bab3a880c5c3a4dbf6d1c8afb8de16, type: 2}
-  m_sharedMaterial: {fileID: 3906779889605611924, guid: 65bab3a880c5c3a4dbf6d1c8afb8de16, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: a57ebd016dc2a0343a2b801643ea858e, type: 2}
+  m_sharedMaterial: {fileID: 2346962903794538181, guid: a57ebd016dc2a0343a2b801643ea858e, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4293914431
+  m_fontColor: {r: 0.24705882, g: 0.9372549, b: 0.9372549, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:

@@ -63,7 +63,7 @@ public class bl_FreeForAll : MonoBehaviour, IGameMode
         {
             player = bl_GameManager.Instance.LocalActor;
         }
-        bl_FreeForAllUI.Instance.SetScores(player);
+        bl_FreeForAllUI.Instance.SetScores(bl_GameManager.Instance.LocalActor);
         //check if the best player reach the max kills
         if((int)player.GetPlayerPropertie(PropertiesKeys.KillsKey) >= bl_RoomSettings.Instance.GameGoal && !bl_PhotonNetwork.OfflineMode)
         {

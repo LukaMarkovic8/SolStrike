@@ -10,7 +10,7 @@ namespace MFPS.GameModes.FreeForAll
 
         public void SetScores(MFPSPlayer bestPlayer)
         {
-            string scoreText = string.Format(bl_GameTexts.PlayerStart, bestPlayer.Name);
+            string scoreText = bestPlayer.Name;//string.Format(bl_GameTexts.PlayerStart, bestPlayer.Name);
             ScoreText.text = scoreText;
         }
 

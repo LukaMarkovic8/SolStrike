@@ -11,7 +11,6 @@ public class bl_PhotonStatistics : bl_PhotonHelper, IConnectionCallbacks, ILobby
 {
     public GameObject ServerStatsHolder;
     public GameObject ServerButtonHolder;
-    public TextMeshProUGUI ServerButtoText;
     public TextMeshProUGUI ServerWarningText;
     //  public TextMeshProUGUI PingText;
 
