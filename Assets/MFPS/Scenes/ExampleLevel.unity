@@ -11990,7 +11990,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   team: 3
   shape: 1
-  SpawnSpace: 5
+  SpawnSpace: 3
   groundSnapLimit: 1.5
   randomRotation: 0
 --- !u!4 &822082594 stripped
@@ -12222,7 +12222,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   team: 3
   shape: 1
-  SpawnSpace: 5
+  SpawnSpace: 3
   groundSnapLimit: 1.5
   randomRotation: 0
 --- !u!4 &929040294 stripped
@@ -15827,7 +15827,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   team: 3
   shape: 1
-  SpawnSpace: 5
+  SpawnSpace: 3
   groundSnapLimit: 1.5
   randomRotation: 0
 --- !u!1001 &1844186620
@@ -16939,7 +16939,7 @@ Transform:
   m_GameObject: {fileID: 2041344268}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.77075744, z: -0, w: 0.6371288}
-  m_LocalPosition: {x: 30.47, y: -0.38, z: -10.26}
+  m_LocalPosition: {x: 30.88, y: -0.38, z: -10.38}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -16959,7 +16959,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   team: 3
   shape: 1
-  SpawnSpace: 4
+  SpawnSpace: 3
   groundSnapLimit: 1.5
   randomRotation: 0
 --- !u!1001 &2066442850
