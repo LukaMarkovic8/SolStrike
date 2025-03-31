@@ -79,7 +79,7 @@ MonoBehaviour:
   - ShowName: SOLSTRIKE ARENA
     m_Scene: {fileID: 102900000, guid: 7b433244bb0354246a7c6a8c682e5441, type: 3}
     RealSceneName: ExampleLevel
-    Preview: {fileID: 21300000, guid: 2bfa08422adb605449d78ef0c21faec5, type: 3}
+    Preview: {fileID: 21300000, guid: 48e558a32a223ae48a89b6e9b4d6f543, type: 3}
     NoAllowedGameModes: 
   AllWeapons:
   - Name: Rifle
@@ -226,13 +226,13 @@ MonoBehaviour:
     supportBots: 0
     AutoTeamSelection: 1
     UnlistGameAfterStarted: 1
-    RequiredPlayersToStart: 4
+    RequiredPlayersToStart: 1
     onRoundStartedSpawn: 0
     onPlayerDie: 0
     RoundModeAllowed: 0
     GoalName: Kills
     allowedPickupWeapons: 1
-    maxPlayers: 04000000
+    maxPlayers: 01000000
     GameGoalsOptions: 14000000
     timeLimits: 58020000
   Team1Name: Delta
