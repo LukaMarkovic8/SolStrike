@@ -184,10 +184,10 @@ public class bl_PhotonStatistics : bl_PhotonHelper, IConnectionCallbacks, ILobby
         AllPlayerInRoomText.text = string.Format(LocalizedTexts[2].ToUpper(), AllPlayerInRoom);
         AllPlayerInLobbyText.text = string.Format(LocalizedTexts[3].ToUpper(), AllPlayerInLobby);
 #else
-        AllRoomText.text = string.Format(bl_GameTexts.RoomsCreated, AllRooms);
-        AllPlayerText.text = string.Format(bl_GameTexts.PlayersOnline, AllPlayers);
-        AllPlayerInRoomText.text = string.Format(bl_GameTexts.PlayersPlaying, AllPlayerInRoom);
-        AllPlayerInLobbyText.text = string.Format(bl_GameTexts.PlayersInLobby, AllPlayerInLobby);
+        AllRoomText.text = "Rooms Created : <color=white>" + AllRooms.ToString();
+        AllPlayerText.text = "Players Online : <color=white>" + AllPlayers.ToString();
+        AllPlayerInRoomText.text = "Players Playing : <color=white>" + AllPlayerInRoom.ToString();
+        AllPlayerInLobbyText.text = "Players In Lobby : <color=white>" + AllPlayerInLobby.ToString();
 #endif
     }
 
