@@ -66,11 +66,11 @@ public class bl_GameFinish : bl_PhotonHelper, IMFPSResumeScreen
         {
             coins = tscore / bl_GameData.Instance.VirtualCoins.CoinScoreValue;
         }
-        KillsText.text = string.Format("{0}: <b>{1}</b>", bl_GameTexts.Kills.Localized(126).ToUpper(), kills);
-        DeathsText.text = string.Format("{0}: <b>{1}</b>", bl_GameTexts.Deaths.Localized(58, true).ToUpper(), deaths);
-        ScoreText.text = string.Format("{0}: <b>{1}</b>", bl_GameTexts.Score.Localized(59).ToUpper(), score - hsscore);
+        KillsText.text = kills.ToString();
+        DeathsText.text =  deaths.ToString();
+        ScoreText.text = (score - hsscore).ToString();
         WinScoreText.text = string.Format(bl_GameTexts.WinMatch.Localized(61), winScore);
-        KDRText.text = string.Format("{0}\n<size=10>KDR</size>", kd);
+        KDRText.text =  kd.ToString();
         TimePlayedText.text = string.Format("{0} <b>{1}</b> +{2}", bl_GameTexts.TimePlayed.Localized(60).ToUpper(), bl_StringUtility.GetTimeFormat((float)timePlayed / 60, timePlayed), scorePerTime);
         HeadshotsText.text = string.Format("{0} <b>{1}</b> +{2}", bl_GameTexts.HeadShot.Localized(16, true).ToUpper(), bl_GameManager.Instance.Headshots, hsscore);
         TotalScoreText.text = string.Format("{0}\n<size=9>{1}</size>", tscore, bl_GameTexts.TotalScore.Localized(35).ToUpper());
