@@ -113,7 +113,7 @@ public class bl_PhotonStatistics : bl_PhotonHelper, IConnectionCallbacks, ILobby
         int ping = PhotonNetwork.GetPing();
         if (ping <= 150)
         {
-            PingImage.color = Color.green;
+            PingImage.color = Color.cyan;
         }
         else if (ping > 150 && ping < 250)
         {
