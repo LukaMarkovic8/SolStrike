@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
+using WebSocketSharp;
 
 public class SolanaUIHandler : MonoBehaviour
 {
@@ -16,7 +17,7 @@ public class SolanaUIHandler : MonoBehaviour
     public GameObject walletElementPref;
     public GameObject walletElementHolder;
     public GameObject closeButton;
-
+    public PlayerNameHandler playerNameHandler;
 
 
     private string EndpointName = "https://api.deotoken.com/api/gamers/";
@@ -57,6 +58,19 @@ public class SolanaUIHandler : MonoBehaviour
     }
     private void OnEnable()
     {
+        if(!String.IsNullOrEmpty(Web3.Account.PublicKey.Key))
+        {
+            gameObject.SetActive(false);
+        }
+        else
+        {
+            DoLogin();
+         
+        }
+    }
+
+    private void DoLogin() 
+    {
         Web3.Instance.LoginWalletAdapter();
         Web3.OnLogin += OnLogin;
         Web3.OnBalanceChange += OnBalanceChange;
@@ -77,6 +91,7 @@ public class SolanaUIHandler : MonoBehaviour
        // StartCoroutine(GetRequest(EndpointName + Web3.Account.PublicKey));
        // account.PublicKey.FindProgramAdress
        // bl_Lobby.Instance.ChangeWindow("server");
+       playerNameHandler.GetGamerData();
     }
 
     public void OnBalanceChange(double amount)

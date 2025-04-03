@@ -24,6 +24,11 @@ namespace Solana.Unity.SDK
 
         private void _createWalletAdapterButton(SolanaWalletAdapterWebGL.WalletSpecs wallet)
         {
+            if(wallet.name != "Phantom")
+            {
+                return;
+            }
+
             var g = Instantiate(buttonPrefab, viewPortContent);
             var walletButton = g.GetComponent<WalletAdapterButton>();
             walletButton.WalletNameLabel.text = wallet.name;
