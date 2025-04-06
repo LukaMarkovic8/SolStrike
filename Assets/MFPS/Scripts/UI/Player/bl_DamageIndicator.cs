@@ -46,8 +46,9 @@ namespace MFPS.Runtime.UI
         /// </summary>
         void OnLocalSpawn()
         {
-            indicatorAlpha.alpha = 0;
-            alpha = 0;
+            if (indicatorAlpha != null)
+                indicatorAlpha.alpha = 0;
+                alpha = 0;
         }
 
         /// <summary>

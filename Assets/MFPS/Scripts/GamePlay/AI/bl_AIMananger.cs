@@ -840,6 +840,7 @@ public class bl_AIMananger : bl_PhotonHelper
     [PunRPC]
     void SyncAllBotsStats(string data, int cmd)
     {
+        return;
         if (cmd == 0)//bots statistics
         {
             BotsStatistics.Clear();
