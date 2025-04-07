@@ -4,6 +4,7 @@ using Solana.Unity.Wallet;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -117,7 +118,29 @@ public class SolanaUIHandler : MonoBehaviour
         }
     }
 
+    IEnumerator SendPutRequest(string url)
+    {
+        string jsonData = "{\"username\": \"Luka\"}";
+        byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonData);
 
+        using (UnityWebRequest www = UnityWebRequest.Put(url, bodyRaw))
+        {
+            www.SetRequestHeader("Content-Type", "application/json");
+
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError($"Error sending PUT: {www.responseCode} - {www.error}");
+                if (www.downloadHandler != null) Debug.LogError($"Response: {www.downloadHandler.text}");
+            }
+            else
+            {
+                Debug.Log($"PUT successful: {www.responseCode}");
+                if (www.downloadHandler != null) Debug.Log($"Response: {www.downloadHandler.text}");
+            }
+        }
+    }
 
 
 

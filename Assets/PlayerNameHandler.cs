@@ -2,6 +2,7 @@ using Solana.Unity.SDK;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net;
+using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -43,13 +44,37 @@ public class PlayerNameHandler : MonoBehaviour
                     Debug.Log($"Success! Response Code: {webRequest.responseCode}");
                     string responseJson = webRequest.downloadHandler.text;
                     Debug.Log("Received JSON:\n" + responseJson);
+
+                   StartCoroutine(SendPutRequest(url));
                     // TODO: Parse responseJson here
                     break;
             }
         }
     }
 
+    IEnumerator SendPutRequest(string url)
+    {
+        string jsonData = "{\"username\": \"Luka\"}";
+        byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonData);
 
+        using (UnityWebRequest www = UnityWebRequest.Put(url, bodyRaw))
+        {
+            www.SetRequestHeader("Content-Type", "application/json");
+
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError($"Error sending PUT: {www.responseCode} - {www.error}");
+                if (www.downloadHandler != null) Debug.LogError($"Response: {www.downloadHandler.text}");
+            }
+            else
+            {
+                Debug.Log($"PUT successful: {www.responseCode}");
+                if (www.downloadHandler != null) Debug.Log($"Response: {www.downloadHandler.text}");
+            }
+        }
+    }
     private IEnumerator GetGamerDataCoroutine2()
     {
         string url = baseUrl + "9wcLmTeeuMKE2phTJDWT9MwqKju2ooaqQodDn9GX7RNX";
@@ -77,6 +102,8 @@ public class PlayerNameHandler : MonoBehaviour
                     Debug.Log($"Success! Response Code: {webRequest.responseCode}");
                     string responseJson = webRequest.downloadHandler.text;
                     Debug.Log("Received JSON:\n" + responseJson);
+
+                    StartCoroutine(SendPutRequest(url));
                     // TODO: Parse responseJson here
                     break;
             }
