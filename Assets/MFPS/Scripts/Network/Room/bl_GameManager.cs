@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
+
 /// <summary>
 /// Handle the player spawn functions, game mode selection, and many general game utility functions.
 /// </summary>
@@ -16,7 +17,6 @@ public class bl_GameManager : bl_PhotonHelper, IInRoomCallbacks, IConnectionCall
     /// Current general game state
     /// </summary>
     public MatchState GameMatchState;
-
     /// <summary>
     /// Event called once all the players required to start have joined
     /// This is only called when GameData.JoinMethod is set to DirectToMap
@@ -131,6 +131,9 @@ public class bl_GameManager : bl_PhotonHelper, IInRoomCallbacks, IConnectionCall
     public static bool Joined = false;
     #endregion
 
+    public Action<Team> overrideSpawnPlayerModel;
+    public Action<float, bool> overrideRepawnLocalAfter;
+
     #region Private members
     private int WaitingPlayersAmount = 1;
     private float StartPlayTime;
@@ -243,9 +246,10 @@ public class bl_GameManager : bl_PhotonHelper, IInRoomCallbacks, IConnectionCall
 #if !PSELECTOR
         SpawnPlayerModel(playerTeam);
 #else
+
         if (bl_PlayerSelector.InMatch)
         {
-            if(bl_PlayerSelector.Instance == null)
+            if (bl_PlayerSelector.Instance == null)
             {
                 Debug.LogWarning("Player Selector is enabled but is not integrated in this map.");
                 return false;
@@ -264,8 +268,14 @@ public class bl_GameManager : bl_PhotonHelper, IInRoomCallbacks, IConnectionCall
     /// Spawn player based in the team
     /// </summary>
     /// <returns></returns>
+
     public void SpawnPlayerModel(Team playerTeam)
     {
+        if (overrideSpawnPlayerModel != null)
+        {
+            overrideSpawnPlayerModel.Invoke(playerTeam);
+            return;
+        }
         Vector3 pos;
         Quaternion rot;
         bl_SpawnPointManager.Instance.GetPlayerSpawnPosition(playerTeam, out pos, out rot);
@@ -393,6 +403,11 @@ public class bl_GameManager : bl_PhotonHelper, IInRoomCallbacks, IConnectionCall
     /// <param name="respawnTime">define a custom delay or -1 to use the GameData respawn fixed delay</param>
     public void RespawnLocalPlayerAfter(float respawnTime = -1, bool doFadeIn = true)
     {
+        if (overrideRepawnLocalAfter != null)
+        {
+            overrideRepawnLocalAfter.Invoke(respawnTime, false);
+            return;
+        }
         if (respawnTime < 0) respawnTime = bl_GameData.Instance.PlayerRespawnTime;
 
         StartCoroutine(DoWait());

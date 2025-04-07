@@ -537,11 +537,22 @@ public class bl_AIMananger : bl_PhotonHelper
         if (SpawningBots == null || SpawningBots.Count <= 0) return;
         if (SpawningBots[0] != null)
         {
-            SpawnBot(SpawningBots[0]);
-            //This fix the issue with the duplicate pv id when a master client re-enter in a room.
-            PhotonNetwork.Destroy(SpawningBots[0].gameObject);
+            if (SpawnBot(SpawningBots[0]) != null)
+            {
+                //This fix the issue with the duplicate pv id when a master client re-enter in a room.
+                PhotonNetwork.Destroy(SpawningBots[0].gameObject);
+            }
             SpawningBots.RemoveAt(0);
         }
+    }
+
+    public void RemovePendingSpawnBot(bl_AIShooter bot)
+    {
+        if (SpawningBots.Contains(bot))
+        {
+            SpawningBots.Remove(bot);
+        }
+        PhotonNetwork.Destroy(bot.gameObject);
     }
 
     /// <summary>
