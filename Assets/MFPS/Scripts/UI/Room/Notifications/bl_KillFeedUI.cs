@@ -51,7 +51,7 @@ namespace MFPS.Runtime.UI
             var newkillfeed = pool[currentPooled];
             newkillfeed.Init(feed);
             newkillfeed.transform.SetParent(KillfeedPanel, false);
-            newkillfeed.transform.SetAsFirstSibling();
+            newkillfeed.transform.SetAsLastSibling();
 
             currentPooled = (currentPooled + 1) % numberOfPooledPrefabs;
         }
