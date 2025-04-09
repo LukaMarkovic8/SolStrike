@@ -1,4 +1,10 @@
+using Solana.Unity.Programs;
 using Solana.Unity.Programs.Utilities;
+using Solana.Unity.Rpc.Builders;
+using Solana.Unity.Rpc.Core.Http;
+using Solana.Unity.Rpc.Messages;
+using Solana.Unity.Rpc.Models;
+using Solana.Unity.Rpc;
 using Solana.Unity.SDK;
 using Solana.Unity.Wallet;
 using System;
@@ -9,6 +15,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
 using WebSocketSharp;
+using static Solana.Unity.SDK.Web3;
 
 public class SolanaUIHandler : MonoBehaviour
 {
@@ -59,6 +66,7 @@ public class SolanaUIHandler : MonoBehaviour
     }
     private void OnEnable()
     {
+#if !UNITY_EDITOR
         if(!String.IsNullOrEmpty(Web3.Account.PublicKey.Key))
         {
             gameObject.SetActive(false);
@@ -68,9 +76,12 @@ public class SolanaUIHandler : MonoBehaviour
             DoLogin();
          
         }
+#else
+        gameObject.SetActive(false);
+#endif
     }
 
-    private void DoLogin() 
+    private void DoLogin()
     {
         Web3.Instance.LoginWalletAdapter();
         Web3.OnLogin += OnLogin;
@@ -85,19 +96,19 @@ public class SolanaUIHandler : MonoBehaviour
     public void OnLogin(Account account)
     {
         gameObject.SetActive(false);
-        TextMeshProUGUI.text = "public key: "+account.PublicKey;
+        TextMeshProUGUI.text = "public key: " + account.PublicKey;
         //GameObject gameObject =  Instantiate(walletElementPref,walletElementHolder.transform);
-      //  gameObject.GetComponentInChildren<TextMeshProUGUI>().text = "public key: "+account.PublicKey;
-        closeButton.SetActive(true);
-       // StartCoroutine(GetRequest(EndpointName + Web3.Account.PublicKey));
-       // account.PublicKey.FindProgramAdress
-       // bl_Lobby.Instance.ChangeWindow("server");
-       playerNameHandler.GetGamerData();
+        //  gameObject.GetComponentInChildren<TextMeshProUGUI>().text = "public key: "+account.PublicKey;
+       // closeButton.SetActive(true);
+        // StartCoroutine(GetRequest(EndpointName + Web3.Account.PublicKey));
+        // account.PublicKey.FindProgramAdress
+        // bl_Lobby.Instance.ChangeWindow("server");
+        playerNameHandler.GetGamerData();
     }
 
     public void OnBalanceChange(double amount)
     {
-        balance.text = "SOL:"+ amount.ToString();
+        balance.text = "SOL:" + amount.ToString();
     }
 
 
@@ -142,6 +153,41 @@ public class SolanaUIHandler : MonoBehaviour
         }
     }
 
+    
+  Web3.WalletInstance;
 
+    private const string MnemonicWords =
+        "route clerk disease box emerge airport loud waste attitude film army tray " +
+        "forward deal onion eight catalog surface unit card window walnut wealth medal";
 
+    public void Run()
+    {
+         WalletInstance  wallet = new Web3.WalletInstanc(Web3.Wallet.Mnemonic);
+
+        Account fromAccount = wallet.GetAccount(10);
+        Account toAccount = wallet.GetAccount(8);
+
+        RequestResult<ResponseValue<BlockHash>> blockHash = rpcClient.GetRecentBlockHash();
+        Console.WriteLine($"BlockHash >> {blockHash.Result.Value.Blockhash}");
+
+        TransactionBuilder txBuilder = new TransactionBuilder()
+            .SetRecentBlockHash(blockHash.Result.Value.Blockhash)
+            .SetFeePayer(fromAccount)
+            .AddInstruction(SystemProgram.Transfer(fromAccount.PublicKey, toAccount.PublicKey, 10000000))
+            .AddInstruction(MemoProgram.NewMemo(fromAccount.PublicKey, "Hello from Sol.Net :)"));
+
+        byte[] msgBytes = txBuilder.CompileMessage();
+        byte[] signature = fromAccount.Sign(msgBytes);
+
+        byte[] tx = txBuilder.AddSignature(signature)
+            .Serialize();
+
+        Console.WriteLine($"Tx base64: {Convert.ToBase64String(tx)}");
+        RequestResult<ResponseValue<SimulationLogs>> txSim = rpcClient.SimulateTransaction(tx);
+        string logs = Examples.PrettyPrintTransactionSimulationLogs(txSim.Result.Value.Logs);
+        Console.WriteLine($"Transaction Simulation:\n\tError: {txSim.Result.Value.Error}\n\tLogs: \n" + logs);
+        RequestResult<string> firstSig = rpcClient.SendTransaction(tx);
+        Console.WriteLine($"First Tx Signature: {firstSig.Result}");
+
+    }*/
 }
