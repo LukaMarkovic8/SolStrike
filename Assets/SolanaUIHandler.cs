@@ -153,7 +153,7 @@ public class SolanaUIHandler : MonoBehaviour
         }
     }
 
-    
+    /*
   Web3.WalletInstance;
 
     private const string MnemonicWords =
