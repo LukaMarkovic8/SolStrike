@@ -59,6 +59,7 @@ public class SolanaUIHandler : MonoBehaviour
     }
     private void OnEnable()
     {
+#if !UNITY_EDITOR
         if(!String.IsNullOrEmpty(Web3.Account.PublicKey.Key))
         {
             gameObject.SetActive(false);
@@ -68,6 +69,9 @@ public class SolanaUIHandler : MonoBehaviour
             DoLogin();
          
         }
+#else
+        gameObject.SetActive(false);
+#endif
     }
 
     private void DoLogin() 
