@@ -2072,6 +2072,7 @@ GameObject:
   - component: {fileID: 540061290}
   - component: {fileID: 540061292}
   - component: {fileID: 540061291}
+  - component: {fileID: 540061293}
   m_Layer: 5
   m_Name: Claim Chips
   m_TagString: Untagged
@@ -2137,6 +2138,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 540061289}
   m_CullTransparentMesh: 1
+--- !u!114 &540061293
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 540061289}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f121d98c32ff1e478692071986ecc90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &589196015
 GameObject:
   m_ObjectHideFlags: 0
@@ -9372,6 +9385,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1646673337}
   m_CullTransparentMesh: 1
+--- !u!1 &1647136901
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1647136902}
+  - component: {fileID: 1647136903}
+  m_Layer: 0
+  m_Name: DataController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1647136902
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1647136901}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 960, y: 540, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1647136903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1647136901}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bfea492ebf6a004fa6818144dd7d42e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1668045076
 GameObject:
   m_ObjectHideFlags: 0
@@ -9464,7 +9521,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1672510839
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10237,6 +10294,7 @@ GameObject:
   - component: {fileID: 1774921116}
   - component: {fileID: 1774921118}
   - component: {fileID: 1774921117}
+  - component: {fileID: 1774921119}
   m_Layer: 5
   m_Name: Redeem Chips
   m_TagString: Untagged
@@ -10302,6 +10360,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1774921115}
   m_CullTransparentMesh: 1
+--- !u!114 &1774921119
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1774921115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16287df50ea379a4b8ef9c96463983ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1810818144
 GameObject:
   m_ObjectHideFlags: 0
@@ -11684,6 +11754,7 @@ GameObject:
   - component: {fileID: 2022611064}
   - component: {fileID: 2022611066}
   - component: {fileID: 2022611065}
+  - component: {fileID: 2022611067}
   m_Layer: 5
   m_Name: Buy Chips
   m_TagString: Untagged
@@ -11749,6 +11820,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2022611063}
   m_CullTransparentMesh: 1
+--- !u!114 &2022611067
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2022611063}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 341684757c7144546a50ae3ec1c83fe3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!850595691 &2028552801
 LightingSettings:
   m_ObjectHideFlags: 0
@@ -16567,3 +16650,4 @@ SceneRoots:
   - {fileID: 2872105871639860631}
   - {fileID: 1420298671}
   - {fileID: 678236363}
+  - {fileID: 1647136902}

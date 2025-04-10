@@ -16,6 +16,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using WebSocketSharp;
 using static Solana.Unity.SDK.Web3;
+using System.Threading.Tasks;
 
 public class SolanaUIHandler : MonoBehaviour
 {
@@ -95,20 +96,36 @@ public class SolanaUIHandler : MonoBehaviour
 
     public void OnLogin(Account account)
     {
-        gameObject.SetActive(false);
-        TextMeshProUGUI.text = "public key: " + account.PublicKey;
+        //  gameObject.SetActive(false);
+        //  TextMeshProUGUI.text = "public key: " + account.PublicKey;
         //GameObject gameObject =  Instantiate(walletElementPref,walletElementHolder.transform);
         //  gameObject.GetComponentInChildren<TextMeshProUGUI>().text = "public key: "+account.PublicKey;
-       // closeButton.SetActive(true);
+        // closeButton.SetActive(true);
         // StartCoroutine(GetRequest(EndpointName + Web3.Account.PublicKey));
         // account.PublicKey.FindProgramAdress
         // bl_Lobby.Instance.ChangeWindow("server");
-        playerNameHandler.GetGamerData();
+        // playerNameHandler.GetGamerData();
+        Debug.Log("Public Key: " + account.PublicKey);
+        TextMeshProUGUI.text = "SIGN MESSAGE";
+        SignMessage();
     }
 
+    public async Task SignMessage()
+    {
+        // Example of signing a message
+        Guid myuuid = Guid.NewGuid();
+        string myuuidAsString = myuuid.ToString();
+        Debug.Log("UUID: " + myuuidAsString);
+        byte[] bytes = Encoding.UTF8.GetBytes(myuuidAsString);
+        await Web3.Base.SignMessage(bytes);
+        Debug.Log("Message signed");
+        Siginiture.SignatureString = myuuidAsString;
+        gameObject.SetActive(false);
+
+    }
     public void OnBalanceChange(double amount)
     {
-        balance.text = "SOL:" + amount.ToString();
+      //  balance.text = "SOL:" + amount.ToString();
     }
 
 

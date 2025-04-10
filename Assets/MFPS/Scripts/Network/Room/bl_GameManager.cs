@@ -268,7 +268,29 @@ public class bl_GameManager : bl_PhotonHelper, IInRoomCallbacks, IConnectionCall
     {
         Vector3 pos;
         Quaternion rot;
-        bl_SpawnPointManager.Instance.GetPlayerSpawnPosition(playerTeam, out pos, out rot);
+        // Add a small random delay to prevent all players spawning at exactly the same time
+        float randomDelay = UnityEngine.Random.Range(0.1f, 0.5f);
+        StartCoroutine(DelayedSpawn(playerTeam, randomDelay));
+    }
+    private IEnumerator DelayedSpawn(Team playerTeam, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        Vector3 pos;
+        Quaternion rot;
+        // Get spawn position with additional checks
+        if (!bl_SpawnPointManager.Instance.GetPlayerSpawnPosition(playerTeam, out pos, out rot))
+        {
+            Debug.LogWarning("Failed to get spawn position!");
+            yield break;
+        }
+
+        // Add small random offset to position
+        pos += new Vector3(
+            UnityEngine.Random.Range(-0.5f, 0.5f),
+            0,
+            UnityEngine.Random.Range(-0.5f, 0.5f)
+        );
 
         GameObject playerPrefab = bl_GameData.Instance.Player1.gameObject;
         if (OverridePlayerPrefab == null)
@@ -283,12 +305,11 @@ public class bl_GameManager : bl_PhotonHelper, IInRoomCallbacks, IConnectionCall
         if (!InstancePlayer(playerPrefab, pos, rot, playerTeam))
         {
             // if the player was not instanced
-            return;
+            yield break;
         }
 
         OnPostSpawn();
     }
-
     /// <summary>
     /// Spawn the local player in the given position and rotation.
     /// </summary>
