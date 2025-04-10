@@ -15,4 +15,8 @@ public class ClaimChipsController : MonoBehaviour
     {
         
     }
+    private void OnEnable()
+    {
+        
+    }
 }

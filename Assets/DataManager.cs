@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 
 public class DataManager : MonoBehaviour
 {
@@ -44,21 +45,44 @@ public class DataManager : MonoBehaviour
 
     #region HTTP Calls
 
-    public IEnumerator GetRequests(string url)//, System.Action<string> onComplete, System.Action<string> onError = null)
+
+    IEnumerator GetRequest(string url)
     {
         using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
         {
-            // Send the request and wait for the response
             yield return webRequest.SendWebRequest();
 
             if (webRequest.result == UnityWebRequest.Result.Success)
             {
-             //   onComplete?.Invoke(webRequest.downloadHandler.text);
+                Debug.Log("Response: " + webRequest.downloadHandler.text);
             }
             else
             {
-                Debug.LogError($"GET request failed for URL: {url} - Error: {webRequest.error}");
-               // onError?.Invoke(webRequest.error);
+                Debug.LogError("Error: " + webRequest.error);
+            }
+        }
+    }
+
+    IEnumerator SendPutRequest(string url)
+    {
+        string jsonData = "{\"username\": \"Luka\"}";
+        byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonData);
+
+        using (UnityWebRequest www = UnityWebRequest.Put(url, bodyRaw))
+        {
+            www.SetRequestHeader("Content-Type", "application/json");
+
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError($"Error sending PUT: {www.responseCode} - {www.error}");
+                if (www.downloadHandler != null) Debug.LogError($"Response: {www.downloadHandler.text}");
+            }
+            else
+            {
+                Debug.Log($"PUT successful: {www.responseCode}");
+                if (www.downloadHandler != null) Debug.Log($"Response: {www.downloadHandler.text}");
             }
         }
     }
