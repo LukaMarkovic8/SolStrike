@@ -45,6 +45,7 @@ public static class bl_Extensions
     public static int GetKills(this Player p)
     {
         int k = 0;
+        if (p == null) return k;
         if (p.CustomProperties.ContainsKey(PropertiesKeys.KillsKey))
         {
             k = (int)p.CustomProperties[PropertiesKeys.KillsKey];

@@ -62,8 +62,11 @@ public class SolanaUIHandler : MonoBehaviour
 
     public void OnLogin(Account account)
     {
-        Debug.Log("Public Key: " + account.PublicKey);
+        //Debug.Log("Public Key: " + account.PublicKey);
+        Siginiture.PublicKey = account.PublicKey.Key;
         TextMeshProUGUI.text = "SIGN MESSAGE";
+        byte[] bytes = Encoding.UTF8.GetBytes(Siginiture.PublicKey);
+        Siginiture.PublicKeyBytes = bytes;
         SignMessage();
     }
 

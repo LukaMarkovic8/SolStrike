@@ -159,5 +159,9 @@ public class DataManager : MonoBehaviour
 public static class Siginiture
 {
     public static string SignatureString = "signature";
+    public static byte[] SignitureBytes = new byte[0];
 
+    public static string PublicKey = "pk";
+
+    public static byte[] PublicKeyBytes { get; internal set; }
 }
