@@ -17,7 +17,7 @@ namespace Solana.Unity.SDK
 
         public GameObject walletAdapterUIPrefab;
     }
-    public class SolanaWalletAdapterWebGL: WalletBase
+    public class SolanaWalletAdapterWebGL : WalletBase
     {
         private static SolanaWalletAdapterWebGLOptions _walletOptions;
         private static TaskCompletionSource<Account> _loginTaskCompletionSource;
@@ -28,6 +28,7 @@ namespace Solana.Unity.SDK
         private static TaskCompletionSource<byte[]> _signedMessageTaskCompletionSource;
         private static Transaction[] _currentTransactions;
         private static Account _account;
+
         public static GameObject WalletAdapterUI { get; private set; }
 
         [Serializable]
@@ -41,20 +42,20 @@ namespace Solana.Unity.SDK
                 return $"{name}: installed? {installed}";
             }
         }
-        
+
         [Serializable]
         public class WalletSpecsObject
         {
             public WalletSpecs[] wallets;
         }
 
-        
+
         public static WalletSpecs[] Wallets { get; private set; }
 
         private static WalletSpecs _currentWallet;
 
         private static string _clusterName;
-            
+
 
         [Obsolete("Use SolanaWalletAdapter class instead, which is the cross platform wrapper.")]
         public SolanaWalletAdapterWebGL(
@@ -62,7 +63,7 @@ namespace Solana.Unity.SDK
             RpcCluster rpcCluster = RpcCluster.DevNet,
             string customRpcUri = null,
             string customStreamingRpcUri = null,
-            bool autoConnectOnStartup = false) 
+            bool autoConnectOnStartup = false)
             : base(rpcCluster, customRpcUri, customStreamingRpcUri, autoConnectOnStartup)
         {
             _walletOptions = solanaWalletOptions;
@@ -72,35 +73,41 @@ namespace Solana.Unity.SDK
             }
             _clusterName = RPCNameMap[(int)RpcCluster];
         }
-        
-        private static async Task InitWallets() {
+
+        private static async Task InitWallets()
+        {
             _currentWallet = null;
             _walletsInitializedTaskCompletionSource = new TaskCompletionSource<bool>();
-            
+
             InitWalletAdapter(OnWalletsInitialized, _clusterName);
             bool isXnft = await _walletsInitializedTaskCompletionSource.Task;
-            if (isXnft){
-               _currentWallet = new WalletSpecs()
-               {
-                   name = "XNFT",
-                   icon = "",
-                   installed = true
-               };
-            } else{
+            if (isXnft)
+            {
+                _currentWallet = new WalletSpecs()
+                {
+                    name = "XNFT",
+                    icon = "",
+                    installed = true
+                };
+            }
+            else
+            {
                 _getWalletsTaskCompletionSource = new TaskCompletionSource<string>();
                 ExternGetWallets(OnWalletsLoaded);
                 var walletsData = await _getWalletsTaskCompletionSource.Task;
                 Wallets = JsonUtility.FromJson<WalletSpecsObject>(walletsData).wallets;
             }
         }
-        
-        
+
+
         /// <summary>
         /// Check whether it's an XNFT or not
         /// </summary>
         /// <returns> true if it's an XNFT, false otherwise</returns>
-        public static async Task<bool> IsXnft(){
-            if(RuntimePlatform.WebGLPlayer != Application.platform){
+        public static async Task<bool> IsXnft()
+        {
+            if (RuntimePlatform.WebGLPlayer != Application.platform)
+            {
                 return false;
             }
             await InitWallets();
@@ -120,12 +127,13 @@ namespace Solana.Unity.SDK
                 Debug.LogError("WalletAdapter _Login -> Exception: " + e);
                 _loginTaskCompletionSource.SetResult(null);
             }
-            if (WalletAdapterUI != null ){
+            if (WalletAdapterUI != null)
+            {
                 WalletAdapterUI.SetActive(false);
             }
             return await _loginTaskCompletionSource.Task;
         }
-        
+
         private static async Task SetCurrentWallet()
         {
             await InitWallets();
@@ -155,15 +163,15 @@ namespace Solana.Unity.SDK
         protected override Task<Transaction> _SignTransaction(Transaction transaction)
         {
             _signedTransactionTaskCompletionSource = new TaskCompletionSource<Transaction>();
-            var base64TransactionStr = Convert.ToBase64String(transaction.Serialize()) ;
-            ExternSignTransactionWallet(_currentWallet.name,base64TransactionStr, OnTransactionSigned);
+            var base64TransactionStr = Convert.ToBase64String(transaction.Serialize());
+            ExternSignTransactionWallet(_currentWallet.name, base64TransactionStr, OnTransactionSigned);
             return _signedTransactionTaskCompletionSource.Task;
         }
 
         public override Task<byte[]> SignMessage(byte[] message)
         {
             _signedMessageTaskCompletionSource = new TaskCompletionSource<byte[]>();
-            var base64MessageStr = Convert.ToBase64String(message) ;
+            var base64MessageStr = Convert.ToBase64String(message);
             ExternSignMessageWallet(_currentWallet.name, base64MessageStr, OnMessageSigned);
             return _signedMessageTaskCompletionSource.Task;
         }
@@ -183,12 +191,12 @@ namespace Solana.Unity.SDK
                 base64Transactions[i] = Convert.ToBase64String(transactions[i].Serialize());
             }
             var base64TransactionsStr = string.Join(",", base64Transactions);
-            ExternSignAllTransactionsWallet(_currentWallet.name,base64TransactionsStr, OnAllTransactionsSigned);
+            ExternSignAllTransactionsWallet(_currentWallet.name, base64TransactionsStr, OnAllTransactionsSigned);
             return _signedAllTransactionsTaskCompletionSource.Task;
         }
 
         #region WebGL Callbacks
-        
+
         /// <summary>
         /// Called from javascript when the wallet adapter approves the connection
         /// </summary>
@@ -201,7 +209,7 @@ namespace Solana.Unity.SDK
                 _loginTaskCompletionSource.TrySetResult(null);
                 return;
             }
-            Debug.Log($"Wallet {walletPubKey} connected!");
+            //Debug.Log($"Wallet {walletPubKey} connected!");
             _account = new Account("", walletPubKey);
             _loginTaskCompletionSource.TrySetResult(_account);
         }
@@ -222,7 +230,7 @@ namespace Solana.Unity.SDK
             var tx = Transaction.Deserialize(Convert.FromBase64String(transaction));
             _signedTransactionTaskCompletionSource.SetResult(tx);
         }
-        
+
         /// <summary>
         /// Called from javascript when the wallet signed all transactions and return the signature
         /// that we then need to put into the transaction before we send it out.
@@ -247,9 +255,9 @@ namespace Solana.Unity.SDK
             }
             _signedAllTransactionsTaskCompletionSource.SetResult(_currentTransactions);
         }
-        
-        
-        
+
+
+
         /// <summary>
         /// Called from javascript when the wallet adapter signed the message and return the signature.
         /// </summary>
@@ -262,6 +270,11 @@ namespace Solana.Unity.SDK
                 _signedMessageTaskCompletionSource.TrySetResult(null);
                 return;
             }
+            //Debug.Log($"Message signed with signature: {signature}");
+
+            Web3.Base.SignatureString = signature;
+            //Debug.Log("ss "+Web3.Base.SignatureString);
+            
             _signedMessageTaskCompletionSource.SetResult(Convert.FromBase64String(signature));
         }
 
@@ -273,7 +286,7 @@ namespace Solana.Unity.SDK
         {
             _walletsInitializedTaskCompletionSource.SetResult(isXnft);
         }
-        
+
         /// <summary>
         /// Called from javascript when the wallets are loaded
         /// </summary>
@@ -285,29 +298,29 @@ namespace Solana.Unity.SDK
 
         #endregion
 
-        #if UNITY_WEBGL
-                
-                [DllImport("__Internal")]
-                private static extern void ExternConnectWallet(string walletName,Action<string> callback);
+#if UNITY_WEBGL
 
-                [DllImport("__Internal")]
-                private static extern void ExternSignTransactionWallet(string walletName, string transaction, Action<string> callback);
-                
-                [DllImport("__Internal")]
-                private static extern void ExternSignAllTransactionsWallet(string walletName, string transactions, Action<string> callback);
+        [DllImport("__Internal")]
+        private static extern void ExternConnectWallet(string walletName, Action<string> callback);
 
-                [DllImport("__Internal")]
-                private static extern void ExternSignMessageWallet(string walletName, string messageBase64, Action<string> callback);
-        
-                
-                [DllImport("__Internal")]
-                private static extern string  ExternGetWallets(Action<string> callback);
+        [DllImport("__Internal")]
+        private static extern void ExternSignTransactionWallet(string walletName, string transaction, Action<string> callback);
 
-                [DllImport("__Internal")]
-                private static extern void InitWalletAdapter(Action<bool> callback, string clusterName);
-                
-                
-        #else
+        [DllImport("__Internal")]
+        private static extern void ExternSignAllTransactionsWallet(string walletName, string transactions, Action<string> callback);
+
+        [DllImport("__Internal")]
+        private static extern void ExternSignMessageWallet(string walletName, string messageBase64, Action<string> callback);
+
+
+        [DllImport("__Internal")]
+        private static extern string ExternGetWallets(Action<string> callback);
+
+        [DllImport("__Internal")]
+        private static extern void InitWalletAdapter(Action<bool> callback, string clusterName);
+
+
+#else
                 private static void ExternConnectWallet(string walletName, Action<string> callback){}
                 private static void ExternSignTransactionWallet(string walletName, string transaction, Action<string> callback){}
                 private static void ExternSignAllTransactionsWallet(string walletName, string transactions, Action<string> callback){}
@@ -315,6 +328,6 @@ namespace Solana.Unity.SDK
                 private static string ExternGetWallets(Action<string> callback){return null;}
                 private static void InitWalletAdapter(Action<bool> callback, string clusterName){}
                 
-        #endif
+#endif
     }
 }

@@ -154,12 +154,15 @@ public class DataManager : MonoBehaviour
     #endregion
 
     // Example Usage (can be called from other scripts)
-
 }
+
+
 public static class Siginiture
 {
     public static string SignatureString = "signature";
     public static byte[] SignitureBytes = new byte[0];
+    public static string UUid = "signature";
+    public static byte[] UUidBytes = new byte[0];
 
     public static string PublicKey = "pk";
 

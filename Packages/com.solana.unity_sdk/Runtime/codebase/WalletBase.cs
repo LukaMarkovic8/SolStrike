@@ -59,6 +59,8 @@ namespace Solana.Unity.SDK
 
         private IStreamingRpcClient _activeStreamingRpcClient;
         private TaskCompletionSource<object> _webSocketConnection;
+        public string SignatureString = "None";
+
         public IStreamingRpcClient ActiveStreamingRpcClient => StartStreamingConnection();
         public Account Account { get;protected set; }
         public Mnemonic Mnemonic { get;protected set; }

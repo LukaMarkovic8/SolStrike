@@ -17,6 +17,8 @@ using UnityEngine.Networking;
 using WebSocketSharp;
 using static Solana.Unity.SDK.Web3;
 using System.Threading.Tasks;
+using Org.BouncyCastle.Asn1.Ocsp;
+
 
 public class SolanaUIHandler : MonoBehaviour
 {
@@ -67,25 +69,28 @@ public class SolanaUIHandler : MonoBehaviour
         TextMeshProUGUI.text = "SIGN MESSAGE";
         byte[] bytes = Encoding.UTF8.GetBytes(Siginiture.PublicKey);
         Siginiture.PublicKeyBytes = bytes;
-        SignMessage();
+        SignMessageAsync();
     }
 
-    public async Task SignMessage()
+    public async Task SignMessageAsync()
     {
         // Example of signing a message
         Guid myuuid = Guid.NewGuid();
         string myuuidAsString = myuuid.ToString();
-        Debug.Log("UUID: " + myuuidAsString);
         byte[] bytes = Encoding.UTF8.GetBytes(myuuidAsString);
+        byte[] bytessiginture;
         await Web3.Base.SignMessage(bytes);
-        Debug.Log("Message signed");
-        Siginiture.SignatureString = myuuidAsString;
+        Siginiture.UUid = myuuidAsString;
+        Siginiture.SignatureString = Web3.Base.SignatureString;
+        Debug.Log("Message signed     Siginiture.UUid:" + Siginiture.UUid + "    Siginiture.SignatureString:" + Siginiture.SignatureString);
         gameObject.SetActive(false);
+   
 
     }
+
     public void OnBalanceChange(double amount)
     {
-      //  balance.text = "SOL:" + amount.ToString();
+        //  balance.text = "SOL:" + amount.ToString();
     }
 
 
