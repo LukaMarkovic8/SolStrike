@@ -3,6 +3,7 @@ using MFPS.Internal.Structures;
 using MFPS.Runtime.UI;
 using Photon.Pun;
 using Photon.Realtime;
+using Solana.Unity.SDK;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -351,6 +352,10 @@ public class bl_Lobby : bl_PhotonHelper, IConnectionCallbacks, ILobbyCallbacks, 
         CachePlayerName = InputName;
         PlayerPrefs.SetString(PropertiesKeys.GetUniqueKey("playername"), CachePlayerName);
         SetNickName(CachePlayerName);
+        //TODO : Remove this when the game is not using the web3
+#if !UNITY_EDITOR
+        bl_PhotonNetwork.PublicKey = Web3.Account.PublicKey.Key;
+#endif
         ConnectPhoton();
     }
 

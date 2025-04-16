@@ -231,4 +231,6 @@ public class bl_PhotonNetwork : bl_PhotonHelper
             return _instance;
         }
     }
+
+    public static string PublicKey { get; internal set; }
 }

@@ -18,6 +18,7 @@ using WebSocketSharp;
 using static Solana.Unity.SDK.Web3;
 using System.Threading.Tasks;
 using Org.BouncyCastle.Asn1.Ocsp;
+using Cysharp.Threading.Tasks.Triggers;
 
 
 public class SolanaUIHandler : MonoBehaviour
@@ -78,15 +79,40 @@ public class SolanaUIHandler : MonoBehaviour
         Guid myuuid = Guid.NewGuid();
         string myuuidAsString = myuuid.ToString();
         byte[] bytes = Encoding.UTF8.GetBytes(myuuidAsString);
-        byte[] bytessiginture;
-        await Web3.Base.SignMessage(bytes);
-        Siginiture.UUid = myuuidAsString;
-        Siginiture.SignatureString = Web3.Base.SignatureString;
-        Debug.Log("Message signed     Siginiture.UUid:" + Siginiture.UUid + "    Siginiture.SignatureString:" + Siginiture.SignatureString);
+        byte[] response = await Web3.Wallet.SignMessage(bytes);
+        string result = System.Text.Encoding.UTF8.GetString(response);
+        Debug.Log("result: " + result);
+        Siginiture.SignedMessage = myuuidAsString;
+        Siginiture.SignatureString = result;
+        result = Encoding.ASCII.GetString(response);
+        Debug.Log("ASCII: " + result);
+
+        //   Try UTF-16 Big Endian
+        string result1 = Encoding.BigEndianUnicode.GetString(response);
+        Debug.Log("UTF-16 BE: " + result1);
+        // Try ISO-8859 - 1(Latin - 1)
+        string result2 = Encoding.GetEncoding("ISO-8859-1").GetString(response);
+        Debug.Log("ISO-8859-1: " + result2);
+        //   Try UTF-16 Big Endian
+        string result5 = Encoding.BigEndianUnicode.GetString(response);
+        Debug.Log("UTF-16 BE: " + result5);
+
+        //   Try Windows-1252
+        /*    string result3 = Encoding.GetEncoding(1252).GetString(response);
+            Debug.Log("Windows-1252: " + result3);*/
+
+        //  Try UTF-16 Little Endian(common)
+        string result4 = Encoding.Unicode.GetString(response); // Same as UTF-16LE
+        Debug.Log("UTF-16 LE: " + result4);
+       // List<SignaturePubKeyPair> a = Web3.Base.DeduplicateTransactionSignatures(response,false);
+        bool verified = Web3.Account.Verify(bytes, response);
+        Debug.Log(Siginiture.PublicKey + " Message signed     SignedMessage:" + Siginiture.SignedMessage + "   SignatureString:" + Siginiture.SignatureString);
+        Debug.Log(response.ToString());
+        Debug.Log(verified.ToString());
         gameObject.SetActive(false);
-   
 
     }
+
 
     public void OnBalanceChange(double amount)
     {

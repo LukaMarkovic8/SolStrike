@@ -163,6 +163,7 @@ public static class Siginiture
     public static byte[] SignitureBytes = new byte[0];
     public static string UUid = "signature";
     public static byte[] UUidBytes = new byte[0];
+    public static string SignedMessage = "signature";
 
     public static string PublicKey = "pk";
 

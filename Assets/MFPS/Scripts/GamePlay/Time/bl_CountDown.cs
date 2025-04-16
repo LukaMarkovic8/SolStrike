@@ -5,6 +5,7 @@ using UnityEngine.Networking;
 using System.Text;
 using System.Collections;
 using Solana.Unity.Soar.Accounts;
+using Org.BouncyCastle.Asn1.Ocsp;
 
 public class bl_CountDown : bl_CountDownBase
 {
@@ -24,17 +25,19 @@ public class bl_CountDown : bl_CountDownBase
         bl_PhotonNetwork.AddNetworkCallback(PropertiesKeys.CountdownEvent, OnNetworkEvent);
 
         //TODO SEND START GAME;
-        accountId = Web3.Wallet.Account.PublicKey.Key;
-        gameId = bl_PhotonNetwork.CurrentRoom.Name;
+        //#if !UNITY_EDITOR
+
+        SendPlayRequest();
+        //#endif
     }
-    public string baseUrl = "YOUR_API_BASE_URL_HERE";
+    public string baseUrl = "https://api.deotoken.com";
 
     // Example data - replace these with your actual dynamic data
     public string accountId = "user123";
     public string gameId = "game456";
     public string signature = "example_signature";
     public string signedMessage = "example_signed_message";
-    public string network = "mainnet"; // Or whatever network applies
+    public string network = "devnet"; // Or whatever network applies
 
     // --- Data Structure for the Request Body ---
     // Must match the JSON structure exactly
@@ -47,6 +50,7 @@ public class bl_CountDown : bl_CountDownBase
         public string signature;
         public string signedMessage;
         public string network;
+     
     }
 
     // --- Public Method to Trigger the Request ---
@@ -60,8 +64,13 @@ public class bl_CountDown : bl_CountDownBase
             gameId = this.gameId,
             signature = this.signature,
             signedMessage = this.signedMessage,
-            network = this.network
+        
         };
+        data.accountId = Siginiture.PublicKey;
+        data.gameId = bl_PhotonNetwork.CurrentRoom.Name;
+        data.signature = Siginiture.SignatureString;
+        data.signedMessage = Siginiture.SignedMessage;
+        data.network = "devnet"; // Or whatever network applies
 
         // Start the Coroutine to handle the web request
         StartCoroutine(PostRequestCoroutine(baseUrl + "/api/games/play", data));
