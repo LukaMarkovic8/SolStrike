@@ -3,6 +3,7 @@ using UnityEngine.Networking;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using Solana.Unity.Wallet;
 
 public class DataManager : MonoBehaviour
 {
@@ -157,15 +158,69 @@ public class DataManager : MonoBehaviour
 }
 
 
-public static class Siginiture
+public static class Signature
 {
+    public static PublicKey TokenProgram22 = new PublicKey("TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb");
+    public static string baseUrl = "https://api.solstrike.xyz/api/";
     public static string SignatureString = "signature";
     public static byte[] SignitureBytes = new byte[0];
     public static string UUid = "signature";
     public static byte[] UUidBytes = new byte[0];
     public static string SignedMessage = "signature";
-
+    public static string Poruka = "Sign this message to log in. It is free and will not trigger any blockchain transaction.";
     public static string PublicKey = "pk";
+    public static GamerData GamerData = new GamerData();
+    public static int UnclaimedChipsAmount = 0;
+    public static int StandardChipsAmount = 0;
+    public static bool HasReservedChips = false;
+    public static PlayerData[] LeaderBoardPlayers = new PlayerData[0];
+
+    public static string marker = "-account:";
+
 
     public static byte[] PublicKeyBytes { get; internal set; }
+    public static double SolanaBalance { get; internal set; }
+
+    public static (string, string) SplitStringByAccount(string input, out string beforeAccount, out string afterAccount)
+    {
+        beforeAccount = null;
+        afterAccount = null;
+
+
+        int index = input.IndexOf(marker);
+
+        if (index != -1)
+        {
+            beforeAccount = input.Substring(0, index);
+            afterAccount = input.Substring(index + marker.Length);
+            return new(beforeAccount, afterAccount);
+        }
+        else
+        {
+            return (null, null);
+            // Handle the case where the marker is not found, perhaps by setting both to the original string or empty
+            // For this specific request, we are setting them to null as initialized.
+        }
+    }
+    public static string GetJustUsername(string input)
+    {
+
+
+        string beforeAccount;
+  
+        int index = input.IndexOf(marker);
+
+        if (index != -1)
+        {
+            beforeAccount = input.Substring(0, index);
+           
+            return beforeAccount;
+        }
+        else
+        {
+            return null;
+            // Handle the case where the marker is not found, perhaps by setting both to the original string or empty
+            // For this specific request, we are setting them to null as initialized.
+        }
+    }
 }

@@ -85,6 +85,7 @@ public class bl_PlayerScoreboard : bl_PlayerScoreboardBase
             //check if the player has selected a team
             if (p.GetPlayerTeam() != Team.None)
             {
+                Debug.Log(players[i].accountID);
                 //is the ui binding already created for this player?
                 if (cachedUIBindings.ContainsKey(p.ActorNumber))
                 {
@@ -303,10 +304,10 @@ public class bl_PlayerScoreboard : bl_PlayerScoreboardBase
                 .SetTargetPlayer(player)
                 .SetActive(true)
                .FilterMenuOptions(new bl_ScoreboardPopUpMenuBase.MenuFilter()
-                {
-                    IsLocalPlayer = localPlayer,
-                    IsBot = player == null,
-                });
+               {
+                   IsLocalPlayer = localPlayer,
+                   IsBot = player == null,
+               });
         }
     }
 

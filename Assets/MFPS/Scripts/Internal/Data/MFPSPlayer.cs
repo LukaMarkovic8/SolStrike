@@ -7,13 +7,14 @@ using MFPS.Runtime.AI;
 [Serializable]
 public class MFPSPlayer
 {
+    public string accountID = string.Empty;
+
     public string Name;
     public Transform Actor;
     public bool isRealPlayer = true;
     public bool isAlive = true;
     public Team Team = Team.None;
     public Transform AimPosition;
-
     public PhotonView m_actorView;
     /// <summary>
     /// Photon View of this actor
@@ -138,6 +139,7 @@ public class MFPSPlayer
             {
                 Name = view.Owner.NickName;
                 Team = (Team)view.InstantiationData[0];
+
             }
         }
         return this;

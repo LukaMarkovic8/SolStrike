@@ -35,7 +35,7 @@ public class bl_GameFinish : bl_PhotonHelper, IMFPSResumeScreen
     /// 
     /// </summary>
     public void CollectData()
-    {       
+    {
         int kills = bl_PhotonNetwork.LocalPlayer.GetKills();
 
         // if bots eliminations doesn't count for the player stats
@@ -58,7 +58,7 @@ public class bl_GameFinish : bl_PhotonHelper, IMFPSResumeScreen
         int hsscore = bl_GameManager.Instance.Headshots * bl_GameData.Instance.ScoreReward.ScorePerHeadShot;
         bool winner = bl_GameManager.Instance.isLocalPlayerWinner();
         int winScore = (winner) ? bl_GameData.Instance.ScoreReward.ScoreForWinMatch : 0;
-        PlayerNameText.text = bl_PhotonNetwork.NickName;
+        PlayerNameText.text = Signature.GetJustUsername(bl_PhotonNetwork.NickName);
         int tscore = score + winScore + scorePerTime;
 
         int coins = 0;
@@ -67,10 +67,10 @@ public class bl_GameFinish : bl_PhotonHelper, IMFPSResumeScreen
             coins = tscore / bl_GameData.Instance.VirtualCoins.CoinScoreValue;
         }
         KillsText.text = kills.ToString();
-        DeathsText.text =  deaths.ToString();
+        DeathsText.text = deaths.ToString();
         ScoreText.text = (score - hsscore).ToString();
         WinScoreText.text = string.Format(bl_GameTexts.WinMatch.Localized(61), winScore);
-        KDRText.text =  kd.ToString();
+        KDRText.text = kd.ToString();
         TimePlayedText.text = string.Format("{0} <b>{1}</b> +{2}", bl_GameTexts.TimePlayed.Localized(60).ToUpper(), bl_StringUtility.GetTimeFormat((float)timePlayed / 60, timePlayed), scorePerTime);
         HeadshotsText.text = string.Format("{0} <b>{1}</b> +{2}", bl_GameTexts.HeadShot.Localized(16, true).ToUpper(), bl_GameManager.Instance.Headshots, hsscore);
         TotalScoreText.text = string.Format("{0}\n<size=9>{1}</size>", tscore, bl_GameTexts.TotalScore.Localized(35).ToUpper());

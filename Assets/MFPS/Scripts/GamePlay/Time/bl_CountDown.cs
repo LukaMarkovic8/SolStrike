@@ -30,7 +30,7 @@ public class bl_CountDown : bl_CountDownBase
         SendPlayRequest();
         //#endif
     }
-    public string baseUrl = "https://api.deotoken.com";
+
 
     // Example data - replace these with your actual dynamic data
     public string accountId = "user123";
@@ -49,9 +49,27 @@ public class bl_CountDown : bl_CountDownBase
         public string gameId;
         public string signature;
         public string signedMessage;
-        public string network;
-     
+        //  public string network;
+
     }
+    public class PlayerResult
+    {
+        public string accountId;
+        public int kills;
+        public int deaths;
+        public int headshots;
+    }
+
+    public class GameOverData
+    {
+        public string accountId;
+        public string gameId;
+        public PlayerResult[] playerResults= new PlayerResult[0];
+        public string signature;
+        public string signedMessage;
+
+    }
+
 
     // --- Public Method to Trigger the Request ---
     // You can call this method from a UI Button or another script
@@ -64,16 +82,16 @@ public class bl_CountDown : bl_CountDownBase
             gameId = this.gameId,
             signature = this.signature,
             signedMessage = this.signedMessage,
-        
+
         };
-        data.accountId = Siginiture.PublicKey;
+        data.accountId = Signature.PublicKey;
         data.gameId = bl_PhotonNetwork.CurrentRoom.Name;
-        data.signature = Siginiture.SignatureString;
-        data.signedMessage = Siginiture.SignedMessage;
-        data.network = "devnet"; // Or whatever network applies
+        data.signature = Signature.SignatureString;
+        data.signedMessage = Signature.SignedMessage;
+        //  data.network = "devnet"; // Or whatever network applies
 
         // Start the Coroutine to handle the web request
-        StartCoroutine(PostRequestCoroutine(baseUrl + "/api/games/play", data));
+        StartCoroutine(PostRequestCoroutine(Signature.baseUrl + "games/play", data));
     }
 
     // --- Coroutine to Handle the Asynchronous POST Request ---

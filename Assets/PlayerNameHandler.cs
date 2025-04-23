@@ -9,7 +9,6 @@ using UnityEngine.Networking;
 public class PlayerNameHandler : MonoBehaviour
 {
 
-    private string baseUrl = "https://api.deotoken.com/api/gamers/";
 
     private void OnEnable()
     {
@@ -22,7 +21,7 @@ public class PlayerNameHandler : MonoBehaviour
 
     private IEnumerator GetGamerDataCoroutine()
     {
-        string url = baseUrl + Web3.Account.PublicKey.Key;
+        string url = Signature.baseUrl + Web3.Account.PublicKey.Key;
         Debug.Log("Sending GET request to: " + url);
 
         using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
@@ -45,7 +44,7 @@ public class PlayerNameHandler : MonoBehaviour
                     string responseJson = webRequest.downloadHandler.text;
                     Debug.Log("Received JSON:\n" + responseJson);
 
-                   StartCoroutine(SendPutRequest(url));
+                  // StartCoroutine(SendPutRequest(url));
                     // TODO: Parse responseJson here
                     break;
             }
@@ -77,8 +76,8 @@ public class PlayerNameHandler : MonoBehaviour
     }
     private IEnumerator GetGamerDataCoroutine2()
     {
-        string url = baseUrl + "9wcLmTeeuMKE2phTJDWT9MwqKju2ooaqQodDn9GX7RNX";
-        //string url = "https://api.deotoken.com/api/gamers/9wcLmTeeuMKE2phTJDWT9MwqKju2ooaqQodDn9GX7RNX";
+        string url = a + "9wcLmTeeuMKE2phTJDWT9MwqKju2ooaqQodDn9GX7RNX";
+     
 
 
         Debug.Log("Sending GET request to: " + url);
@@ -114,7 +113,7 @@ public class PlayerNameHandler : MonoBehaviour
 
     }
 
-
+    string a = "api.solstrike.xyz/gamers/leaderboard/";
     private void SetPlayerName()
     {
 

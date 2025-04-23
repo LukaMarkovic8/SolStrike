@@ -8,7 +8,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Networking;
 using Random = UnityEngine.Random;
 
 [DefaultExecutionOrder(-998)]
@@ -101,9 +104,12 @@ public class bl_Lobby : bl_PhotonHelper, IConnectionCallbacks, ILobbyCallbacks, 
         bl_LobbyLoadingScreenBase.Instance
             .SetActive(true);
 
-        GetPlayerName();
     }
+    public void GPN()
+    {
+        GetPlayerName();
 
+    }
     /// <summary>
     /// 
     /// </summary>
@@ -271,38 +277,111 @@ public class bl_Lobby : bl_PhotonHelper, IConnectionCallbacks, ILobbyCallbacks, 
     /// <summary>
     /// 
     /// </summary>
-    void GeneratePlayerName()
+    /// 
+
+
+    public void GetGamerData()
     {
-        connectionState = LobbyConnectionState.WaitingForUserName;
-        if (!rememberMe)
+        StartCoroutine(GetGamerDataCoroutine((gamerData) =>
         {
-            string storedNick = PropertiesKeys.GetUniqueKey("playername");
-            if (!PlayerPrefs.HasKey(storedNick) || !bl_GameData.Instance.RememberPlayerName)
+            if (gamerData != null)
+            {
+                Debug.Log($"Gamer Data Retrieved: Username = {gamerData.username}, Account ID = {gamerData.account_id}");
+                // Handle the retrieved gamer data here, e.g., update UI or cache the data
+            }
+            else
+            {
+                Debug.LogError("Failed to retrieve gamer data.");
+            }
+        }));
+    }
+
+    private IEnumerator GetGamerDataCoroutine(Action<GamerData> onComplete)
+    {
+        string url = Signature.baseUrl + "gamers/" + Web3.Account.PublicKey.Key;
+        Debug.Log("Sending GET request to: " + url);
+
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
+        {
+            webRequest.SetRequestHeader("accept", "application/json");
+
+            yield return webRequest.SendWebRequest();
+
+            switch (webRequest.result)
+            {
+                case UnityWebRequest.Result.ConnectionError:
+                case UnityWebRequest.Result.DataProcessingError:
+                    Debug.LogError($"Error: {webRequest.error}\nURL: {url}");
+                    onComplete?.Invoke(null);
+                    break;
+                case UnityWebRequest.Result.ProtocolError:
+                    Debug.LogError($"HTTP Error: {webRequest.error}\nCode: {webRequest.responseCode}\nURL: {url}");
+                    onComplete?.Invoke(null);
+                    break;
+                case UnityWebRequest.Result.Success:
+                    Debug.Log($"Success! Response Code: {webRequest.responseCode}");
+                    string responseJson = webRequest.downloadHandler.text;
+                    Debug.Log("Received JSON:\n" + responseJson);
+
+                    try
+                    {
+                        GamerData gamerData = JsonUtility.FromJson<GamerData>(responseJson);
+                        Signature.GamerData = gamerData;
+                        Debug.Log(gamerData.username.ToString());
+                        onComplete?.Invoke(gamerData);
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.LogError($"Failed to parse JSON: {ex.Message}");
+                        onComplete?.Invoke(null);
+                    }
+                    break;
+            }
+        }
+    }
+
+    async Task GeneratePlayerName()
+    {
+
+
+
+        connectionState = LobbyConnectionState.WaitingForUserName;
+
+        StartCoroutine(GetGamerDataCoroutine((gamerData) =>
+        {
+            string beforeAccountString = string.Empty;
+
+            if (gamerData != null)
+            {
+                // Debug.Log("aaa 2" + gamerData.username.ToString());
+
+
+                if (string.IsNullOrEmpty(gamerData.username))
+                {
+                    CachePlayerName = string.Format(bl_GameData.Instance.guestNameFormat, Random.Range(1, 9999));
+                }
+                else
+                {
+                    if (gamerData.username.Contains(Signature.marker))
+                    {
+                        (string, string) ca = Signature.SplitStringByAccount(gamerData.username, out string beforeAccount, out string afterAccount);
+
+                        beforeAccountString = ca.Item1;
+                    }
+                    CachePlayerName = gamerData.username;
+                }
+
+            }
+            else
             {
                 CachePlayerName = string.Format(bl_GameData.Instance.guestNameFormat, Random.Range(1, 9999));
             }
-            else if (bl_GameData.Instance.RememberPlayerName)
-            {
-                CachePlayerName = PlayerPrefs.GetString(storedNick, string.Format(bl_GameData.Instance.guestNameFormat, Random.Range(1, 9999)));
-            }
-            bl_LobbyUI.Instance.PlayerNameField.text = CachePlayerName;
+
+            bl_LobbyUI.Instance.PlayerNameField.text = beforeAccountString;
             SetNickName(CachePlayerName);
             bl_LobbyUI.Instance.ChangeWindow("player name");
             bl_LobbyLoadingScreenBase.Instance.HideIn(0.2f, true);
-        }
-        else
-        {
-            // Assign the saved nick name automatically
-            CachePlayerName = PlayerPrefs.GetString(PropertiesKeys.GetUniqueKey("remembernick"));
-            if (string.IsNullOrEmpty(CachePlayerName))
-            {
-                rememberMe = false;
-                GeneratePlayerName();
-                return;
-            }
-            SetNickName(CachePlayerName);
-            GoToMainMenu();
-        }
+        }));
     }
 
     /// <summary>
@@ -890,7 +969,6 @@ public class bl_Lobby : bl_PhotonHelper, IConnectionCallbacks, ILobbyCallbacks, 
             }
         }
     }
-
     private static bl_Lobby _instance;
     public static bl_Lobby Instance
     {
@@ -903,4 +981,16 @@ public class bl_Lobby : bl_PhotonHelper, IConnectionCallbacks, ILobbyCallbacks, 
             return _instance;
         }
     }
+}
+[Serializable]
+public class GamerData
+{
+    public string username;
+    public string account_id;
+    public string referral_code;
+    public bool referral_used;
+    public int referral_user_id;
+    public string reservedChips;
+    public string points;
+    public int party;
 }

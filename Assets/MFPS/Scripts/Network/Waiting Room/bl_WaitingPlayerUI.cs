@@ -31,7 +31,7 @@ public class bl_WaitingPlayerUI : bl_WaitingPlayerUIBase
     public override void SetInfo(Player player)
     {
         ThisPlayer = player;
-        NameText.text = string.Format(player.NickNameAndRole());
+        NameText.text = Signature.SplitStringByAccount(string.Format(player.NickNameAndRole()),out string beforeAccount, out string AfrerAccount).Item1;
         TeamColorImg.color = player.GetPlayerTeam().GetTeamColor();
        // MasterClientUI.SetActive(player.IsMasterClient);
       /*  if(bl_GameData.Instance.MasterCanKickPlayers && player.ActorNumber != bl_PhotonNetwork.LocalPlayer.ActorNumber)

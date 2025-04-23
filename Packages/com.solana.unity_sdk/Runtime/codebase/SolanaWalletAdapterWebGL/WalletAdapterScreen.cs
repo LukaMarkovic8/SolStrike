@@ -24,7 +24,7 @@ namespace Solana.Unity.SDK
 
         private void _createWalletAdapterButton(SolanaWalletAdapterWebGL.WalletSpecs wallet)
         {
-            if(wallet.name != "Phantom")
+            if(wallet.name != "Solflare")
             {
                 return;
             }

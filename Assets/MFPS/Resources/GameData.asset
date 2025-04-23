@@ -63,7 +63,7 @@ MonoBehaviour:
   GameVersion: 1.9.4
   guestNameFormat: Guest {0}
   botsNameFormat: BOT {0}
-  SpawnProtectedTime: 3
+  SpawnProtectedTime: 5
   CountDownTime: 10
   PlayerRespawnTime: 5
   MaxFriendsAdded: 25
@@ -71,7 +71,7 @@ MonoBehaviour:
   afterMatchCountdown: 5
   AFKTimeLimit: 60
   MaxChangeTeamTimes: 3
-  maxSuicideAttempts: 3
+  maxSuicideAttempts: 300
   MainMenuScene: MainMenu
   OnDisconnectScene: MainMenu
   highLightColor: {r: 0.44827604, g: 0, b: 1, a: 1}
@@ -233,8 +233,8 @@ MonoBehaviour:
     GoalName: Kills
     allowedPickupWeapons: 1
     maxPlayers: 04000000
-    GameGoalsOptions: 14000000
-    timeLimits: 58020000
+    GameGoalsOptions: 0a000000
+    timeLimits: 2c010000
   Team1Name: Delta
   Team1Color: {r: 0.23529412, g: 0.27450982, b: 0.3137255, a: 1}
   Team2Name: Recon

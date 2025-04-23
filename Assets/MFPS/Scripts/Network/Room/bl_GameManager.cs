@@ -1,5 +1,6 @@
 using Photon.Pun;
 using Photon.Realtime;
+using Solana.Unity.SDK;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -245,7 +246,7 @@ public class bl_GameManager : bl_PhotonHelper, IInRoomCallbacks, IConnectionCall
 #else
         if (bl_PlayerSelector.InMatch)
         {
-            if(bl_PlayerSelector.Instance == null)
+            if (bl_PlayerSelector.Instance == null)
             {
                 Debug.LogWarning("Player Selector is enabled but is not integrated in this map.");
                 return false;
@@ -919,7 +920,15 @@ public class bl_GameManager : bl_PhotonHelper, IInRoomCallbacks, IConnectionCall
     //PLAYER EVENTS
     public void OnPlayerEnteredRoom(Player newPlayer)
     {
+
         Debug.Log("Player connected: " + newPlayer.NickName);
+#if UNITY_EDITOR
+        Debug.Log("Player PublicKey: " + "TEST LOCAL");
+#else
+
+        Debug.Log("Player PublicKey: " + Web3.Account.PublicKey.Key);
+#endif
+
         if (bl_PhotonNetwork.IsMasterClient)
         {
             //master sync the require match info to be sure all players have the same info at the start
@@ -938,6 +947,7 @@ public class bl_GameManager : bl_PhotonHelper, IInRoomCallbacks, IConnectionCall
                 Team = newPlayer.GetPlayerTeam(),
                 isRealPlayer = true,
                 isAlive = false,
+                accountID = Web3.Account.PublicKey.Key,
             };
             RegisterMFPSPlayer(playerData);
         }

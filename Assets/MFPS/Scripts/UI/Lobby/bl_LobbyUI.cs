@@ -4,12 +4,15 @@ using MFPS.Runtime.Settings;
 using MFPS.Runtime.UI;
 using Photon.Pun;
 using Photon.Realtime;
+using Solana.Unity.SDK;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
 public class bl_LobbyUI : MonoBehaviour
@@ -24,7 +27,7 @@ public class bl_LobbyUI : MonoBehaviour
     public GameObject PhotonGamePrefab;
     public GameObject EnterPasswordUI;
     public GameObject SeekingMatchUI;
-    public TextMeshProUGUI PlayerNameText = null;
+    //  public TextMeshProUGUI PlayerNameText = null;
     [SerializeField] private TextMeshProUGUI PasswordLogText = null;
 
     public Image LevelIcon;
@@ -165,13 +168,14 @@ public class bl_LobbyUI : MonoBehaviour
     /// <summary>
     /// 
     /// </summary>
+    /*
     private void Update()
     {
         if (bl_PhotonNetwork.IsConnected && bl_GameData.isDataCached)
         {
             PlayerNameText.text = bl_MFPS.LocalPlayer.FullNickName();
         }
-    }
+    }*/
 
     public void SignOut()
     {
@@ -327,6 +331,10 @@ public class bl_LobbyUI : MonoBehaviour
     #endregion
 
     #region UI Callbacks
+
+
+
+
     /// <summary>
     /// 
     /// </summary>
@@ -334,6 +342,8 @@ public class bl_LobbyUI : MonoBehaviour
     /// SOLANA NAME
     public void EnterName(TMP_InputField field = null)
     {
+
+
         if (field == null || string.IsNullOrEmpty(field.text))
         {
             return;
@@ -351,7 +361,45 @@ public class bl_LobbyUI : MonoBehaviour
             field.text = string.Empty;
             return;
         }
-        bl_Lobby.Instance.SetPlayerName(field.text);
+
+        if (field.text != Signature.GamerData.username)
+        {
+            StartCoroutine(SendPutRequest(field.text)); // Replace with your actual URL
+        }
+        else
+        {
+            bl_Lobby.Instance.SetPlayerName(field.text + name + Signature.marker + Signature.PublicKey);
+        }
+
+
+    }
+    IEnumerator SendPutRequest(string name)
+    {
+        string a = name+Signature.marker+ Signature.PublicKey;
+        string url = Signature.baseUrl + "gamers/" + Signature.PublicKey;
+        string jsonData = $"{{\"username\":\"{a}\"}}";
+        
+        Debug.Log("SendPutRequest    jsonData:" + jsonData);
+        byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonData);
+        
+        using (UnityWebRequest www = UnityWebRequest.Put(url, bodyRaw))
+        {
+            www.SetRequestHeader("Content-Type", "application/json");
+
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError($"Error sending PUT: {www.responseCode} - {www.error}");
+                if (www.downloadHandler != null) Debug.LogError($"Response: {www.downloadHandler.text}");
+            }
+            else
+            {
+                Debug.Log($"PUT successful: {www.responseCode}");
+                if (www.downloadHandler != null) Debug.Log($"Response: {www.downloadHandler.text}");
+            }
+        }
+        bl_Lobby.Instance.SetPlayerName(a);
     }
 
     /// <summary>

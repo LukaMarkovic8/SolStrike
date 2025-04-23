@@ -39,6 +39,7 @@ public class bl_PlayerScoreboardUI : bl_PlayerScoreboardUIBase
         RealPlayer = player;
         gameObject.name = player.NickName + player.ActorNumber;
         InitTeam = player.GetPlayerTeam();
+        // string acc = player.accountID;
         UpdatePlayerUI(RealPlayer);
 
 #if !LM
@@ -51,7 +52,7 @@ public class bl_PlayerScoreboardUI : bl_PlayerScoreboardUIBase
     /// </summary>
     public override bool Refresh()
     {
-        if (Bot != null || isBotBinding) {  return UpdateBot(); }
+        if (Bot != null || isBotBinding) { return UpdateBot(); }
 
         if (RealPlayer == null || RealPlayer.GetPlayerTeam() != InitTeam)
         {
@@ -71,7 +72,7 @@ public class bl_PlayerScoreboardUI : bl_PlayerScoreboardUIBase
     /// </summary>
     private void UpdatePlayerUI(Player player)
     {
-        NameText.text = player.NickNameAndRole();
+        NameText.text = Signature.GetJustUsername(player.NickNameAndRole());
         if (!player.CustomProperties.ContainsKey(PropertiesKeys.KillsKey)) return;
 
         if (localHighlight != null) localHighlight.SetActive(player.IsLocal);

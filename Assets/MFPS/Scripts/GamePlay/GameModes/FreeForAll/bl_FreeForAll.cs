@@ -129,6 +129,7 @@ public class bl_FreeForAll : MonoBehaviour, IGameMode
 
     public void OnFinishTime(bool gameOver)
     {
+       
         bl_RoundFinishScreenBase.Instance?.Show(GetBestPlayer().Name);
     }
 

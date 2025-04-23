@@ -18,6 +18,7 @@ using SolStrike.Errors;
 using SolStrike.Accounts;
 using SolStrike.Events;
 using SolStrike.Types;
+using System.Diagnostics;
 
 namespace SolStrike
 {
@@ -160,7 +161,48 @@ namespace SolStrike
             var res = await RpcClient.GetAccountInfoAsync(accountAddress, commitment);
             if (!res.WasSuccessful)
                 return new Solana.Unity.Programs.Models.AccountResultWrapper<ClaimableRewards>(res);
-            var resultingAccount = ClaimableRewards.Deserialize(Convert.FromBase64String(res.Result.Value.Data[0]));
+            if (res.WasSuccessful)
+            {
+                Console.WriteLine($"Account {accountAddress} found");
+                Console.WriteLine(res.RawRpcResponse.ToString());
+            }
+            else
+            {
+                Console.WriteLine($"Account {accountAddress} not found");
+
+            }
+
+            ClaimableRewards resultingAccount = new ClaimableRewards();
+            if (res.Result == null)
+            {
+                Console.WriteLine($"1 Account not found NULL DATA");
+
+                if (res.Result.Value == null)
+                {
+                    Console.WriteLine($"2 Account not found NULL DATA");
+
+                    if (res.Result.Value.Data == null)
+                    {
+                        Console.WriteLine($"3 Account not found NULL DATA");
+
+                        if (res.Result.Value.Data[0] == null)
+                        {
+                            Console.WriteLine($"4 Account not found NULL DATA");
+
+                            return new Solana.Unity.Programs.Models.AccountResultWrapper<ClaimableRewards>(res, new ClaimableRewards());
+                        }
+                        else
+                        {
+
+                            resultingAccount = ClaimableRewards.Deserialize(Convert.FromBase64String(res.Result.Value.Data[0]));
+                        }
+                    }
+                }
+            }
+         
+
+
+
             return new Solana.Unity.Programs.Models.AccountResultWrapper<ClaimableRewards>(res, resultingAccount);
         }
 
