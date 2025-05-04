@@ -1,0 +1,16 @@
+using System.Collections;
+using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
+
+public class MatchCostDisplay : MonoBehaviour
+{
+
+    public TextMeshProUGUI text;
+
+    // Update is called once per frame
+    void Update()
+    {
+        text.text = "MATCH COST:"+Signature.matchCost.ToString()+" SOL";
+    }
+}

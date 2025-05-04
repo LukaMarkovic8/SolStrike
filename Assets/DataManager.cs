@@ -170,11 +170,11 @@ public static class Signature
     public static string Poruka = "Sign this message to log in. It is free and will not trigger any blockchain transaction.";
     public static string PublicKey = "pk";
     public static GamerData GamerData = new GamerData();
-    public static int UnclaimedChipsAmount = 0;
-    public static int StandardChipsAmount = 0;
+    public static double UnclaimedChipsAmount = 0;
+    public static double StandardChipsAmount = 0;
     public static bool HasReservedChips = false;
     public static PlayerData[] LeaderBoardPlayers = new PlayerData[0];
-
+    public static float matchCost = 0.01f; // Example match cost, can be set dynamically
     public static string marker = "-account:";
 
 
