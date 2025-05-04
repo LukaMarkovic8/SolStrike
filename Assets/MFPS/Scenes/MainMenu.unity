@@ -13307,6 +13307,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   reserveChipsHolder: {fileID: 243253187}
+--- !u!114 &1378311598
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1378311596}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74fa2a1f1f3b2404e85e8b7a32766bc8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  redeemButton: {fileID: 1643794351}
+--- !u!114 &1378311599
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1378311596}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea66185d25b2d9f46ad16182852e17a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  claimButton: {fileID: 2042539004}
 --- !u!1001 &1420298671
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -28175,6 +28201,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5689433044148909605, guid: 88411bd00e4bd9f43a283314addb1a28, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1378311597}
+    - targetCorrespondingSourceObject: {fileID: 5689433044148909605, guid: 88411bd00e4bd9f43a283314addb1a28, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1378311598}
+    - targetCorrespondingSourceObject: {fileID: 5689433044148909605, guid: 88411bd00e4bd9f43a283314addb1a28, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1378311599}
   m_SourcePrefab: {fileID: 100100000, guid: 88411bd00e4bd9f43a283314addb1a28, type: 3}
 --- !u!1001 &7053723625632271817
 PrefabInstance:
