@@ -79,8 +79,8 @@ MonoBehaviour:
     m_FixedHeight: 0
     m_StretchWidth: 0
     m_StretchHeight: 0
-  IndicatorIcon: {fileID: 2800000, guid: 792ac8cab527c304d9dc4ba3668a72e5, type: 3}
-  IndicatorIconSize: 15
+  IndicatorIcon: {fileID: 2800000, guid: 9f9e3ab36f83ff449bf139d8a1c54182, type: 3}
+  IndicatorIconSize: 20
   HealthBarTexture: {fileID: 2800000, guid: ca4f245ce554ba04e9077565d5667264, type: 3}
   HealthBarThickness: 7
   HealthBackColor: {r: 0, g: 0, b: 0, a: 0.60784316}
