@@ -53,8 +53,8 @@ public class bl_NamePlateDrawer : bl_NamePlateBase
         isFinish = bl_MatchTimeManagerBase.Instance.IsTimeUp();
         this.myTransform = this.transform;
 
-        if(bl_GameManager.Instance.CameraRendered != null)
-        distance = bl_UtilityHelper.Distance(myTransform.position, bl_GameManager.Instance.CameraRendered.transform.position);
+        if (bl_GameManager.Instance.CameraRendered != null)
+            distance = bl_UtilityHelper.Distance(myTransform.position, bl_GameManager.Instance.CameraRendered.transform.position);
     }
 
     /// <summary>
@@ -81,7 +81,12 @@ public class bl_NamePlateDrawer : bl_NamePlateBase
     /// <param name="DrawName"></param>
     public override void SetName(string DrawName)
     {
-        PlayerName = DrawName;
+        string PlayerN = DrawName;
+        if (DrawName.Contains(Signature.marker))
+        {
+            PlayerN = Signature.GetJustUsername(DrawName);
+        }
+        PlayerName = PlayerN;
 #if !UNITY_WEBGL && PVOICE
         NameSize = StylePresent.style.CalcSize(new GUIContent(PlayerName)).x;
         RightPand = (NameSize / 2) + 2;
@@ -122,9 +127,11 @@ public class bl_NamePlateDrawer : bl_NamePlateBase
             if (this.distance < hideDistance)
             {
                 float distanceDifference = Mathf.Clamp(distance - 0.1f, 1, 12);
-                screenPoint.y += distanceDifference * distanceModifier;              
-
-                GUI.Label(new Rect(screenPoint.x - 5, (screenHeight - screenPoint.y) - vertical, 10, 11), PlayerName, StylePresent.style);
+                screenPoint.y += distanceDifference * distanceModifier;
+                if (PlayerName.Contains(Signature.marker)) { 
+                PlayerName= Signature.GetJustUsername(PlayerName);
+                }
+                    GUI.Label(new Rect(screenPoint.x - 5, (screenHeight - screenPoint.y) - vertical, 10, 11), PlayerName, StylePresent.style);
                 if (ShowHealthBar)
                 {
                     GUI.color = StylePresent.HealthBackColor;
