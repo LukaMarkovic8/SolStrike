@@ -7,7 +7,7 @@ public class bl_Footstep : MonoBehaviour
     public LayerMask surfaceLayers;
 
     [Header("Settings")]
-    [Range(0, 1)] public float stepsVolume = 0.7f;
+    [Range(0, 1)] public float stepsVolume = 0.15f;
     [Range(0, 1)] public float stealthModeVolumeMultiplier = 0.1f;
     public float walkSpeed = 4;
     [Range(0.1f, 1)] public float walkStepRate = 0.44f;

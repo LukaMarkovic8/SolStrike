@@ -120,11 +120,11 @@ public class SolanaUIHandler : MonoBehaviour
         byte[] bytes = Encoding.UTF8.GetBytes(signedMessageId);
         byte[] response = await Web3.Wallet.SignMessage(bytes);
         string base58Result = Solana.Unity.Wallet.Utilities.Encoders.Base58.EncodeData(response);
-        Debug.Log("Base58 result: " + base58Result);
+       // Debug.Log("Base58 result: " + base58Result);
         Signature.SignedMessage = signedMessageId;
         Signature.SignatureString = base58Result;
 
-        Debug.Log(Signature.PublicKey + "   SignedMessage:" + Signature.SignedMessage + "   SignatureString:" + Signature.SignatureString);
+        //Debug.Log(Signature.PublicKey + "   SignedMessage:" + Signature.SignedMessage + "   SignatureString:" + Signature.SignatureString);
         bool verified = Web3.Account.Verify(bytes, response);
        // Debug.Log("Verification result: " + verified);
         await GetAmountOfChipsWeb3Async();
@@ -178,7 +178,7 @@ public class SolanaUIHandler : MonoBehaviour
     private IEnumerator GetGamerDataCoroutine()
     {
         string url = baseUrl + Web3.Account.PublicKey.Key;
-        Debug.Log("Sending GET request to: " + url);
+        //Debug.Log("Sending GET request to: " + url);
 
         using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
         {
@@ -196,7 +196,7 @@ public class SolanaUIHandler : MonoBehaviour
                     Debug.LogError($"HTTP Error: {webRequest.error}\nCode: {webRequest.responseCode}\nURL: {url}");
                     break;
                 case UnityWebRequest.Result.Success:
-                    Debug.Log($"Success! Response Code: {webRequest.responseCode}");
+                  //  Debug.Log($"Success! Response Code: {webRequest.responseCode}");
                     string responseJson = webRequest.downloadHandler.text;
                 //    Debug.Log("Received JSON:\n" + responseJson);
 
@@ -262,7 +262,7 @@ public class SolanaUIHandler : MonoBehaviour
     public async Task GetAmountOfUnclaimedChipsWeb3Async()
     {
         PublicKey claimableRewardsPDA;
-        Debug.Log("GetAmountOfUnclaimedChipsWeb3Async");
+        //Debug.Log("GetAmountOfUnclaimedChipsWeb3Async");
         //TODO LUKA
         //        holder.SetActive(false);
 
@@ -278,7 +278,7 @@ public class SolanaUIHandler : MonoBehaviour
             {
                 Signature.UnclaimedChipsAmount = 0;
                 unclaimedChipsText.text = "UNCLAIMED CHIPS : " + Signature.UnclaimedChipsAmount.ToString();
-                Debug.Log("Error: " + a.WasSuccessful);
+               // Debug.Log("Error: " + a.WasSuccessful);
                 return;
             }
             else
@@ -621,7 +621,7 @@ public class SolanaUIHandler : MonoBehaviour
             // Debug.LogError($"Failed to claim chips. Error: {signature.Reason}");
         }
         var now = System.DateTime.Now.ToString();
-        Debug.Log("Claimed chips at: " + now);
+       // Debug.Log("Claimed chips at: " + now);
     }
 
 
@@ -629,7 +629,7 @@ public class SolanaUIHandler : MonoBehaviour
     private IEnumerator GetLeaderboardCoroutine()
     {
         string url = Signature.baseUrl + "gamers/leaderboard/" + Web3.Account.PublicKey.Key;
-        Debug.Log("Sending GET  leaderboard request to: " + url);
+      //  Debug.Log("Sending GET  leaderboard request to: " + url);
 
         using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
         {
@@ -647,8 +647,8 @@ public class SolanaUIHandler : MonoBehaviour
                     Debug.LogError($"HTTP Error: {webRequest.error}\nCode: {webRequest.responseCode}\nURL: {url}");
                     break;
                 case UnityWebRequest.Result.Success:
-                    Debug.Log($"Success! Response Code: {webRequest.responseCode}");
-                    Debug.Log($"Response: {webRequest.downloadHandler.text}");
+                   // Debug.Log($"Success! Response Code: {webRequest.responseCode}");
+                  //  Debug.Log($"Response: {webRequest.downloadHandler.text}");
                     string wrappedJsonString = "{ \"players\": " + webRequest.downloadHandler.text + "}";
                     //   Debug.Log("wrappedJsonString JSON:\n" + wrappedJsonString);
                     PlayerListWrapper players = JsonUtility.FromJson<PlayerListWrapper>(wrappedJsonString);
@@ -752,7 +752,7 @@ public class SolanaUIHandler : MonoBehaviour
     private int chisToRedeem = 0;
     public void OnRedeemInputFieldValueChanged(string newValue)
     {
-        Debug.Log(newValue);
+      //  Debug.Log(newValue);
 
         if (int.TryParse(newValue, out int chipsToSell))
         {
@@ -765,7 +765,7 @@ public class SolanaUIHandler : MonoBehaviour
 
                 if (Signature.StandardChipsAmount >= chipsToSell)
                 {
-                    solToReciveText.text = "SOL to recieve: " + (chipsToSell * chipCost).ToString();
+                    solToReciveText.text = "SOL to receive: " + (chipsToSell * chipCost).ToString();
                     redeemChipsButton.gameObject.SetActive(true);
 
                     InvalidInputTextRedeem.gameObject.SetActive(false);

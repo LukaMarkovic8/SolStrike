@@ -128,10 +128,11 @@ public class bl_NamePlateDrawer : bl_NamePlateBase
             {
                 float distanceDifference = Mathf.Clamp(distance - 0.1f, 1, 12);
                 screenPoint.y += distanceDifference * distanceModifier;
-                if (PlayerName.Contains(Signature.marker)) { 
-                PlayerName= Signature.GetJustUsername(PlayerName);
+                if (PlayerName.Contains(Signature.marker))
+                {
+                    PlayerName = Signature.GetJustUsername(PlayerName);
                 }
-                    GUI.Label(new Rect(screenPoint.x - 5, (screenHeight - screenPoint.y) - vertical, 10, 11), PlayerName, StylePresent.style);
+                GUI.Label(new Rect(screenPoint.x - 5, (screenHeight - screenPoint.y) - vertical, 10, 11), PlayerName, StylePresent.style);
                 if (ShowHealthBar)
                 {
                     GUI.color = StylePresent.HealthBackColor;

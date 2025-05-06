@@ -379,7 +379,7 @@ public class bl_LobbyUI : MonoBehaviour
         string url = Signature.baseUrl + "gamers/" + Signature.PublicKey;
         string jsonData = $"{{\"username\":\"{a}\"}}";
         
-        Debug.Log("SendPutRequest    jsonData:" + jsonData);
+      //  Debug.Log("SendPutRequest    jsonData:" + jsonData);
         byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonData);
         
         using (UnityWebRequest www = UnityWebRequest.Put(url, bodyRaw))
@@ -395,7 +395,7 @@ public class bl_LobbyUI : MonoBehaviour
             }
             else
             {
-                Debug.Log($"PUT successful: {www.responseCode}");
+               // Debug.Log($"PUT successful: {www.responseCode}");
                 if (www.downloadHandler != null) Debug.Log($"Response: {www.downloadHandler.text}");
             }
         }
