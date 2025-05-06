@@ -181,6 +181,7 @@ public static class Signature
     public static byte[] PublicKeyBytes { get; internal set; }
     public static double SolanaBalance { get; internal set; }
 
+    public static bool isFirstTime = true;
     public static (string, string) SplitStringByAccount(string input, out string beforeAccount, out string afterAccount)
     {
         beforeAccount = null;

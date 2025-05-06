@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Org.BouncyCastle.Asn1.Ocsp;
 using TMPro;
 using UnityEngine;
 
@@ -10,6 +12,6 @@ public class SolanaBlanceDisplay : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        balanceText.text = "Balance: " + Signature.SolanaBalance.ToString() + " SOL";
+        balanceText.text = "Balance: " + Math.Round(Signature.SolanaBalance, 2).ToString() + " SOL";
     }
 }

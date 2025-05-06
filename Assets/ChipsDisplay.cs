@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -6,10 +7,10 @@ using UnityEngine;
 
 public class ChipsDisplay : MonoBehaviour
 {
-public TextMeshProUGUI chipsText;
+    public TextMeshProUGUI chipsText;
     // Update is called once per frame
     void Update()
     {
-        chipsText.text ="STRIKE CHIPS:"+Signature.StandardChipsAmount.ToString();
+        chipsText.text = "Strike Chips: " + Math.Round(Signature.StandardChipsAmount, 2).ToString();
     }
 }

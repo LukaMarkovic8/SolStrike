@@ -11,6 +11,6 @@ public class MatchCostDisplay : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        text.text = "MATCH COST:"+Signature.matchCost.ToString()+" SOL";
+        text.text = "Match Cost: "+Signature.matchCost.ToString()+" Sol";
     }
 }

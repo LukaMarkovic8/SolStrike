@@ -11,6 +11,6 @@ public class UnclaimedChipsDisplay : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        unclaimedChipsText.text = "UNCLAIMED CHIPS:" + Signature.UnclaimedChipsAmount.ToString();
+        unclaimedChipsText.text = "Unclaimed Chips: " + Signature.UnclaimedChipsAmount.ToString();
     }
 }

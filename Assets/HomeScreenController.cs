@@ -10,24 +10,48 @@ public class HomeScreenController : MonoBehaviour
 {
 
 
-    public GameObject reserveChipsHolder;
+    //public GameObject reserveChipsHolder;
+
+
+    public GameObject PlayButtonHolder;
+    public GameObject ReserveButtonHolder;
+    public GameObject BuyButtonHolder;
+
 
     private void Update()
     {
         if (Signature.GamerData != null)
         {
-            int a = Convert.ToInt32(Signature.GamerData.reservedChips);
-            if (Signature.GamerData.reservedChips != null && a > 0)
+            int reserved = Convert.ToInt32(Signature.GamerData.reservedChips);
+            double standard = Convert.ToDouble(Signature.StandardChipsAmount);
+
+            if (reserved > 0)
             {
-                reserveChipsHolder.SetActive(false);
-                //Debug.Log("Reserve Chips: " + Signature.GamerData.reservedChips);
+
+                PlayButtonHolder.SetActive(true);
+                ReserveButtonHolder.SetActive(false);
+                BuyButtonHolder.SetActive(false);
+
+
+
             }
-            else
+            else if (reserved < 1 && standard >= 1)
             {
-                reserveChipsHolder.SetActive(true);
+                ReserveButtonHolder.SetActive(true);
+                PlayButtonHolder.SetActive(false);
+                BuyButtonHolder.SetActive(false);
+            }
+            else if (reserved < 1 && standard < 1)
+            {
+                ReserveButtonHolder.SetActive(false);
+                PlayButtonHolder.SetActive(false);
+                BuyButtonHolder.SetActive(true);
             }
         }
+
     }
+
+
     private IEnumerator GetLeaderboardCoroutine()
     {
         string url = Signature.baseUrl + "leaderboard/" + Web3.Account.PublicKey.Key;

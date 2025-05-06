@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -12,6 +13,7 @@ public class PointsDisplay : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        text.text ="POINTS:"+ Signature.GamerData.points.ToString();
+        decimal originalDecimal = decimal.Parse(Signature.GamerData.points);
+        text.text ="Points: " + Math.Round(originalDecimal, 2).ToString();
     }
 }
