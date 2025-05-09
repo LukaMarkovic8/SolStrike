@@ -7,6 +7,7 @@ using System.Text;
 using UnityEngine.Networking;
 using System.Collections;
 using Newtonsoft.Json;
+using System;
 
 namespace MFPS.Runtime.UI.Layout
 {
@@ -45,9 +46,6 @@ namespace MFPS.Runtime.UI.Layout
                 playerResults[i].deaths = players[i].GetDeaths();
                 playerResults[i].headshots = 0;
 
-
-                Debug.Log($"Player {i}: {players[i].NickName} - Account ID: {playerResults[i].accountId}");
-
             }
             GameOverData data = new GameOverData();
             data.accountId = Signature.PublicKey;
@@ -55,7 +53,7 @@ namespace MFPS.Runtime.UI.Layout
             data.signature = Signature.SignatureString;
             data.signedMessage = Signature.SignedMessage;
             data.playerResults = playerResults;
-            Debug.Log(data.playerResults.Length+"  "+ data.playerResults[0].accountId);
+            Debug.Log(data.playerResults.Length + "  " + data.playerResults[0].accountId);
             if (data.playerResults.Length < 1)
             {
                 Debug.LogError("No player results found.");
@@ -63,9 +61,28 @@ namespace MFPS.Runtime.UI.Layout
             }
             else
             {
-                Debug.Log("Player results found."+ data.playerResults[0].accountId);
+                // Debug.Log("Player results found."+ data.playerResults[0].accountId);
             }
+            for (int i = 0; i < data.playerResults.Length; i++)
+            {
+                PlayerResult item = data.playerResults[i];
+                if (item.accountId == Signature.PublicKey)
+                {
+                    Signature.placeFinished = i + 1;
+                    Debug.Log($"Player {i + 1} finished with account ID: {item.accountId}");
+                }
+                // Debug.Log($"Player {i}: {item.accountId} - Kills: {item.kills}, Deaths: {item.deaths}, Headshots: {item.headshots}");
+            }
+
+            if (IsStartTimeMoreThan5SecondsAgo(Signature.startTime))
+            {
                 StartCoroutine(PostRequestCoroutine(Signature.baseUrl + "games/over", data));
+            }
+            else
+            {
+                Debug.LogError("Start time is less than 5 seconds ago. Not sending request.");
+            }
+
             content.SetActive(true);
             FinalUIText.text = (bl_RoomSettings.Instance.CurrentRoomInfo.roundStyle == RoundStyle.OneMacht) ? bl_GameTexts.FinalOneMatch.Localized(38) : bl_GameTexts.FinalRounds.Localized(32);
             FinalWinnerText.text = string.Format("{0} {1}", Signature.GetJustUsername(winner), bl_GameTexts.FinalWinner).Localized(33).ToUpper();
@@ -73,6 +90,19 @@ namespace MFPS.Runtime.UI.Layout
         /// <summary>
         /// 
         /// </summary>
+        /// 
+
+        public bool IsStartTimeMoreThan5SecondsAgo(DateTime startTimeValue)
+        {
+
+            DateTime now = DateTime.Now;
+
+
+            TimeSpan difference = now - startTimeValue;
+
+            return difference.TotalSeconds > 5.0;
+        }
+
         public override void Hide()
         {
 

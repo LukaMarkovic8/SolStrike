@@ -51,9 +51,9 @@ MonoBehaviour:
   howConsiderBotsEliminations: 0
   ScoreReward:
     ScorePerKill: 100
-    ScorePerHeadShot: 25
-    ScoreForWinMatch: 1000
-    ScorePerTimePlayed: 3
+    ScorePerHeadShot: 0
+    ScoreForWinMatch: 0
+    ScorePerTimePlayed: 0
   VirtualCoins:
     XPCoin: 0
     CoinScoreValue: 100

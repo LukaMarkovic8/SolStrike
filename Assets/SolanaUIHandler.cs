@@ -105,7 +105,7 @@ public class SolanaUIHandler : MonoBehaviour
         // StartCoroutine(GetLeaderboardCoroutine());
         await GetAmountOfChipsWeb3Async(true);
         await GetSolanaBalance();
-
+        StartCoroutine(GetUnclaimedChipsAfterSeconds(5));
     }
 
     public async Task SignMessageAsync()
@@ -120,13 +120,13 @@ public class SolanaUIHandler : MonoBehaviour
         byte[] bytes = Encoding.UTF8.GetBytes(signedMessageId);
         byte[] response = await Web3.Wallet.SignMessage(bytes);
         string base58Result = Solana.Unity.Wallet.Utilities.Encoders.Base58.EncodeData(response);
-       // Debug.Log("Base58 result: " + base58Result);
+        // Debug.Log("Base58 result: " + base58Result);
         Signature.SignedMessage = signedMessageId;
         Signature.SignatureString = base58Result;
 
         //Debug.Log(Signature.PublicKey + "   SignedMessage:" + Signature.SignedMessage + "   SignatureString:" + Signature.SignatureString);
         bool verified = Web3.Account.Verify(bytes, response);
-       // Debug.Log("Verification result: " + verified);
+        // Debug.Log("Verification result: " + verified);
         await GetAmountOfChipsWeb3Async();
         // gameObject.SetActive(false);
     }
@@ -137,7 +137,7 @@ public class SolanaUIHandler : MonoBehaviour
         Signature.SolanaBalance = amount;
         solanaBalanceText.text = "SOL BALANCE : " + Signature.SolanaBalance.ToString();
 
-    //    Debug.Log("sol balance: " + amount);
+        //    Debug.Log("sol balance: " + amount);
     }
 
     [ContextMenu("TESTGET")]
@@ -196,9 +196,9 @@ public class SolanaUIHandler : MonoBehaviour
                     Debug.LogError($"HTTP Error: {webRequest.error}\nCode: {webRequest.responseCode}\nURL: {url}");
                     break;
                 case UnityWebRequest.Result.Success:
-                  //  Debug.Log($"Success! Response Code: {webRequest.responseCode}");
+                    //  Debug.Log($"Success! Response Code: {webRequest.responseCode}");
                     string responseJson = webRequest.downloadHandler.text;
-                //    Debug.Log("Received JSON:\n" + responseJson);
+                    //    Debug.Log("Received JSON:\n" + responseJson);
 
                     try
                     {
@@ -210,7 +210,7 @@ public class SolanaUIHandler : MonoBehaviour
                     }
                     catch (Exception ex)
                     {
-                       // Debug.LogError("Error parsing JSON: " + ex.Message);
+                        // Debug.LogError("Error parsing JSON: " + ex.Message);
                         break;
                     }
             }
@@ -219,10 +219,10 @@ public class SolanaUIHandler : MonoBehaviour
     }
     public async Task GetSolanaBalance()
     {
-      //  Debug.Log("Solana balance before: " + Signature.SolanaBalance);
+        //  Debug.Log("Solana balance before: " + Signature.SolanaBalance);
 
         Signature.SolanaBalance = await Web3.Wallet.GetBalance();
-     //   Debug.Log("Solana balance after: " + Signature.SolanaBalance);
+        //   Debug.Log("Solana balance after: " + Signature.SolanaBalance);
     }
     public async Task GetAmountOfChipsWeb3Async(bool a = true)
     {
@@ -259,6 +259,13 @@ public class SolanaUIHandler : MonoBehaviour
 
     }
 
+
+    IEnumerator GetUnclaimedChipsAfterSeconds(int seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        GetAmountOfUnclaimedChipsWeb3Async();
+    }
+
     public async Task GetAmountOfUnclaimedChipsWeb3Async()
     {
         PublicKey claimableRewardsPDA;
@@ -278,7 +285,7 @@ public class SolanaUIHandler : MonoBehaviour
             {
                 Signature.UnclaimedChipsAmount = 0;
                 unclaimedChipsText.text = "UNCLAIMED CHIPS : " + Signature.UnclaimedChipsAmount.ToString();
-               // Debug.Log("Error: " + a.WasSuccessful);
+                // Debug.Log("Error: " + a.WasSuccessful);
                 return;
             }
             else
@@ -621,7 +628,7 @@ public class SolanaUIHandler : MonoBehaviour
             // Debug.LogError($"Failed to claim chips. Error: {signature.Reason}");
         }
         var now = System.DateTime.Now.ToString();
-       // Debug.Log("Claimed chips at: " + now);
+        // Debug.Log("Claimed chips at: " + now);
     }
 
 
@@ -629,7 +636,7 @@ public class SolanaUIHandler : MonoBehaviour
     private IEnumerator GetLeaderboardCoroutine()
     {
         string url = Signature.baseUrl + "gamers/leaderboard/" + Web3.Account.PublicKey.Key;
-      //  Debug.Log("Sending GET  leaderboard request to: " + url);
+        //  Debug.Log("Sending GET  leaderboard request to: " + url);
 
         using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
         {
@@ -647,8 +654,8 @@ public class SolanaUIHandler : MonoBehaviour
                     Debug.LogError($"HTTP Error: {webRequest.error}\nCode: {webRequest.responseCode}\nURL: {url}");
                     break;
                 case UnityWebRequest.Result.Success:
-                   // Debug.Log($"Success! Response Code: {webRequest.responseCode}");
-                  //  Debug.Log($"Response: {webRequest.downloadHandler.text}");
+                    // Debug.Log($"Success! Response Code: {webRequest.responseCode}");
+                    //  Debug.Log($"Response: {webRequest.downloadHandler.text}");
                     string wrappedJsonString = "{ \"players\": " + webRequest.downloadHandler.text + "}";
                     //   Debug.Log("wrappedJsonString JSON:\n" + wrappedJsonString);
                     PlayerListWrapper players = JsonUtility.FromJson<PlayerListWrapper>(wrappedJsonString);
@@ -736,6 +743,12 @@ public class SolanaUIHandler : MonoBehaviour
         }
         else
         {
+
+            if (int.TryParse(newValue, out int chipsToBuy2))
+            {
+                solToSpendTextBuyScreen.text = "Amount to spend: " + (chipsToBuy * chipCost).ToString() + " SOL";
+            }
+
             buyChipsButtonBuyScreen.gameObject.SetActive(false);
             InvalidInputText.gameObject.SetActive(true);
             // Debug.Log("Invalid input, not an integer.");
@@ -752,7 +765,7 @@ public class SolanaUIHandler : MonoBehaviour
     private int chisToRedeem = 0;
     public void OnRedeemInputFieldValueChanged(string newValue)
     {
-      //  Debug.Log(newValue);
+        //  Debug.Log(newValue);
 
         if (int.TryParse(newValue, out int chipsToSell))
         {

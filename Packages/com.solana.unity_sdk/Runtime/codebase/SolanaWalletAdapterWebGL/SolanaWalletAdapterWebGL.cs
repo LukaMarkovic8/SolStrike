@@ -273,7 +273,7 @@ namespace Solana.Unity.SDK
             //Debug.Log($"Message signed with signature: {signature}");
 
             //Web3.Base.SignatureString = signature;
-            Debug.Log("ss "+ signature);
+            //Debug.Log("ss "+ signature);
             
             _signedMessageTaskCompletionSource.SetResult(Convert.FromBase64String(signature));
         }

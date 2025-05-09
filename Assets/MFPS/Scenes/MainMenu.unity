@@ -3340,10 +3340,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 516759682}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ebcd73de60b87e428615fe4ed7a3b0e, type: 3}
+  m_Script: {fileID: 11500000, guid: 52579f41ccf0d6240804492d43dea227, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  balanceText: {fileID: 516759684}
+  chipsText: {fileID: 516759684}
 --- !u!1 &540061289
 GameObject:
   m_ObjectHideFlags: 0
@@ -7950,7 +7950,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Chips to redeem
+  m_text: 'Chips to redeem:'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8c1cffc377ee14e45bac3f8dd1b41f5e, type: 2}
   m_sharedMaterial: {fileID: -5094103871776856743, guid: 8c1cffc377ee14e45bac3f8dd1b41f5e, type: 2}

@@ -80,7 +80,7 @@ public class PlayerNameHandler : MonoBehaviour
      
 
 
-        Debug.Log("Sending GET request to: " + url);
+      //  Debug.Log("Sending GET request to: " + url);
 
         using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
         {
@@ -98,9 +98,9 @@ public class PlayerNameHandler : MonoBehaviour
                     Debug.LogError($"HTTP Error: {webRequest.error}\nCode: {webRequest.responseCode}\nURL: {url}");
                     break;
                 case UnityWebRequest.Result.Success:
-                    Debug.Log($"Success! Response Code: {webRequest.responseCode}");
+                   // Debug.Log($"Success! Response Code: {webRequest.responseCode}");
                     string responseJson = webRequest.downloadHandler.text;
-                    Debug.Log("Received JSON:\n" + responseJson);
+                 //   Debug.Log("Received JSON:\n" + responseJson);
 
                     StartCoroutine(SendPutRequest(url));
                     // TODO: Parse responseJson here

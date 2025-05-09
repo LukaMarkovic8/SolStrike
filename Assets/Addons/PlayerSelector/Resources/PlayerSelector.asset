@@ -24,7 +24,7 @@ MonoBehaviour:
       NoAllowedCoins: 
     ID: 0
     team: 2
-  - Name: dogWTF
+  - Name: DOGWIFHAT
     Preview: {fileID: 21300000, guid: e108e0246c0c4ed45849ab1eb07ea400, type: 3}
     Prefab: {fileID: 4811422019803324394, guid: e05147c568b0f88479d07a33e470740d, type: 3}
     Unlockability:
@@ -35,7 +35,7 @@ MonoBehaviour:
       NoAllowedCoins: 
     ID: 1
     team: 1
-  - Name: Gecko Geek
+  - Name: GALACTIC GECKO
     Preview: {fileID: 21300000, guid: f88f2bb57b063fc4d957d563d387eb31, type: 3}
     Prefab: {fileID: 8573728130409336226, guid: 27a8e7ddb8737a843a24f9657f48340d, type: 3}
     Unlockability:
@@ -57,8 +57,8 @@ MonoBehaviour:
       NoAllowedCoins: 
     ID: 3
     team: 1
-  - Name: SOLFLARE MONKEY
-    Preview: {fileID: 21300000, guid: e94a8bcbdf4bb0e4e9541dd6165774da, type: 3}
+  - Name: SOLFLARE MONKE
+    Preview: {fileID: 21300000, guid: 64697d49957e0e94bbef4e7c53d17644, type: 3}
     Prefab: {fileID: 2121814061003406732, guid: ddf0fc939244d164abced7492e96cf16, type: 3}
     Unlockability:
       UnlockMethod: 0

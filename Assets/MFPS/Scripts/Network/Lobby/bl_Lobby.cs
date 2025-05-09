@@ -733,14 +733,14 @@ public class bl_Lobby : bl_PhotonHelper, IConnectionCallbacks, ILobbyCallbacks, 
         if (string.IsNullOrEmpty(bl_PhotonNetwork.NickName))
         {
             connectionState = LobbyConnectionState.Authenticating;
-            Debug.Log($"Player has joined to the lobby, now verifying session...");
+            //Debug.Log($"Player has joined to the lobby, now verifying session...");
             RequestSessionVerification();
             bl_LobbyLoadingScreenBase.Instance.SetText(bl_GameTexts.VerifyingSession.Localized(199));
         }
         else
         {
             connectionState = LobbyConnectionState.Connected;
-            Debug.Log($"Player <b>{bl_PhotonNetwork.LocalPlayer.NickName}</b> joined to the lobby, UserId: {bl_PhotonNetwork.LocalPlayer.UserId}");
+          //  Debug.Log($"Player <b>{bl_PhotonNetwork.LocalPlayer.NickName}</b> joined to the lobby, UserId: {bl_PhotonNetwork.LocalPlayer.UserId}");
             bl_LobbyLoadingScreenBase.Instance.SetActive(true).HideIn(2, true);
         }
 

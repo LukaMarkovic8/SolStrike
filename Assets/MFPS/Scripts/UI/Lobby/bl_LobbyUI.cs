@@ -391,12 +391,12 @@ public class bl_LobbyUI : MonoBehaviour
             if (www.result != UnityWebRequest.Result.Success)
             {
                 Debug.LogError($"Error sending PUT: {www.responseCode} - {www.error}");
-                if (www.downloadHandler != null) Debug.LogError($"Response: {www.downloadHandler.text}");
+                //if (www.downloadHandler != null) Debug.LogError($"Response: {www.downloadHandler.text}");
             }
             else
             {
                // Debug.Log($"PUT successful: {www.responseCode}");
-                if (www.downloadHandler != null) Debug.Log($"Response: {www.downloadHandler.text}");
+             //   if (www.downloadHandler != null) Debug.Log($"Response: {www.downloadHandler.text}");
             }
         }
         bl_Lobby.Instance.SetPlayerName(a);

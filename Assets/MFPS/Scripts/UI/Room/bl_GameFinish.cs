@@ -10,6 +10,8 @@ using MFPS.Runtime.AI;
 /// </summary>
 public class bl_GameFinish : bl_PhotonHelper, IMFPSResumeScreen
 {
+    [SerializeField] private GameObject roundFinishScreen;
+    [SerializeField] private GameObject resumeScreen;
 
     [SerializeField] private TextMeshProUGUI PlayerNameText = null;
     [SerializeField] private TextMeshProUGUI KillsText = null;
@@ -107,7 +109,7 @@ public class bl_GameFinish : bl_PhotonHelper, IMFPSResumeScreen
     public void Show()
     {
         Content.SetActive(true);
-        Invoke(nameof(GoToLobby), 60);//maximum time out to leave.
+        Invoke(nameof(GoToLobby), 10);//maximum time out to leave.
     }
 
     /// <summary>
@@ -124,5 +126,7 @@ public class bl_GameFinish : bl_PhotonHelper, IMFPSResumeScreen
         {
             bl_UtilityHelper.LoadLevel(bl_GameData.Instance.MainMenuScene);
         }
+        resumeScreen.SetActive(false);
+        roundFinishScreen.SetActive(false);
     }
 }

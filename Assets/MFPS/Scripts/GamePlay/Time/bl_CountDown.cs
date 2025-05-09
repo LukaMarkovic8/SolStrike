@@ -91,7 +91,9 @@ public class bl_CountDown : bl_CountDownBase
         //  data.network = "devnet"; // Or whatever network applies
 
         // Start the Coroutine to handle the web request
+        Signature.startTime = System.DateTime.Now; 
         StartCoroutine(PostRequestCoroutine(Signature.baseUrl + "games/play", data));
+
     }
 
     // --- Coroutine to Handle the Asynchronous POST Request ---

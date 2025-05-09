@@ -4,7 +4,7 @@ using TMPro;
 using System.Collections;
 
 [System.Serializable]
-public class bl_KillCamUI :  bl_KillCamUIBase
+public class bl_KillCamUI : bl_KillCamUIBase
 {
     [SerializeField] private GameObject content = null;
     [SerializeField] private TextMeshProUGUI KillerNameText = null;
@@ -19,25 +19,25 @@ public class bl_KillCamUI :  bl_KillCamUIBase
     /// 
     /// </summary>
     public override void Show(bl_KillCamBase.KillCamInfo kcinfo)
-{
+    {
         var killer = kcinfo.TargetName;
         if (string.IsNullOrEmpty(killer) && kcinfo.Target != null)
         {
             killer = kcinfo.Target.name;
         }
-        
+
         content.SetActive(true);
         bl_GunInfo info = bl_GameData.Instance.GetWeapon(kcinfo.GunID);
         GunImage.sprite = info.GunIcon;
         GunNameText.text = info.Name.ToUpper();
         killer = killer.Replace("(die)", "");
-        KillerNameText.text = killer;
+        KillerNameText.text = Signature.GetJustUsername(killer);
         KillCamSpectatingText.text = string.Format("<size=8>{0}:</size>\n{1}", bl_GameTexts.Spectating.Localized(26).ToUpper(), killer);
 
         levelIcon.gameObject.SetActive(false);
         StartCoroutine(RespawnCountDown());
         MFPSPlayer actor = bl_GameManager.Instance.FindActor(killer);
-        if(actor != null)
+        if (actor != null)
         {
 
             var pdm = actor.Actor.GetComponent<bl_PlayerHealthManagerBase>();

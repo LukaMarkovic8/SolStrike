@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using Solana.Unity.Wallet;
+using System;
 
 public class DataManager : MonoBehaviour
 {
@@ -160,6 +161,9 @@ public class DataManager : MonoBehaviour
 
 public static class Signature
 {
+
+    public static int placeFinished = 0;
+    public static DateTime startTime= new  DateTime();
     public static PublicKey TokenProgram22 = new PublicKey("TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb");
     public static string baseUrl = "https://api.solstrike.xyz/api/";
     public static string SignatureString = "signature";
