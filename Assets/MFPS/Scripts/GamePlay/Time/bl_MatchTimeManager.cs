@@ -284,6 +284,8 @@ public class bl_MatchTimeManager : bl_MatchTimeManagerBase
         else if (seconds <= 0.001 && GetTimeServed == true)//Round Finished
         {
             CurrentTime = 0;
+            Debug.Log("Game Over TIME UP");
+
             FinishRound(RoundFinishCause.TimeUp);
         }
         else//if we cant get the server time yet
@@ -335,8 +337,21 @@ public class bl_MatchTimeManager : bl_MatchTimeManagerBase
     /// Call this in order to finish the match
     /// if the room is setup as one match room -> the game resume screen will appear.
     /// </summary>
+    /// 
+    public bool IsStartTimeMoreThan20SecondsAgo(DateTime startTimeValue)
+    {
+
+        DateTime now = DateTime.Now;
+
+
+        TimeSpan difference = now - startTimeValue;
+
+        return difference.TotalSeconds > 20.0;
+    }
     public override void FinishRound(RoundFinishCause cause)
     {
+
+        //if (IsStartTimeMoreThan20SecondsAgo(Signature.startTime)) { return; }
         // if the room time if finished but the countdown is still running, do not finish the match.
         if (TimeState == RoomTimeState.Countdown) return;
         

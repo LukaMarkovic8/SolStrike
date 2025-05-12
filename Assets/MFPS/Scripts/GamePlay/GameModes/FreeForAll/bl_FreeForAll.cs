@@ -65,9 +65,24 @@ public class bl_FreeForAll : MonoBehaviour, IGameMode
         }
         bl_FreeForAllUI.Instance.SetScores(bl_GameManager.Instance.LocalActor);
         //check if the best player reach the max kills
-        if((int)player.GetPlayerPropertie(PropertiesKeys.KillsKey) >= bl_RoomSettings.Instance.GameGoal && !bl_PhotonNetwork.OfflineMode)
+        if ((int)player.GetPlayerPropertie(PropertiesKeys.KillsKey) >= bl_RoomSettings.Instance.GameGoal && !bl_PhotonNetwork.OfflineMode)
         {
-            bl_MatchTimeManagerBase.Instance.FinishRound();
+
+            if (Signature.IsStartTimeMoreThanSecondsAgo(11))
+            {
+
+                Debug.Log("Game Over GAME GOAL");
+                bl_MatchTimeManagerBase.Instance.FinishRound();
+            }
+            else
+            {
+                Debug.Log("Try reset values game started recently, finish round bug");
+
+                player.GetNetworkPlayer().SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { PropertiesKeys.KillsKey, 0 } });
+                player.GetNetworkPlayer().SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { PropertiesKeys.DeathsKey, 0 } });
+                player.GetNetworkPlayer().SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { PropertiesKeys.ScoreKey, 0 } });
+                bl_FreeForAllUI.Instance.SetScores(player);
+            }
             return;
         }
         //check if bots have not reach max kills
@@ -129,7 +144,7 @@ public class bl_FreeForAll : MonoBehaviour, IGameMode
 
     public void OnFinishTime(bool gameOver)
     {
-       
+
         bl_RoundFinishScreenBase.Instance?.Show(GetBestPlayer().Name);
     }
 
@@ -161,6 +176,6 @@ public class bl_FreeForAll : MonoBehaviour, IGameMode
     public void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable propertiesThatChanged)
     {
 
-    } 
+    }
     #endregion
 }

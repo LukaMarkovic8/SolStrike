@@ -194,7 +194,7 @@ public static class Signature
 
 
         TimeSpan difference = now - startTime;
-
+        Debug.Log("Startet AGO: "+(int)difference.TotalSeconds);
         return difference.TotalSeconds > seconds;
     }
     public static (string, string) SplitStringByAccount(string input, out string beforeAccount, out string afterAccount)

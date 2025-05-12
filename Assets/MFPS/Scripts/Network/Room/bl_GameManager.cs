@@ -270,7 +270,7 @@ public class bl_GameManager : bl_PhotonHelper, IInRoomCallbacks, IConnectionCall
         Vector3 pos;
         Quaternion rot;
         // Add a small random delay to prevent all players spawning at exactly the same time
-        float randomDelay = UnityEngine.Random.Range(0.1f, 0.5f);
+        float randomDelay = 0.1f;
         StartCoroutine(DelayedSpawn(playerTeam, randomDelay));
     }
     private IEnumerator DelayedSpawn(Team playerTeam, float delay)
@@ -288,9 +288,9 @@ public class bl_GameManager : bl_PhotonHelper, IInRoomCallbacks, IConnectionCall
 
         // Add small random offset to position
         pos += new Vector3(
-            UnityEngine.Random.Range(-0.5f, 0.5f),
+            UnityEngine.Random.Range(-0.2f, 0.2f),
             0,
-            UnityEngine.Random.Range(-0.5f, 0.5f)
+            UnityEngine.Random.Range(-0.2f, 0.2f)
         );
 
         GameObject playerPrefab = bl_GameData.Instance.Player1.gameObject;

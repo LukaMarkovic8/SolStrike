@@ -8,6 +8,7 @@ using UnityEngine.Networking;
 using System.Collections;
 using Newtonsoft.Json;
 using System;
+using System.Linq;
 
 namespace MFPS.Runtime.UI.Layout
 {
@@ -45,15 +46,17 @@ namespace MFPS.Runtime.UI.Layout
                 playerResults[i].kills = players[i].GetKills();
                 playerResults[i].deaths = players[i].GetDeaths();
                 playerResults[i].headshots = 0;
-
+                
             }
             GameOverData data = new GameOverData();
             data.accountId = Signature.PublicKey;
             data.gameId = bl_PhotonNetwork.CurrentRoom.Name;
             data.signature = Signature.SignatureString;
             data.signedMessage = Signature.SignedMessage;
-            data.playerResults = playerResults;
-            Debug.Log(data.playerResults.Length + "  " + data.playerResults[0].accountId);
+             data.playerResults = playerResults;
+
+            System.Array.Sort(data.playerResults, (player1, player2) => player2.kills.CompareTo(player1.kills));
+            //  Debug.Log(data.playerResults.Length + "  " + data.playerResults[0].accountId);
             if (data.playerResults.Length < 1)
             {
                 Debug.LogError("No player results found.");
@@ -69,7 +72,7 @@ namespace MFPS.Runtime.UI.Layout
                 if (item.accountId == Signature.PublicKey)
                 {
                     Signature.placeFinished = i + 1;
-                    Debug.Log($"Player {i + 1} finished with account ID: {item.accountId}");
+                    Debug.Log($"Player finished {i + 1} with account ID: {item.accountId}");
                 }
                 // Debug.Log($"Player {i}: {item.accountId} - Kills: {item.kills}, Deaths: {item.deaths}, Headshots: {item.headshots}");
             }
