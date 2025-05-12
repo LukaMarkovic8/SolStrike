@@ -50,6 +50,7 @@ public abstract class bl_PlayerScoreboardUIBase : MonoBehaviour
     /// <returns></returns>
     public abstract bool UpdateBot();
 
+    public abstract int GetDeaths();
     /// <summary>
     /// 
     /// </summary>

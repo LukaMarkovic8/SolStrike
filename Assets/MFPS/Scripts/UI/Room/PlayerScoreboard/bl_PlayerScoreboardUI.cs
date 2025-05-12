@@ -181,6 +181,7 @@ public class bl_PlayerScoreboardUI : bl_PlayerScoreboardUIBase
         if (Bot == null) { return RealPlayer.GetPlayerScore(); }
         else { return Bot.Score; }
     }
+    public override int GetDeaths() { return RealPlayer.GetDeaths(); }
 
     /// <summary>
     /// 
