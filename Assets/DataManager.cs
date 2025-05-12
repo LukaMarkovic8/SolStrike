@@ -186,6 +186,17 @@ public static class Signature
     public static double SolanaBalance { get; internal set; }
 
     public static bool isFirstTime = true;
+
+    public static bool IsStartTimeMoreThanSecondsAgo(int seconds)
+    {
+
+        DateTime now = DateTime.Now;
+
+
+        TimeSpan difference = now - startTime;
+
+        return difference.TotalSeconds > seconds;
+    }
     public static (string, string) SplitStringByAccount(string input, out string beforeAccount, out string afterAccount)
     {
         beforeAccount = null;

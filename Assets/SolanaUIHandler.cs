@@ -45,6 +45,8 @@ public class SolanaUIHandler : MonoBehaviour
         // Add a listener to the onValueChanged event
         buyChipsInputFieldBuyScreen.onValueChanged.AddListener(OnInputFieldValueChanged);
         redeemChipsInputField.onValueChanged.AddListener(OnRedeemInputFieldValueChanged);
+        reserveChipsInputField.onValueChanged.AddListener(OnReserveInputfieldChanged);
+
         if (!Signature.isFirstTime)
         {
             LoadData();
@@ -149,7 +151,7 @@ public class SolanaUIHandler : MonoBehaviour
     [ContextMenu("ReserveTest")]
     public void ReserveTest()
     {
-        Reserve(1 * 1000000000);
+        Reserve(1000000000 * (ulong)chipsToReserveAmount);
     }
 
     [ContextMenu("BuyTest")]
@@ -380,6 +382,7 @@ public class SolanaUIHandler : MonoBehaviour
 
     public async void Reserve(ulong vhipsAmount)
     {
+        double oldValue = Signature.StandardChipsAmount;
         string programId = SolStrike.Program.SolStrikeProgram.ID;
         PublicKey treasury;
         PublicKey chipMint;
@@ -435,7 +438,7 @@ public class SolanaUIHandler : MonoBehaviour
             // Debug.Log($"Successfully reserved {vhipsAmount} vhips. Transaction signature: {signature.Result}");
             //TOO FAKEING 1 because game data changes are too slow
             // Signature.GamerData.reservedChips = 1.ToString();
-            StartCoroutine(waitReservedChipsToChange());
+            StartCoroutine(waitReservedChipsToChange(oldValue));
         }
         else
         {
@@ -446,7 +449,7 @@ public class SolanaUIHandler : MonoBehaviour
     }
 
 
-    IEnumerator waitReservedChipsToChange()
+    IEnumerator waitReservedChipsToChange(double ChipsOldValue)
     {
         Signature.GamerData.reservedChips = 0.ToString();
         while (int.Parse(Signature.GamerData.reservedChips) < 1)
@@ -454,9 +457,8 @@ public class SolanaUIHandler : MonoBehaviour
             GetGamerData();
             yield return new WaitForSeconds(1f);
         }
-        waitingForTransactionHolder.SetActive(false);
 
-
+        StartCoroutine(waitForChipsToChange(ChipsOldValue));
     }
 
 
@@ -818,6 +820,75 @@ public class SolanaUIHandler : MonoBehaviour
     }
 
 
+    [Header("Reserve SCREEN")]
+    public GameObject reserveChipsButton;
+    public TextMeshProUGUI reserveChipsWarningText;
+    public TMP_InputField reserveChipsInputField;
+
+
+
+    public void SetReserveScreen()
+    {
+        ReserveScreenState();
+
+    }
+
+    public void ReserveScreenState()
+    {
+        if (Signature.StandardChipsAmount < 1)
+        {
+            reserveChipsWarningText.gameObject.SetActive(true);
+            reserveChipsButton.SetActive(false);
+            SetResrveChipsWarningText();
+        }
+        else
+        {
+            reserveChipsWarningText.gameObject.SetActive(false);
+            reserveChipsButton.SetActive(true);
+        }
+
+    }
+
+
+    public void SetResrveChipsWarningText()
+    {
+        if (Signature.StandardChipsAmount < 1)
+        {
+            reserveChipsWarningText.text = "BUY CHIPS FIRST";
+        }
+        else
+        {
+            reserveChipsWarningText.text = "INVALID INPUT";
+        }
+    }
+
+    private int chipsToReserveAmount = 0;
+    public void OnReserveInputfieldChanged(string newValue)
+    {
+        //  Debug.Log(newValue);
+        if (int.TryParse(newValue, out int chipsToReserve))
+        {
+            if (chipsToReserve > 0 && Signature.StandardChipsAmount >= chipsToReserve)
+            {
+
+                reserveChipsButton.gameObject.SetActive(true);
+                reserveChipsWarningText.gameObject.SetActive(false);
+                chipsToReserveAmount = chipsToReserve;
+            }
+            else
+            {
+                reserveChipsButton.gameObject.SetActive(false);
+                reserveChipsWarningText.gameObject.SetActive(true);
+                SetResrveChipsWarningText();
+            }
+        }
+        else
+        {
+            reserveChipsButton.gameObject.SetActive(false);
+            reserveChipsWarningText.gameObject.SetActive(true);
+            SetResrveChipsWarningText();
+        }
+    }
     void OnDestroy()
     {
         // Remove the listener when the object is destroyed
