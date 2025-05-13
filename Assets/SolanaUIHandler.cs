@@ -233,7 +233,7 @@ public class SolanaUIHandler : MonoBehaviour
         PublicKey chipMint;
         PublicKey publicKeyProgram = new PublicKey(SolStrike.Program.SolStrikeProgram.ID);
         PublicKey.TryFindProgramAddress(new[] { Encoding.UTF8.GetBytes("CHIP_MINT") }, publicKeyProgram, out chipMint, out var bump2);
-        var tokenABalance = await Web3.Rpc.GetTokenAccountBalanceAsync(Web3.Account.PublicKey.DeriveAssociatedTokenAccount(chipMint, TokenProgram22));
+        var tokenABalance = await Web3.Rpc.GetTokenAccountBalanceAsync(Web3.Account.PublicKey.DeriveAssociatedTokenAccount(chipMint, TokenProgram22), Commitment.Confirmed);
         //  Debug.Log("tokenABalance : " + tokenABalance.WasSuccessful.ToString());
 
         if (tokenABalance.WasSuccessful)
@@ -280,7 +280,7 @@ public class SolanaUIHandler : MonoBehaviour
 
         try
         {
-            Solana.Unity.Programs.Models.AccountResultWrapper<ClaimableRewards> a = await solStrikeClient.GetClaimableRewardsAsync(claimableRewardsPDA);
+            Solana.Unity.Programs.Models.AccountResultWrapper<ClaimableRewards> a = await solStrikeClient.GetClaimableRewardsAsync(claimableRewardsPDA, Commitment.Confirmed);
 
 
             if (a.WasSuccessful == false)
@@ -346,7 +346,7 @@ public class SolanaUIHandler : MonoBehaviour
         account.SystemProgram = SystemProgram.ProgramIdKey;
         TransactionInstruction buyChipInstruction = SolStrike.Program.SolStrikeProgram.BuyChipWithSol(account, chipsAmount, publicKeyProgram);
 
-        string blockHash = await Web3.Base.GetBlockHash();
+        string blockHash = await Web3.Base.GetBlockHash(Commitment.Confirmed);
 
 
 
@@ -359,9 +359,7 @@ public class SolanaUIHandler : MonoBehaviour
         waitingForTransactionHolder.SetActive(true);
         Transaction signedTransaction = await Base.SignTransaction(transaction);
 
-        RequestResult<string> signature = await Base.ActiveRpcClient.SendTransactionAsync(
-            Convert.ToBase64String(signedTransaction.Serialize()),
-            true, Commitment.Confirmed);
+        RequestResult<string> signature = await Base.ActiveRpcClient.SendTransactionAsync(Convert.ToBase64String(signedTransaction.Serialize()), true, Commitment.Confirmed);
 
 
         if (signature.WasSuccessful)
@@ -416,7 +414,7 @@ public class SolanaUIHandler : MonoBehaviour
         // Fetch the recent block hash
         waitingForTransactionHolder.SetActive(true);
 
-        string blockHash = await Web3.Base.GetBlockHash();
+        string blockHash = await Web3.Base.GetBlockHash(Commitment.Confirmed);
         // Create and sign the transaction
         Transaction transaction = new Transaction
         {
@@ -530,7 +528,7 @@ public class SolanaUIHandler : MonoBehaviour
         TransactionInstruction sellChipInstruction = SolStrike.Program.SolStrikeProgram.SellChip(accounts, chipsAmount, publicKeyProgram);
 
         // Fetch the recent block hash
-        string blockHash = await Web3.Base.GetBlockHash();
+        string blockHash = await Web3.Base.GetBlockHash(Commitment.Confirmed);
 
         // Create and sign the transaction
         Transaction transaction = new Transaction
@@ -597,7 +595,7 @@ public class SolanaUIHandler : MonoBehaviour
         TransactionInstruction claimChipsInstruction = SolStrike.Program.SolStrikeProgram.ClaimChips(accounts, publicKeyProgram);
 
         // Fetch the recent block hash
-        string blockHash = await Web3.Base.GetBlockHash();
+        string blockHash = await Web3.Base.GetBlockHash(Commitment.Confirmed);
 
         // Create and sign the transaction
         Transaction transaction = new Transaction
