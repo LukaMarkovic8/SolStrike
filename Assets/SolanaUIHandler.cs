@@ -369,7 +369,9 @@ public class SolanaUIHandler : MonoBehaviour
         }
         else
         {
+
             waitingForTransactionHolder.SetActive(false);
+            buyChipsScreenHolder.SetActive(false);
 
         }
         //Debug.Log("signature: " + signature.Result);
@@ -440,6 +442,7 @@ public class SolanaUIHandler : MonoBehaviour
         }
         else
         {
+            reserveChipsScreenHolder.SetActive(false);
             waitingForTransactionHolder.SetActive(false);
             //  Debug.LogError($"Failed to reserve vhips. Error: {signature.Reason}");
         }
@@ -455,6 +458,7 @@ public class SolanaUIHandler : MonoBehaviour
             GetGamerData();
             yield return new WaitForSeconds(1f);
         }
+        reserveChipsScreenHolder.SetActive(false);
 
         StartCoroutine(waitForChipsToChange(ChipsOldValue));
     }
@@ -482,6 +486,8 @@ public class SolanaUIHandler : MonoBehaviour
             yield return new WaitForSeconds(1f);
         }
         GetAmountOfUnclaimedChipsWeb3Async();
+        redeemChipsScreenHolder.SetActive(false);
+
         waitingForTransactionHolder.SetActive(false);
     }
 
@@ -495,6 +501,8 @@ public class SolanaUIHandler : MonoBehaviour
         }
         GetSolanaBalance();
         waitingForTransactionHolder.SetActive(false);
+        buyChipsScreenHolder.SetActive(false);
+        redeemChipsScreenHolder.SetActive(false);
     }
 
 
@@ -623,6 +631,7 @@ public class SolanaUIHandler : MonoBehaviour
         }
         else
         {
+            claimChipsScreenHolder.SetActive(false);
             waitingForTransactionHolder.SetActive(false);
 
             // Debug.LogError($"Failed to claim chips. Error: {signature.Reason}");
@@ -823,7 +832,11 @@ public class SolanaUIHandler : MonoBehaviour
     public TextMeshProUGUI reserveChipsWarningText;
     public TMP_InputField reserveChipsInputField;
 
-
+    [Header("SCREEN HOLDERS")]
+    public GameObject buyChipsScreenHolder;
+    public GameObject redeemChipsScreenHolder;
+    public GameObject claimChipsScreenHolder;
+    public GameObject reserveChipsScreenHolder;
 
     public void SetReserveScreen()
     {

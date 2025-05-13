@@ -958,7 +958,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: REDEEM
+  m_text: SELL
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8c1cffc377ee14e45bac3f8dd1b41f5e, type: 2}
   m_sharedMaterial: {fileID: -5094103871776856743, guid: 8c1cffc377ee14e45bac3f8dd1b41f5e, type: 2}
@@ -5415,7 +5415,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: REDEEM CHIPS
+  m_text: SELL
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 05958b68e1e3f5945978975500bab7ea, type: 2}
   m_sharedMaterial: {fileID: -796303403823276597, guid: 05958b68e1e3f5945978975500bab7ea, type: 2}
@@ -9018,7 +9018,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Chips to redeem:'
+  m_text: 'Chips to sell:'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8c1cffc377ee14e45bac3f8dd1b41f5e, type: 2}
   m_sharedMaterial: {fileID: -5094103871776856743, guid: 8c1cffc377ee14e45bac3f8dd1b41f5e, type: 2}
@@ -11436,10 +11436,10 @@ RectTransform:
   - {fileID: 1301555740}
   m_Father: {fileID: 1235547532}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0}
-  m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 139.9, y: 0}
-  m_SizeDelta: {x: 97.7, y: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 50, y: 0}
+  m_SizeDelta: {x: 60, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1438392402
 MonoBehaviour:
@@ -12682,6 +12682,10 @@ MonoBehaviour:
   reserveChipsButton: {fileID: 202424486}
   reserveChipsWarningText: {fileID: 979649652}
   reserveChipsInputField: {fileID: 438600220}
+  buyChipsScreenHolder: {fileID: 2022611063}
+  redeemChipsScreenHolder: {fileID: 1774921115}
+  claimChipsScreenHolder: {fileID: 540061289}
+  reserveChipsScreenHolder: {fileID: 554574947}
 --- !u!1 &1564159764
 GameObject:
   m_ObjectHideFlags: 0
