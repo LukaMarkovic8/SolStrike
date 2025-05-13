@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 using System.Threading.Tasks;
 using Solana.Unity.Programs;
@@ -487,7 +488,7 @@ public class SolanaUIHandler : MonoBehaviour
         }
         GetAmountOfUnclaimedChipsWeb3Async();
         redeemChipsScreenHolder.SetActive(false);
-
+        claimChipsScreenHolder.SetActive(false);
         waitingForTransactionHolder.SetActive(false);
     }
 
@@ -771,7 +772,7 @@ public class SolanaUIHandler : MonoBehaviour
     public TextMeshProUGUI solToReciveText;
     public Button redeemChipsButton;
     public GameObject InvalidInputTextRedeem;
-    private int chisToRedeem = 0;
+    private float chisToRedeem = 0;
     public void OnRedeemInputFieldValueChanged(string newValue)
     {
         //  Debug.Log(newValue);
@@ -794,6 +795,23 @@ public class SolanaUIHandler : MonoBehaviour
                     //     Debug.Log("3 Parsed integer: " + chipsToSell);
                     chisToRedeem = chipsToSell;
                 }
+            }
+        }
+        else if (IsNonNegativeNumberWithExactlyOneDecimalPlace(newValue))
+        {
+            float.TryParse(newValue, out float chipsToSell3);
+            if (Signature.StandardChipsAmount >= chipsToSell3)
+            {
+                solToReciveText.text = "SOL to receive: " + (chipsToSell3 * chipCost).ToString();
+                redeemChipsButton.gameObject.SetActive(true);
+                InvalidInputTextRedeem.SetActive(false);
+                //   Debug.Log("4 Parsed integer: " + chipsToSell3);
+                chisToRedeem = chipsToSell3;
+            }
+            else
+            {
+                redeemChipsButton.gameObject.SetActive(false);
+                InvalidInputTextRedeem.SetActive(true);
             }
         }
         else
@@ -900,6 +918,71 @@ public class SolanaUIHandler : MonoBehaviour
             SetResrveChipsWarningText();
         }
     }
+
+
+
+    public static bool IsNonNegativeNumberWithExactlyOneDecimalPlace(string s)
+    {
+
+        CultureInfo cultureInfo = CultureInfo.InvariantCulture; // Use InvariantCulture for consistent parsing
+
+        if (s == null) // Guard against null input before trimming
+        {
+            return false;
+        }
+        string trimmedString = s.Trim(); // Trim whitespace once at the beginning
+
+        if (string.IsNullOrEmpty(trimmedString)) // Check after trimming
+        {
+            return false;
+        }
+
+        string decimalSeparatorString = cultureInfo.NumberFormat.NumberDecimalSeparator;
+        if (string.IsNullOrEmpty(decimalSeparatorString)) // Cannot have a decimal place if no separator defined
+        {
+            return false;
+        }
+
+        // NumberStyles.Float allows leading/trailing whitespace (already handled by Trim for structure checks),
+        // sign (which we'll check via parsed value), decimal point, and exponent.
+        // It does NOT allow thousands separators by default.
+        NumberStyles styles = NumberStyles.Float;
+
+        if (decimal.TryParse(trimmedString, styles, cultureInfo, out decimal parsedValue))
+        {
+            // New Check: Ensure the parsed value is not negative.
+            if (parsedValue < 0)
+            {
+                return false;
+            }
+
+            int separatorIndex = trimmedString.IndexOf(decimalSeparatorString, StringComparison.Ordinal);
+
+            if (separatorIndex == -1) // No decimal separator means it's an integer
+            {
+                return false; // Integers do not have "one decimal place"
+            }
+
+            // Ensure there isn't a second occurrence of the decimal separator
+            if (trimmedString.IndexOf(decimalSeparatorString, separatorIndex + decimalSeparatorString.Length, StringComparison.Ordinal) != -1)
+            {
+                return false; // More than one decimal separator
+            }
+
+            string fractionPart = trimmedString.Substring(separatorIndex + decimalSeparatorString.Length);
+
+            // Check if there is exactly one character after the decimal separator AND it's a digit.
+            if (fractionPart.Length == 1 && char.IsDigit(fractionPart[0]))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
+
     void OnDestroy()
     {
         // Remove the listener when the object is destroyed
