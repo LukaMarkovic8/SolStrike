@@ -5,7 +5,7 @@ using UnityEngine;
 public class CheckIfFirstPlay : MonoBehaviour
 {
     // Start is called before the first frame update
-    void Awake()
+    void Update()
     {
         Debug.Log("CheckIfFirstPlay");
         if (!Signature.isFirstTime)
@@ -20,8 +20,5 @@ public class CheckIfFirstPlay : MonoBehaviour
 
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-    }
+ 
 }

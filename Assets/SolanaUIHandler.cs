@@ -50,12 +50,13 @@ public class SolanaUIHandler : MonoBehaviour
 
         if (!Signature.isFirstTime)
         {
-            LoadData();
+        
         }
         else
         {
             Signature.isFirstTime = false;
         }
+        LoadData();
 
 
     }

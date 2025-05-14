@@ -46,16 +46,24 @@ namespace MFPS.Runtime.UI.Layout
                 playerResults[i].kills = players[i].GetKills();
                 playerResults[i].deaths = players[i].GetDeaths();
                 playerResults[i].headshots = 0;
-                
+
             }
             GameOverData data = new GameOverData();
             data.accountId = Signature.PublicKey;
             data.gameId = bl_PhotonNetwork.CurrentRoom.Name;
             data.signature = Signature.SignatureString;
             data.signedMessage = Signature.SignedMessage;
-             data.playerResults = playerResults;
+            data.playerResults = playerResults;
+            int a = data.playerResults[0].kills;
+            System.Array.Sort(data.playerResults, (player1, player2) =>
+            {
+                int killComparison = player2.kills.CompareTo(player1.kills);
+                if (killComparison != 0)
+                    return killComparison;
 
-            System.Array.Sort(data.playerResults, (player1, player2) => player2.kills.CompareTo(player1.kills));
+                // If kills are the same, sort by deaths ascending
+                return player1.deaths.CompareTo(player2.deaths);
+            });
             //  Debug.Log(data.playerResults.Length + "  " + data.playerResults[0].accountId);
             if (data.playerResults.Length < 1)
             {
@@ -76,7 +84,7 @@ namespace MFPS.Runtime.UI.Layout
                 }
                 // Debug.Log($"Player {i}: {item.accountId} - Kills: {item.kills}, Deaths: {item.deaths}, Headshots: {item.headshots}");
             }
-
+            Signature.isFirstTime = false;
             if (IsStartTimeMoreThan5SecondsAgo(Signature.startTime))
             {
                 StartCoroutine(PostRequestCoroutine(Signature.baseUrl + "games/over", data));

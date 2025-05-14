@@ -183,6 +183,8 @@ public class bl_PlayerScoreboardUI : bl_PlayerScoreboardUIBase
     }
     public override int GetDeaths() { return RealPlayer.GetDeaths(); }
 
+
+    public override int GetKills() { return RealPlayer.GetKills(); }
     /// <summary>
     /// 
     /// </summary>
