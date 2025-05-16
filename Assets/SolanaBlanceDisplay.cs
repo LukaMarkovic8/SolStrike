@@ -12,6 +12,6 @@ public class SolanaBlanceDisplay : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        balanceText.text = "Balance: " + Math.Round(Signature.SolanaBalance, 2).ToString() + " SOL";
+        balanceText.text = "Balance: <color=white>" + Math.Round(Signature.SolanaBalance, 2).ToString() + " SOL";
     }
 }

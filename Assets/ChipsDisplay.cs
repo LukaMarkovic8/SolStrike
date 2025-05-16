@@ -11,6 +11,6 @@ public class ChipsDisplay : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        chipsText.text = "Strike Chips: " + Math.Round(Signature.StandardChipsAmount, 2).ToString();
+        chipsText.text = "Strike Chips: <color=white>" + Math.Round(Signature.StandardChipsAmount, 2).ToString();
     }
 }

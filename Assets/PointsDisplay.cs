@@ -14,6 +14,6 @@ public class PointsDisplay : MonoBehaviour
     void Update()
     {
         decimal originalDecimal = decimal.Parse(Signature.GamerData.points);
-        text.text ="Points: " + Math.Round(originalDecimal, 2).ToString();
+        text.text = "Points: <color=white>" + Math.Round(originalDecimal, 2).ToString();
     }
 }

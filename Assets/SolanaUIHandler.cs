@@ -50,13 +50,13 @@ public class SolanaUIHandler : MonoBehaviour
 
         if (!Signature.isFirstTime)
         {
-        
+            LoadData();
         }
         else
         {
-            Signature.isFirstTime = false;
+      //
         }
-        LoadData();
+      
 
 
     }
@@ -100,6 +100,7 @@ public class SolanaUIHandler : MonoBehaviour
         byte[] bytes = Encoding.UTF8.GetBytes(Signature.PublicKey);
         Signature.PublicKeyBytes = bytes;
         SignMessageAsync();
+      
     }
 
 
@@ -801,7 +802,7 @@ public class SolanaUIHandler : MonoBehaviour
         else if (IsNonNegativeNumberWithExactlyOneDecimalPlace(newValue))
         {
             float.TryParse(newValue, out float chipsToSell3);
-            if (Signature.StandardChipsAmount >= chipsToSell3)
+            if (Signature.StandardChipsAmount <= chipsToSell3)
             {
                 solToReciveText.text = "SOL to receive: " + (chipsToSell3 * chipCost).ToString();
                 redeemChipsButton.gameObject.SetActive(true);

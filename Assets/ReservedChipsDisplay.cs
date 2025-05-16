@@ -9,6 +9,6 @@ public class ReservedChipsDisplay : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        reservedChipsText.text = "Reserved Chips: " + Signature.GamerData.reservedChips.ToString();
+        reservedChipsText.text = "Reserved Chips: <color=white>" + Signature.GamerData.reservedChips.ToString();
     }
 }
