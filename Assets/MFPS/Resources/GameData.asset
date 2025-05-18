@@ -229,7 +229,7 @@ MonoBehaviour:
     RequiredPlayersToStart: 4
     onRoundStartedSpawn: 0
     onPlayerDie: 0
-    RoundModeAllowed: 0
+    RoundModeAllowed: 2
     GoalName: Kills
     allowedPickupWeapons: 1
     maxPlayers: 04000000

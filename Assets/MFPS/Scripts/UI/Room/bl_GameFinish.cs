@@ -2,6 +2,7 @@ using UnityEngine;
 using MFPS.Internal.Interfaces;
 using TMPro;
 using MFPS.Runtime.AI;
+using System.Collections;
 
 /// <summary>
 /// Default MFPS after match resume screen
@@ -97,6 +98,10 @@ public class bl_GameFinish : bl_PhotonHelper, IMFPSResumeScreen
         {
             bl_GameData.Instance.VirtualCoins.AddCoins(coins, bl_PhotonNetwork.NickName);
         }
+
+
+        StartCoroutine(delay());
+
         int oldsavedScore = PlayerPrefs.GetInt(PropertiesKeys.GetUniqueKeyForPlayer("score", LocalName), 0);
         oldsavedScore += tscore;
         PlayerPrefs.SetInt(PropertiesKeys.GetUniqueKeyForPlayer("score", LocalName), oldsavedScore);
@@ -110,6 +115,12 @@ public class bl_GameFinish : bl_PhotonHelper, IMFPSResumeScreen
     {
         Content.SetActive(true);
         Invoke(nameof(GoToLobby), 10);//maximum time out to leave.
+    }
+
+    IEnumerator delay()
+    {
+        yield return new WaitForSeconds(8f);
+        GoToLobby();
     }
 
     /// <summary>

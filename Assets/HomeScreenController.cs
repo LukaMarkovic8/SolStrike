@@ -16,8 +16,10 @@ public class HomeScreenController : MonoBehaviour
     public GameObject PlayButtonHolder;
     public GameObject ReserveButtonHolder;
     public GameObject BuyButtonHolder;
+    public GameObject ActiveGameHolder;
 
-
+    private float userDataFetchTimer = 0f;
+    public float userDataFetchInterval = 10f; // 10 seconds
     private void Update()
     {
         if (Signature.GamerData != null)
@@ -25,30 +27,100 @@ public class HomeScreenController : MonoBehaviour
             int reserved = Convert.ToInt32(Signature.GamerData.reservedChips);
             double standard = Convert.ToDouble(Signature.StandardChipsAmount);
 
-            if (reserved > 0)
+            if (Signature.GamerData.isInActiveGame)
             {
-
+                PlayButtonHolder.SetActive(false);
+                ReserveButtonHolder.SetActive(false);
+                ActiveGameHolder.SetActive(true);
+                BuyButtonHolder.SetActive(false);
+            }
+            else if (reserved > 0)
+            {
+                ActiveGameHolder.SetActive(false);
                 PlayButtonHolder.SetActive(true);
                 ReserveButtonHolder.SetActive(false);
                 BuyButtonHolder.SetActive(false);
-
-
-
             }
             else if (reserved < 1 && standard >= 1)
             {
+                ActiveGameHolder.SetActive(false);
                 ReserveButtonHolder.SetActive(true);
                 PlayButtonHolder.SetActive(false);
                 BuyButtonHolder.SetActive(false);
             }
             else if (reserved < 1 && standard < 1)
             {
+                ActiveGameHolder.SetActive(false);
                 ReserveButtonHolder.SetActive(false);
                 PlayButtonHolder.SetActive(false);
                 BuyButtonHolder.SetActive(true);
             }
+
+
+            if (Signature.GamerData.isInActiveGame)
+            {
+                userDataFetchTimer += Time.deltaTime;
+            }
+            else
+            {
+                if (userDataFetchTimer > 0)
+                {
+                    userDataFetchTimer = 0f; // Reset the timer if not in an active game
+
+                }
+            }
+
+
+            if (Signature.GamerData != null && Signature.GamerData.isInActiveGame && userDataFetchTimer >= userDataFetchInterval)
+            {
+                StartCoroutine(GetUserData());
+                userDataFetchTimer = 0f; // Reset the timer
+            }
         }
 
+    }
+
+
+    IEnumerator GetUserData()
+    {
+        string url = Signature.baseUrl + Web3.Account.PublicKey.Key;
+        //Debug.Log("Sending GET request to: " + url);
+
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
+        {
+            webRequest.SetRequestHeader("accept", "application/json");
+
+            yield return webRequest.SendWebRequest();
+
+            switch (webRequest.result)
+            {
+                case UnityWebRequest.Result.ConnectionError:
+                case UnityWebRequest.Result.DataProcessingError:
+                    Debug.LogError($"Error: {webRequest.error}\nURL: {url}");
+                    break;
+                case UnityWebRequest.Result.ProtocolError:
+                    Debug.LogError($"HTTP Error: {webRequest.error}\nCode: {webRequest.responseCode}\nURL: {url}");
+                    break;
+                case UnityWebRequest.Result.Success:
+                    //  Debug.Log($"Success! Response Code: {webRequest.responseCode}");
+                    string responseJson = webRequest.downloadHandler.text;
+                    //    Debug.Log("Received JSON:\n" + responseJson);
+
+                    try
+                    {
+                        GamerData gamerData = JsonUtility.FromJson<GamerData>(responseJson);
+                        Signature.GamerData = gamerData;
+
+                        // TODO: Parse responseJson here
+                        break;
+                    }
+                    catch (Exception ex)
+                    {
+                        // Debug.LogError("Error parsing JSON: " + ex.Message);
+                        break;
+                    }
+            }
+        }
     }
 
 

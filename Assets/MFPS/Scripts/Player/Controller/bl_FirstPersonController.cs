@@ -198,8 +198,11 @@ public class bl_FirstPersonController : bl_FirstPersonControllerBase
         Velocity = m_CharacterController.velocity;
         VelocityMagnitude = Velocity.magnitude;
 
-        if (Finish) return;
-
+        if (Finish)
+        {
+            Debug.Log("gameFinished");
+            return;
+        }
         MovementInput();
         CheckStates();
     }
@@ -1072,6 +1075,7 @@ public class bl_FirstPersonController : bl_FirstPersonControllerBase
     }
     void OnMatchStart()
     {
+        Debug.Log("Match Start   isControlable :" + isControlable);
         isControlable = true;
     }
     void OnGameSettingsChanged() => mouseLook.FetchSettings();

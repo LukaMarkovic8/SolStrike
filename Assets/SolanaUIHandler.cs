@@ -203,7 +203,7 @@ public class SolanaUIHandler : MonoBehaviour
                 case UnityWebRequest.Result.Success:
                     //  Debug.Log($"Success! Response Code: {webRequest.responseCode}");
                     string responseJson = webRequest.downloadHandler.text;
-                    //    Debug.Log("Received JSON:\n" + responseJson);
+                   //    Debug.Log("Received JSON:\n" + responseJson);
 
                     try
                     {

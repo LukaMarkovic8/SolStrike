@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
+using System.Collections;
 
 public class bl_WaitingRoomUI : bl_WaitingRoomUIBase
 {
@@ -185,14 +186,15 @@ public class bl_WaitingRoomUI : bl_WaitingRoomUIBase
             PlayerCountText.text += $" SPECTATORS {spectatorsCount}";
         }
 
-        if (!bl_PhotonNetwork.IsMasterClient) {
+        if (!bl_PhotonNetwork.IsMasterClient)
+        {
             SetLocalReady();
         }
 
         if (bl_PhotonNetwork.IsMasterClient && PhotonNetwork.PlayerList.Length == required)
         {
-            Debug.Log(PhotonNetwork.PlayerList.Length.ToString()+"  "+ PhotonNetwork.CurrentRoom.MaxPlayers.ToString()+"  "+ required.ToString());
-            MasterStartTheGame();
+            StartCoroutine(WaitForStartGame(1f));
+            Debug.Log(PhotonNetwork.PlayerList.Length.ToString() + "  " + PhotonNetwork.CurrentRoom.MaxPlayers.ToString() + "  " + required.ToString());
         }
     }
 
@@ -213,6 +215,13 @@ public class bl_WaitingRoomUI : bl_WaitingRoomUIBase
         readyButtons[1].GetComponentInChildren<TextMeshProUGUI>().text = bl_WaitingRoomBase.Instance.IsLocalReady() ? "CANCEL".Localized(67).ToUpper() : "READY".Localized(184).ToUpper();
     }
 
+
+
+    IEnumerator WaitForStartGame(float time)
+    {
+        yield return new WaitForSeconds(time);
+        MasterStartTheGame();
+    }
     /// <summary>
     /// 
     /// </summary>

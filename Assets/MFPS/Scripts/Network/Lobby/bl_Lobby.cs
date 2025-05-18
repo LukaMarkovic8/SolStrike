@@ -286,7 +286,7 @@ public class bl_Lobby : bl_PhotonHelper, IConnectionCallbacks, ILobbyCallbacks, 
         {
             if (gamerData != null)
             {
-             //   Debug.Log($"Gamer Data Retrieved: Username = {gamerData.username}, Account ID = {gamerData.account_id}");
+                //   Debug.Log($"Gamer Data Retrieved: Username = {gamerData.username}, Account ID = {gamerData.account_id}");
                 // Handle the retrieved gamer data here, e.g., update UI or cache the data
             }
             else
@@ -299,7 +299,7 @@ public class bl_Lobby : bl_PhotonHelper, IConnectionCallbacks, ILobbyCallbacks, 
     private IEnumerator GetGamerDataCoroutine(Action<GamerData> onComplete)
     {
         string url = Signature.baseUrl + "gamers/" + Web3.Account.PublicKey.Key;
-     //   Debug.Log("Sending GET request to: " + url);
+        Debug.Log("Sending GET request to: " + url);
 
         using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
         {
@@ -319,15 +319,15 @@ public class bl_Lobby : bl_PhotonHelper, IConnectionCallbacks, ILobbyCallbacks, 
                     onComplete?.Invoke(null);
                     break;
                 case UnityWebRequest.Result.Success:
-                  //  Debug.Log($"Success! Response Code: {webRequest.responseCode}");
+                    //  Debug.Log($"Success! Response Code: {webRequest.responseCode}");
                     string responseJson = webRequest.downloadHandler.text;
-                //    Debug.Log("Received JSON:\n" + responseJson);
+                    Debug.Log("Received JSON:\n" + responseJson);
 
                     try
                     {
                         GamerData gamerData = JsonUtility.FromJson<GamerData>(responseJson);
                         Signature.GamerData = gamerData;
-                     //   Debug.Log(gamerData.username.ToString());
+                        Debug.Log(gamerData.isInActiveGame.ToString());
                         onComplete?.Invoke(gamerData);
                     }
                     catch (Exception ex)
@@ -740,7 +740,7 @@ public class bl_Lobby : bl_PhotonHelper, IConnectionCallbacks, ILobbyCallbacks, 
         else
         {
             connectionState = LobbyConnectionState.Connected;
-          //  Debug.Log($"Player <b>{bl_PhotonNetwork.LocalPlayer.NickName}</b> joined to the lobby, UserId: {bl_PhotonNetwork.LocalPlayer.UserId}");
+            //  Debug.Log($"Player <b>{bl_PhotonNetwork.LocalPlayer.NickName}</b> joined to the lobby, UserId: {bl_PhotonNetwork.LocalPlayer.UserId}");
             bl_LobbyLoadingScreenBase.Instance.SetActive(true).HideIn(2, true);
         }
 
@@ -849,7 +849,7 @@ public class bl_Lobby : bl_PhotonHelper, IConnectionCallbacks, ILobbyCallbacks, 
     {
         if (!bl_MFPS.GameData.UsingWaitingRoom())
         {
-           // Debug.Log($"Local client joined to the room '{bl_PhotonNetwork.CurrentRoom.Name}'");
+            // Debug.Log($"Local client joined to the room '{bl_PhotonNetwork.CurrentRoom.Name}'");
             StartCoroutine(MoveToGameScene());
         }
         else
@@ -992,5 +992,6 @@ public class GamerData
     public int referral_user_id;
     public string reservedChips;
     public string points;
+    public bool isInActiveGame;
     public int party;
 }

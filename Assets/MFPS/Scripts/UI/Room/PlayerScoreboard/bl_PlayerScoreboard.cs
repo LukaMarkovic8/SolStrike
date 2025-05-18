@@ -194,7 +194,7 @@ public class bl_PlayerScoreboard : bl_PlayerScoreboardBase
             cachePlayerScoreboardSorted.Clear();
             cachePlayerScoreboardSorted.AddRange(cachedUIBindings.Values.ToArray());
             //cachePlayerScoreboardSorted.AddRange(cachedBotsUIBindings.Values.ToArray());
-            Debug.Log("--------------SortScoreboard");
+            //Debug.Log("--------------SortScoreboard");
             cachePlayerScoreboardSorted = cachePlayerScoreboardSorted.OrderByDescending(x => x.GetKills()).ThenBy(x => x.GetDeaths()).ToList();
             for (int i = 0; i < cachePlayerScoreboardSorted.Count; i++)
             {
