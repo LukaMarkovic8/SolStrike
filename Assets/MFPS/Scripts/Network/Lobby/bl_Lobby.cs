@@ -299,7 +299,7 @@ public class bl_Lobby : bl_PhotonHelper, IConnectionCallbacks, ILobbyCallbacks, 
     private IEnumerator GetGamerDataCoroutine(Action<GamerData> onComplete)
     {
         string url = Signature.baseUrl + "gamers/" + Web3.Account.PublicKey.Key;
-        Debug.Log("Sending GET request to: " + url);
+       // Debug.Log("Sending GET request to: " + url);
 
         using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
         {
@@ -321,13 +321,13 @@ public class bl_Lobby : bl_PhotonHelper, IConnectionCallbacks, ILobbyCallbacks, 
                 case UnityWebRequest.Result.Success:
                     //  Debug.Log($"Success! Response Code: {webRequest.responseCode}");
                     string responseJson = webRequest.downloadHandler.text;
-                    Debug.Log("Received JSON:\n" + responseJson);
+         //           Debug.Log("Received JSON:\n" + responseJson);
 
                     try
                     {
                         GamerData gamerData = JsonUtility.FromJson<GamerData>(responseJson);
                         Signature.GamerData = gamerData;
-                        Debug.Log(gamerData.isInActiveGame.ToString());
+           //             Debug.Log(gamerData.isInActiveGame.ToString());
                         onComplete?.Invoke(gamerData);
                     }
                     catch (Exception ex)

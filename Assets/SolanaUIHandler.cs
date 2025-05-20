@@ -54,9 +54,9 @@ public class SolanaUIHandler : MonoBehaviour
         }
         else
         {
-      //
+            //
         }
-      
+
 
 
     }
@@ -100,7 +100,7 @@ public class SolanaUIHandler : MonoBehaviour
         byte[] bytes = Encoding.UTF8.GetBytes(Signature.PublicKey);
         Signature.PublicKeyBytes = bytes;
         SignMessageAsync();
-      
+
     }
 
 
@@ -203,7 +203,7 @@ public class SolanaUIHandler : MonoBehaviour
                 case UnityWebRequest.Result.Success:
                     //  Debug.Log($"Success! Response Code: {webRequest.responseCode}");
                     string responseJson = webRequest.downloadHandler.text;
-                   //    Debug.Log("Received JSON:\n" + responseJson);
+                    //    Debug.Log("Received JSON:\n" + responseJson);
 
                     try
                     {
@@ -876,6 +876,7 @@ public class SolanaUIHandler : MonoBehaviour
         {
             reserveChipsWarningText.gameObject.SetActive(false);
             reserveChipsButton.SetActive(true);
+            reserveChipsInputField.text = 1.ToString();
         }
 
     }
