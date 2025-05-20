@@ -733,9 +733,9 @@ public class SolanaUIHandler : MonoBehaviour
 
     public void SetBuyChipsScreen()
     {
-        chipCostTextBuyScreen.text = "Chip cost: " + chipCost.ToString() + " SOL";
+        chipCostTextBuyScreen.text = "Chip cost: <color=white>" + chipCost.ToString() + " SOL";
         balanceTextBuyScreen.text = "BALANCE : " + Signature.SolanaBalance.ToString();
-        solToSpendTextBuyScreen.text = "Amount to spend: 0 SOL";
+        solToSpendTextBuyScreen.text = "Amount to spend:<color=white> 0 SOL";
         buyChipsInputFieldBuyScreen.text = "0";
     }
 
@@ -746,7 +746,7 @@ public class SolanaUIHandler : MonoBehaviour
 
         if (int.TryParse(newValue, out int chipsToBuy) && chipsToBuy > 0 && Signature.SolanaBalance >= chipsToBuy * chipCost)
         {
-            solToSpendTextBuyScreen.text = "Amount to spend: " + (chipsToBuy * chipCost).ToString() + " SOL";
+            solToSpendTextBuyScreen.text = "Amount to spend:<color=white> " + (chipsToBuy * chipCost).ToString() + " SOL";
             buyChipsButtonBuyScreen.gameObject.SetActive(true);
 
             InvalidInputText.gameObject.SetActive(false);
@@ -758,7 +758,7 @@ public class SolanaUIHandler : MonoBehaviour
 
             if (int.TryParse(newValue, out int chipsToBuy2))
             {
-                solToSpendTextBuyScreen.text = "Amount to spend: " + (chipsToBuy * chipCost).ToString() + " SOL";
+                solToSpendTextBuyScreen.text = "Amount to spend:<color=white> " + (chipsToBuy * chipCost).ToString() + " SOL";
             }
 
             buyChipsButtonBuyScreen.gameObject.SetActive(false);
@@ -790,7 +790,7 @@ public class SolanaUIHandler : MonoBehaviour
 
                 if (Signature.StandardChipsAmount >= chipsToSell)
                 {
-                    solToReciveText.text = "SOL to receive: " + (chipsToSell * chipCost).ToString();
+                    solToReciveText.text = "SOL to receive: <color=white>" + (chipsToSell * chipCost).ToString();
                     redeemChipsButton.gameObject.SetActive(true);
 
                     InvalidInputTextRedeem.gameObject.SetActive(false);
@@ -804,7 +804,7 @@ public class SolanaUIHandler : MonoBehaviour
             float.TryParse(newValue, out float chipsToSell3);
             if (Signature.StandardChipsAmount <= chipsToSell3)
             {
-                solToReciveText.text = "SOL to receive: " + (chipsToSell3 * chipCost).ToString();
+                solToReciveText.text = "SOL to receive: <color=white>" + (chipsToSell3 * chipCost).ToString();
                 redeemChipsButton.gameObject.SetActive(true);
                 InvalidInputTextRedeem.SetActive(false);
                 //   Debug.Log("4 Parsed integer: " + chipsToSell3);
@@ -827,7 +827,7 @@ public class SolanaUIHandler : MonoBehaviour
     public void SetRedeeomChips()
     {
         redeemChipsInputField.text = "0";
-        chipBlanceRedeemText.text = "CHIP BALANCE : " + Signature.StandardChipsAmount.ToString();
+        chipBlanceRedeemText.text = "CHIP BALANCE : <color=white>\"" + Signature.StandardChipsAmount.ToString();
 
     }
 
@@ -841,7 +841,7 @@ public class SolanaUIHandler : MonoBehaviour
 
     public void SetClaimScreen()
     {
-        chipsToClaim.text = "Chips to claim: " + Signature.UnclaimedChipsAmount.ToString();
+        chipsToClaim.text = "Chips to claim: <color=white>" + Signature.UnclaimedChipsAmount.ToString();
         // ChipsBalance.text = "CHIPS BALANCE: " + Signature.StandardChipsAmount.ToString();
 
     }

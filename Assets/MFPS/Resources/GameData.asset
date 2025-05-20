@@ -79,7 +79,7 @@ MonoBehaviour:
   - ShowName: SOLSTRIKE ARENA
     m_Scene: {fileID: 102900000, guid: 7b433244bb0354246a7c6a8c682e5441, type: 3}
     RealSceneName: ExampleLevel
-    Preview: {fileID: 21300000, guid: 48e558a32a223ae48a89b6e9b4d6f543, type: 3}
+    Preview: {fileID: 21300000, guid: 6c8306996f6c4344a953eb34a638f74d, type: 3}
     NoAllowedGameModes: 
   AllWeapons:
   - Name: Rifle
