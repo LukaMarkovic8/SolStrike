@@ -74,6 +74,7 @@ public class HomeScreenController : MonoBehaviour
             if (Signature.GamerData != null && Signature.GamerData.isInActiveGame && userDataFetchTimer >= userDataFetchInterval)
             {
                 StartCoroutine(GetUserData());
+                Debug.Log("Fetching new user data becasuse there is an active game.");
                 userDataFetchTimer = 0f; // Reset the timer
             }
         }

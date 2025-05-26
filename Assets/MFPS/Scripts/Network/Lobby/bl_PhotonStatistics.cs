@@ -17,9 +17,8 @@ public class bl_PhotonStatistics : bl_PhotonHelper, IConnectionCallbacks, ILobby
 
 
     [Header("Settings")]
-    [Range(1, 5)] private float RandomTime = 0.3f;
-    //TODO LUKA HOW OFTEN WE REFRESH PING
-    [Range(1, 5)] private float UpdateEach = 1;
+    private float RandomTime = 0.1f;
+    private float UpdateEach = 1.5f;
     [Header("References")]
     [SerializeField] private GameObject RootUI = null;
     [SerializeField] private TextMeshProUGUI AllRoomText = null;
@@ -127,7 +126,7 @@ public class bl_PhotonStatistics : bl_PhotonHelper, IConnectionCallbacks, ILobby
         PingImage.fillAmount = 1 - (percet * 0.01f);
         PingText.text = ping.ToString();
 
-        if(ping > 250)
+        if (ping > 250)
         {
             ServerWarningText.gameObject.SetActive(true);
             ServerButtonHolder.gameObject.SetActive(false);
@@ -246,5 +245,5 @@ public class bl_PhotonStatistics : bl_PhotonHelper, IConnectionCallbacks, ILobby
     {
         ServerStatsHolder.SetActive(false);
     }
-   
+
 }
