@@ -200,7 +200,7 @@ public class bl_FirstPersonController : bl_FirstPersonControllerBase
 
         if (Finish)
         {
-            Debug.Log("gameFinished");
+            //Debug.Log("gameFinished");
             return;
         }
         MovementInput();

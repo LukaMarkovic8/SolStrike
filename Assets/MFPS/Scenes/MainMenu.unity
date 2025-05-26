@@ -77851,7 +77851,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -90963,7 +90963,6 @@ MonoBehaviour:
   ServerStatsHolder: {fileID: 1703457192884103}
   ServerButtonHolder: {fileID: 956315224}
   ServerWarningText: {fileID: 740846298}
-  RandomTime: 1
   RootUI: {fileID: 1703457192884103}
   AllRoomText: {fileID: 3831888448316331344}
   AllPlayerText: {fileID: 3832265839720709664}
@@ -97014,7 +97013,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Content: {fileID: 224496712884336973}
   m_Horizontal: 0
-  m_Vertical: 1
+  m_Vertical: 0
   m_MovementType: 1
   m_Elasticity: 0.1
   m_Inertia: 1

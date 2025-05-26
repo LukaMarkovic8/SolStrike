@@ -17,9 +17,9 @@ public class bl_PhotonStatistics : bl_PhotonHelper, IConnectionCallbacks, ILobby
 
 
     [Header("Settings")]
-    [Range(1, 5)] public float RandomTime = 2;
+    [Range(1, 5)] private float RandomTime = 0.3f;
     //TODO LUKA HOW OFTEN WE REFRESH PING
-    [Range(1, 5)] private float UpdateEach = 3;
+    [Range(1, 5)] private float UpdateEach = 1;
     [Header("References")]
     [SerializeField] private GameObject RootUI = null;
     [SerializeField] private TextMeshProUGUI AllRoomText = null;
