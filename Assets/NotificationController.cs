@@ -10,6 +10,9 @@ public class NotificationController : MonoBehaviour
     public Image notificationImage;
     private float duration = 5f;
 
+    public GameObject warningHolder;
+
+
     public void ShowNotification(Sprite sprite)
     {
         notificationHolder.SetActive(true);
@@ -17,9 +20,17 @@ public class NotificationController : MonoBehaviour
         StartCoroutine(HideNotificationAfterDelay(duration));
     }
 
+
+    public void ShowWarning()
+    {
+        warningHolder.SetActive(true);
+        StartCoroutine(HideNotificationAfterDelay(duration));
+    }
+
     IEnumerator HideNotificationAfterDelay(float duration)
     {
         yield return new WaitForSeconds(duration);
         notificationHolder.SetActive(false);
+        warningHolder.SetActive(false);
     }
 }

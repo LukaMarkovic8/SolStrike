@@ -91,12 +91,38 @@ public class SolanaUIHandler : MonoBehaviour
         holder.SetActive(false);
 #endif
     }
+    public GameObject ConncetAgainHolder;
+    public GameObject SignAgainHolder;
 
-    private void DoLogin()
+    public void LoginAgain()
     {
-        Web3.Instance.LoginWalletAdapter();
-        Web3.OnLogin += OnLogin;
-        Web3.OnBalanceChange += OnBalanceChange;
+        ConncetAgainHolder.SetActive(false);
+        Web3.OnLogin -= OnLogin;
+        Web3.OnBalanceChange -= OnBalanceChange;
+        DoLogin();
+    }
+
+    public async Task DoLogin()
+    {
+        try
+        {
+            Web3.OnLogin += OnLogin;
+            Web3.OnBalanceChange += OnBalanceChange;
+            await Web3.Instance.LoginWalletAdapter();
+        }
+        catch (OperationCanceledException)
+        {
+            Debug.Log("User cancelled wallet login.");
+            // Optionally, show a notification or update UI here
+        }
+        catch (Exception ex)
+        {
+            ConncetAgainHolder.SetActive(true);
+            notificationController.ShowWarning();
+
+            Debug.LogWarning($"Wallet login failed: {ex.Message}");
+            // Optionally, show a notification or update UI here
+        }
     }
     private void OnDisable()
     {
@@ -127,27 +153,44 @@ public class SolanaUIHandler : MonoBehaviour
 
     public async Task SignMessageAsync()
     {
+        try
+        {
+            string signedMessageId = Signature.Poruka + " - ";
+            DateTime utcNow = DateTime.UtcNow;
+            DateTime unixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            long timestampInSeconds = (long)(utcNow - unixEpoch).TotalSeconds;
+            signedMessageId += timestampInSeconds.ToString();
+            byte[] bytes = Encoding.UTF8.GetBytes(signedMessageId);
 
+            // 1) Sign (user could reject here)
+            byte[] response = await Web3.Wallet.SignMessage(bytes);
 
-        string signedMessageId = Signature.Poruka + " - ";
-        DateTime utcNow = DateTime.UtcNow;
-        DateTime unixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-        long timestampInSeconds = (long)(utcNow - unixEpoch).TotalSeconds;
-        signedMessageId += timestampInSeconds.ToString();
-        byte[] bytes = Encoding.UTF8.GetBytes(signedMessageId);
-        byte[] response = await Web3.Wallet.SignMessage(bytes);
-        string base58Result = Solana.Unity.Wallet.Utilities.Encoders.Base58.EncodeData(response);
-        // Debug.Log("Base58 result: " + base58Result);
-        Signature.SignedMessage = signedMessageId;
-        Signature.SignatureString = base58Result;
+            string base58Result = Solana.Unity.Wallet.Utilities.Encoders.Base58.EncodeData(response);
+            Signature.SignedMessage = signedMessageId;
+            Signature.SignatureString = base58Result;
 
-        //Debug.Log(Signature.PublicKey + "   SignedMessage:" + Signature.SignedMessage + "   SignatureString:" + Signature.SignatureString);
-        bool verified = Web3.Account.Verify(bytes, response);
-        // Debug.Log("Verification result: " + verified);
-        await GetAmountOfChipsWeb3Async();
-        // gameObject.SetActive(false);
+            bool verified = Web3.Account.Verify(bytes, response);
+            await GetAmountOfChipsWeb3Async();
+        }
+        catch (OperationCanceledException)
+        {
+            Debug.Log("User rejected the sign message operation.");
+            // Optionally, show a notification or update UI here
+        }
+        catch (Exception ex)
+        {
+            SignAgainHolder.SetActive(true);
+            notificationController.ShowWarning();
+            Debug.LogWarning($"Wallet sign message failed: {ex.Message}");
+            // Optionally, show a notification or update UI here
+        }
     }
 
+    public void SingMessageAgain()
+    {
+        SignAgainHolder.SetActive(false);
+        SignMessageAsync();
+    }
 
     public void OnBalanceChange(double amount)
     {
@@ -410,7 +453,7 @@ public class SolanaUIHandler : MonoBehaviour
             Debug.LogWarning($"Wallet rejected: {ex.Message}");
             waitingForTransactionHolder.SetActive(false);
         }
-    
+
 
 
 

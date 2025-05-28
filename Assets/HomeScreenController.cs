@@ -84,7 +84,7 @@ public class HomeScreenController : MonoBehaviour
 
     IEnumerator GetUserData()
     {
-        string url = Signature.baseUrl + Web3.Account.PublicKey.Key;
+        string url = "https://api.solstrike.xyz/api/gamers/" + Web3.Account.PublicKey.Key;
         //Debug.Log("Sending GET request to: " + url);
 
         using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
