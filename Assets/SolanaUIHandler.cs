@@ -418,8 +418,7 @@ public class SolanaUIHandler : MonoBehaviour
         // GetSolanaBalance();
         // GetAmountOfChipsWeb3Async(true);
 
-    } 
-
+    }
     public async void Reserve(ulong vhipsAmount)
     {
         double oldValue = Signature.StandardChipsAmount;
@@ -438,58 +437,57 @@ public class SolanaUIHandler : MonoBehaviour
             Signer = Web3.Account.PublicKey,
             Treasury = treasury,
             ChipMint = chipMint,
-            //TreasuryChipTokenAccount = AssociatedTokenAccountProgram.DeriveAssociatedTokenAccount(treasury, chipMint),
             TreasuryChipTokenAccount = treasury.DeriveAssociatedTokenAccount(chipMint, TokenProgram22),
             UserChipAccount = Web3.Account.PublicKey.DeriveAssociatedTokenAccount(chipMint, TokenProgram22),
-            TokenProgram = TokenProgram22//TokenProgram.ProgramIdKey
-
-
+            TokenProgram = TokenProgram22
         };
-        /*   Debug.Log($"Signer: {accounts.Signer}");
-           Debug.Log($"Treasury: {accounts.Treasury}");
-           Debug.Log($"ChipMint: {accounts.ChipMint}");
-           Debug.Log($"TreasuryChipTokenAccount: {accounts.TreasuryChipTokenAccount}");
-           Debug.Log($"UserChipAccount: {accounts.UserChipAccount}");
-           Debug.Log($"TokenProgram: {accounts.TokenProgram}");*/
-        // Create the ReserveChips instruction
+
         TransactionInstruction reserveVhipsInstruction = SolStrike.Program.SolStrikeProgram.ReserveChips(accounts, vhipsAmount, publicKeyProgram);
-        // Fetch the recent block hash
         waitingForTransactionHolder.SetActive(true);
 
-        string blockHash = await Web3.Base.GetBlockHash(Commitment.Confirmed);
-        // Create and sign the transaction
-        Transaction transaction = new Transaction
+        try
         {
-            FeePayer = Web3.Account.PublicKey,
-            RecentBlockHash = blockHash,
-            Signatures = new List<SignaturePubKeyPair>(),
-            Instructions = new List<TransactionInstruction> { reserveVhipsInstruction }
-        };
+            string blockHash = await Web3.Base.GetBlockHash(Commitment.Confirmed);
 
-        Transaction signedTransaction = await Web3.Base.SignTransaction(transaction);
+            Transaction transaction = new Transaction
+            {
+                FeePayer = Web3.Account.PublicKey,
+                RecentBlockHash = blockHash,
+                Signatures = new List<SignaturePubKeyPair>(),
+                Instructions = new List<TransactionInstruction> { reserveVhipsInstruction }
+            };
 
-        // Send the transaction
-        RequestResult<string> signature = await Web3.Base.ActiveRpcClient.SendTransactionAsync(
-            Convert.ToBase64String(signedTransaction.Serialize()),
-            true, Commitment.Confirmed);
+            // 1) Sign (user could reject here)
+            Transaction signedTransaction = await Web3.Base.SignTransaction(transaction);
 
-        if (signature.WasSuccessful)
-        {
-            // Debug.Log($"Successfully reserved {vhipsAmount} vhips. Transaction signature: {signature.Result}");
-            //TOO FAKEING 1 because game data changes are too slow
-            // Signature.GamerData.reservedChips = 1.ToString();
-            StartCoroutine(waitReservedChipsToChange(oldValue));
-            notificationController.ShowNotification(successReserveSprite);
+            // 2) Send (network/rpc errors could happen here)
+            RequestResult<string> signature = await Web3.Base.ActiveRpcClient.SendTransactionAsync(
+                Convert.ToBase64String(signedTransaction.Serialize()),
+                true, Commitment.Confirmed);
+
+            if (signature.WasSuccessful)
+            {
+                StartCoroutine(waitReservedChipsToChange(oldValue));
+                notificationController.ShowNotification(successReserveSprite);
+            }
+            else
+            {
+                Debug.LogError($"RPC error: {signature.Reason}");
+                reserveChipsScreenHolder.SetActive(false);
+                waitingForTransactionHolder.SetActive(false);
+                notificationController.ShowNotification(errorSprite);
+            }
         }
-        else
+        catch (OperationCanceledException)
         {
-            reserveChipsScreenHolder.SetActive(false);
+            Debug.Log("User rejected the transaction.");
             waitingForTransactionHolder.SetActive(false);
-            notificationController.ShowNotification(errorSprite);
-
-            //  Debug.LogError($"Failed to reserve vhips. Error: {signature.Reason}");
         }
-        // GetGamerData();
+        catch (Exception ex)
+        {
+            Debug.LogWarning($"Wallet rejected: {ex.Message}");
+            waitingForTransactionHolder.SetActive(false);
+        }
     }
 
 
@@ -551,6 +549,8 @@ public class SolanaUIHandler : MonoBehaviour
 
     public async void Sell(ulong chipsAmount)
     {
+        double oldValue = Signature.StandardChipsAmount;
+
         string programId = SolStrike.Program.SolStrikeProgram.ID;
         PublicKey globalConfig;
         PublicKey treasury;
@@ -590,36 +590,52 @@ public class SolanaUIHandler : MonoBehaviour
             Instructions = new List<TransactionInstruction> { sellChipInstruction }
         };
 
-        Transaction signedTransaction = await Web3.Base.SignTransaction(transaction);
-
         waitingForTransactionHolder.SetActive(true);
-        // Send the transaction
-        RequestResult<string> signature = await Web3.Base.ActiveRpcClient.SendTransactionAsync(
-            Convert.ToBase64String(signedTransaction.Serialize()),
-            true, Commitment.Confirmed);
 
-        if (signature.WasSuccessful)
+        try
         {
-            //  Debug.Log($"Successfully sold {chipsAmount} chips. Transaction signature: {signature.Result}");
-            //GetSolanaBalance();
-            //GetAmountOfChipsWeb3Async(true);
-            StartCoroutine(waitForChipsToChangeAfterBuy(Signature.StandardChipsAmount));
-            notificationController.ShowNotification(successSellSprite);
+            // 1) Sign (user could reject here)
+            Transaction signedTransaction = await Web3.Base.SignTransaction(transaction);
 
+            // 2) Send (network/rpc errors could happen here)
+            RequestResult<string> signature = await Web3.Base.ActiveRpcClient.SendTransactionAsync(
+                Convert.ToBase64String(signedTransaction.Serialize()),
+                true,
+                Commitment.Confirmed
+            );
 
+            if (signature.WasSuccessful)
+            {
+                StartCoroutine(waitForChipsToChangeAfterBuy(oldValue));
+                notificationController.ShowNotification(successSellSprite);
+            }
+            else
+            {
+                // RPC returned an error
+                Debug.LogError($"RPC error: {signature.Reason}");
+                waitingForTransactionHolder.SetActive(false);
+                redeemChipsScreenHolder.SetActive(false);
+                notificationController.ShowNotification(errorSprite);
+            }
         }
-        else
+        catch (OperationCanceledException)
         {
-            //Debug.LogError($"Failed to sell chips. Error: {signature.Reason}");
+            // Typically thrown if the user explicitly cancels
+            Debug.Log("User rejected the transaction.");
             waitingForTransactionHolder.SetActive(false);
-            notificationController.ShowNotification(errorSprite);
-
-
+        }
+        catch (Exception ex)
+        {
+            // If your wallet SDK throws a specific WalletException on reject
+            Debug.LogWarning($"Wallet rejected: {ex.Message}");
+            waitingForTransactionHolder.SetActive(false);
         }
     }
 
     public async void Claim()
     {
+        double oldValue = Signature.StandardChipsAmount;
+
         string programId = SolStrike.Program.SolStrikeProgram.ID;
         PublicKey treasury;
         PublicKey chipMint;
@@ -659,34 +675,46 @@ public class SolanaUIHandler : MonoBehaviour
             Instructions = new List<TransactionInstruction> { claimChipsInstruction }
         };
 
-        Transaction signedTransaction = await Web3.Base.SignTransaction(transaction);
         waitingForTransactionHolder.SetActive(true);
-        // Send the transaction
-        RequestResult<string> signature = await Web3.Base.ActiveRpcClient.SendTransactionAsync(
-            Convert.ToBase64String(signedTransaction.Serialize()),
-            true, Commitment.Confirmed);
 
-        if (signature.WasSuccessful)
+        try
         {
-            //   Debug.Log($"Successfully claimed chips. Transaction signature: {signature.Result}");
-            StartCoroutine(waitForChipsToChange(Signature.StandardChipsAmount));
-            //GetSolanaBalance();
-            //GetAmountOfChipsWeb3Async(true);
-            // StartCoroutine(waitForChipsToChangeAfterBuy(Signature.StandardChipsAmount));
-            notificationController.ShowNotification(successClaimSprite);
+            // 1) Sign (user could reject here)
+            Transaction signedTransaction = await Web3.Base.SignTransaction(transaction);
 
+            // 2) Send (network/rpc errors could happen here)
+            RequestResult<string> signature = await Web3.Base.ActiveRpcClient.SendTransactionAsync(
+                Convert.ToBase64String(signedTransaction.Serialize()),
+                true,
+                Commitment.Confirmed
+            );
+
+            if (signature.WasSuccessful)
+            {
+                StartCoroutine(waitForChipsToChange(oldValue));
+                notificationController.ShowNotification(successClaimSprite);
+            }
+            else
+            {
+                // RPC returned an error
+                Debug.LogError($"RPC error: {signature.Reason}");
+                notificationController.ShowNotification(errorSprite);
+                claimChipsScreenHolder.SetActive(false);
+                waitingForTransactionHolder.SetActive(false);
+            }
         }
-        else
+        catch (OperationCanceledException)
         {
-            // Debug.LogError($"Failed to claim chips. Error: {signature.Reason}");
-            notificationController.ShowNotification(errorSprite);
-            claimChipsScreenHolder.SetActive(false);
+            // Typically thrown if the user explicitly cancels
+            Debug.Log("User rejected the transaction.");
             waitingForTransactionHolder.SetActive(false);
-
-            // Debug.LogError($"Failed to claim chips. Error: {signature.Reason}");
         }
-        var now = System.DateTime.Now.ToString();
-        // Debug.Log("Claimed chips at: " + now);
+        catch (Exception ex)
+        {
+            // If your wallet SDK throws a specific WalletException on reject
+            Debug.LogWarning($"Wallet rejected: {ex.Message}");
+            waitingForTransactionHolder.SetActive(false);
+        }
     }
 
 
