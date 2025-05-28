@@ -18,11 +18,23 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 using static Solana.Unity.SDK.Web3;
+using Solana.Unity.Programs.Models;
 
 
 
 public class SolanaUIHandler : MonoBehaviour
 {
+
+
+    [Header("Notification sprites")]
+    public Sprite successBuySprite;
+    public Sprite successSellSprite;
+    public Sprite successReserveSprite;
+    public Sprite successClaimSprite;
+    public Sprite errorSprite;
+
+    public NotificationController notificationController;
+
     public GameObject waitingForTransactionHolder;
 
     public TextMeshProUGUI unclaimedChipsText;
@@ -142,7 +154,7 @@ public class SolanaUIHandler : MonoBehaviour
         Signature.SolanaBalance = amount;
         solanaBalanceText.text = "SOL BALANCE : " + Signature.SolanaBalance.ToString();
 
-        //    Debug.Log("sol balance: " + amount);
+        Debug.Log("sol balance: " + amount);
     }
 
     [ContextMenu("TESTGET")]
@@ -360,28 +372,53 @@ public class SolanaUIHandler : MonoBehaviour
         transaction.Instructions = new List<TransactionInstruction>();
         transaction.Instructions.Add(buyChipInstruction);
         waitingForTransactionHolder.SetActive(true);
-        Transaction signedTransaction = await Base.SignTransaction(transaction);
-
-        RequestResult<string> signature = await Base.ActiveRpcClient.SendTransactionAsync(Convert.ToBase64String(signedTransaction.Serialize()), true, Commitment.Confirmed);
-
-
-        if (signature.WasSuccessful)
+        try
         {
-            StartCoroutine(waitForChipsToChangeAfterBuy(oldValue));
+            // 1) Sign (user could reject here)
+            Transaction signedTransaction = await Base.SignTransaction(transaction);
 
+            // 2) Send (network/rpc errors could happen here)
+            RequestResult<string> signature = await Base.ActiveRpcClient.SendTransactionAsync(
+                Convert.ToBase64String(signedTransaction.Serialize()),
+                true,
+                Commitment.Confirmed
+            );
+
+            if (signature.WasSuccessful)
+            {
+                StartCoroutine(waitForChipsToChangeAfterBuy(oldValue));
+                notificationController.ShowNotification(successBuySprite);
+            }
+            else
+            {
+                // RPC returned an error
+                Debug.LogError($"RPC error: {signature.Reason}");
+                waitingForTransactionHolder.SetActive(false);
+                buyChipsScreenHolder.SetActive(false);
+                notificationController.ShowNotification(errorSprite);
+            }
         }
-        else
+        catch (OperationCanceledException)
         {
-
+            // Typically thrown if the user explicitly cancels
+            Debug.Log("User rejected the transaction.");
             waitingForTransactionHolder.SetActive(false);
-            buyChipsScreenHolder.SetActive(false);
-
         }
+        catch (Exception ex)
+        {
+            // If your wallet SDK throws a specific WalletException on reject
+            Debug.LogWarning($"Wallet rejected: {ex.Message}");
+            waitingForTransactionHolder.SetActive(false);
+        }
+    
+
+
+
         //Debug.Log("signature: " + signature.Result);
         // GetSolanaBalance();
         // GetAmountOfChipsWeb3Async(true);
 
-    }
+    } 
 
     public async void Reserve(ulong vhipsAmount)
     {
@@ -442,11 +479,14 @@ public class SolanaUIHandler : MonoBehaviour
             //TOO FAKEING 1 because game data changes are too slow
             // Signature.GamerData.reservedChips = 1.ToString();
             StartCoroutine(waitReservedChipsToChange(oldValue));
+            notificationController.ShowNotification(successReserveSprite);
         }
         else
         {
             reserveChipsScreenHolder.SetActive(false);
             waitingForTransactionHolder.SetActive(false);
+            notificationController.ShowNotification(errorSprite);
+
             //  Debug.LogError($"Failed to reserve vhips. Error: {signature.Reason}");
         }
         // GetGamerData();
@@ -564,7 +604,7 @@ public class SolanaUIHandler : MonoBehaviour
             //GetSolanaBalance();
             //GetAmountOfChipsWeb3Async(true);
             StartCoroutine(waitForChipsToChangeAfterBuy(Signature.StandardChipsAmount));
-
+            notificationController.ShowNotification(successSellSprite);
 
 
         }
@@ -572,6 +612,8 @@ public class SolanaUIHandler : MonoBehaviour
         {
             //Debug.LogError($"Failed to sell chips. Error: {signature.Reason}");
             waitingForTransactionHolder.SetActive(false);
+            notificationController.ShowNotification(errorSprite);
+
 
         }
     }
@@ -631,9 +673,13 @@ public class SolanaUIHandler : MonoBehaviour
             //GetSolanaBalance();
             //GetAmountOfChipsWeb3Async(true);
             // StartCoroutine(waitForChipsToChangeAfterBuy(Signature.StandardChipsAmount));
+            notificationController.ShowNotification(successClaimSprite);
+
         }
         else
         {
+            // Debug.LogError($"Failed to claim chips. Error: {signature.Reason}");
+            notificationController.ShowNotification(errorSprite);
             claimChipsScreenHolder.SetActive(false);
             waitingForTransactionHolder.SetActive(false);
 
