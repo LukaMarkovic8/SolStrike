@@ -39,6 +39,8 @@ public class SolanaUIHandler : MonoBehaviour
     public GameObject holder;
     public GameObject ConncetAgainHolder;
     public GameObject SignAgainHolder;
+    public GameObject TextHolder;
+
 
     [Header("Text Fields")]
     public TextMeshProUGUI unclaimedChipsText;
@@ -161,10 +163,17 @@ public class SolanaUIHandler : MonoBehaviour
         }
         catch (Exception ex)
         {
-            ConncetAgainHolder.SetActive(true);
+            //ConncetAgainHolder.SetActive(true);
+            StartCoroutine(DelayReconnect(0.5f));
             notificationController.ShowWarning();
             Debug.LogWarning($"Wallet login failed: {ex.Message}");
         }
+    }
+
+    IEnumerator DelayReconnect(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        LoginAgain();
     }
 
     public void LoginAgain()
@@ -206,6 +215,7 @@ public class SolanaUIHandler : MonoBehaviour
         catch (Exception ex)
         {
             SignAgainHolder.SetActive(true);
+            TextHolder.SetActive(false);
             notificationController.ShowWarning();
             Debug.LogWarning($"Wallet sign message failed: {ex.Message}");
         }
@@ -214,6 +224,8 @@ public class SolanaUIHandler : MonoBehaviour
     public void SingMessageAgain()
     {
         SignAgainHolder.SetActive(false);
+        TextHolder.SetActive(true);
+
         _ = SignMessageAsync();
     }
 
