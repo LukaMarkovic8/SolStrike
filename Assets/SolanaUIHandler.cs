@@ -20,87 +20,132 @@ using UnityEngine.UI;
 using static Solana.Unity.SDK.Web3;
 using Solana.Unity.Programs.Models;
 
-
-
 public class SolanaUIHandler : MonoBehaviour
 {
+    #region UI References
 
-
-    [Header("Notification sprites")]
+    [Header("Notification Sprites")]
     public Sprite successBuySprite;
     public Sprite successSellSprite;
     public Sprite successReserveSprite;
     public Sprite successClaimSprite;
     public Sprite errorSprite;
 
+    [Header("Notification Controllers")]
     public NotificationController notificationController;
 
+    [Header("UI Holders")]
     public GameObject waitingForTransactionHolder;
+    public GameObject holder;
+    public GameObject ConncetAgainHolder;
+    public GameObject SignAgainHolder;
 
+    [Header("Text Fields")]
     public TextMeshProUGUI unclaimedChipsText;
     public TextMeshProUGUI chipsText;
-    // public TextMeshProUGUI matchCostText;
     public TextMeshProUGUI Points;
     public TextMeshProUGUI solanaBalanceText;
-
-
     public TextMeshProUGUI TextMeshProUGUI;
     public TextMeshProUGUI balance;
-    public GameObject holder;
+
+    [Header("Wallet UI")]
     public GameObject walletElementPref;
     public GameObject walletElementHolder;
     public GameObject closeButton;
+
+    [Header("Leaderboard UI")]
+    public GameObject lederboardElementsHolder;
+    public GameObject leaderboadElementPref;
+    public GameObject leaderboadHeaderPref;
+
+    [Header("Buy Chips Screen")]
+    public TMP_InputField buyChipsInputFieldBuyScreen;
+    public Button buyChipsButtonBuyScreen;
+    public TextMeshProUGUI InvalidInputText;
+    public TextMeshProUGUI solToSpendTextBuyScreen;
+    public TextMeshProUGUI balanceTextBuyScreen;
+    public TextMeshProUGUI chipCostTextBuyScreen;
+    private float chipCost = 0.01f;
+
+    [Header("Redeem Screen")]
+    public TextMeshProUGUI chipBlanceRedeemText;
+    public TMP_InputField redeemChipsInputField;
+    public TextMeshProUGUI solToReciveText;
+    public Button redeemChipsButton;
+    public GameObject InvalidInputTextRedeem;
+    private float chisToRedeem = 0;
+
+    [Header("Claim Chips Screen")]
+    public GameObject claimChipsButton;
+    public TextMeshProUGUI chipsToClaim;
+    public TextMeshProUGUI ChipsBalance;
+
+    [Header("Reserve Screen")]
+    public GameObject reserveChipsButton;
+    public TextMeshProUGUI reserveChipsWarningText;
+    public TMP_InputField reserveChipsInputField;
+
+    [Header("Screen Holders")]
+    public GameObject buyChipsScreenHolder;
+    public GameObject redeemChipsScreenHolder;
+    public GameObject claimChipsScreenHolder;
+    public GameObject reserveChipsScreenHolder;
+
+    #endregion
+
+    #region Fields
+
     private PublicKey TokenProgram22 = new PublicKey("TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb");
     public bl_Lobby bl_Lobby;
+    private string baseUrl = "https://api.solstrike.xyz/api/gamers/";
+    private int chipsToBuywithSOL = 0;
+    private int chipsToReserveAmount = 0;
+
+    #endregion
+
+    #region Unity Lifecycle
 
     void Start()
     {
-        // Add a listener to the onValueChanged event
         buyChipsInputFieldBuyScreen.onValueChanged.AddListener(OnInputFieldValueChanged);
         redeemChipsInputField.onValueChanged.AddListener(OnRedeemInputFieldValueChanged);
         reserveChipsInputField.onValueChanged.AddListener(OnReserveInputfieldChanged);
 
         if (!Signature.isFirstTime)
-        {
             LoadData();
-        }
-        else
-        {
-            //
-        }
-
-
-
     }
-
 
     private void OnEnable()
     {
 #if !UNITY_EDITOR
-        if(!String.IsNullOrEmpty(Web3.Account.PublicKey.Key))
+        if (!string.IsNullOrEmpty(Web3.Account.PublicKey.Key))
         {
             holder.SetActive(false);
         }
         else
         {
-            DoLogin();
-         
+            _ = DoLogin();
         }
 #else
         bl_Lobby.GPN();
         holder.SetActive(false);
 #endif
     }
-    public GameObject ConncetAgainHolder;
-    public GameObject SignAgainHolder;
 
-    public void LoginAgain()
+    private void OnDisable()
     {
-        ConncetAgainHolder.SetActive(false);
         Web3.OnLogin -= OnLogin;
         Web3.OnBalanceChange -= OnBalanceChange;
-        DoLogin();
     }
+
+    void OnDestroy()
+    {
+        buyChipsInputFieldBuyScreen.onValueChanged.RemoveListener(OnInputFieldValueChanged);
+    }
+
+    #endregion
+
+    #region Wallet & Authentication
 
     public async Task DoLogin()
     {
@@ -113,59 +158,41 @@ public class SolanaUIHandler : MonoBehaviour
         catch (OperationCanceledException)
         {
             Debug.Log("User cancelled wallet login.");
-            // Optionally, show a notification or update UI here
         }
         catch (Exception ex)
         {
             ConncetAgainHolder.SetActive(true);
             notificationController.ShowWarning();
-
             Debug.LogWarning($"Wallet login failed: {ex.Message}");
-            // Optionally, show a notification or update UI here
         }
     }
-    private void OnDisable()
+
+    public void LoginAgain()
     {
+        ConncetAgainHolder.SetActive(false);
         Web3.OnLogin -= OnLogin;
         Web3.OnBalanceChange -= OnBalanceChange;
+        _ = DoLogin();
     }
 
     public void OnLogin(Account account)
     {
-        //Debug.Log("Public Key: " + account.PublicKey);
         Signature.PublicKey = account.PublicKey.Key;
         TextMeshProUGUI.text = "SIGN MESSAGE";
-        byte[] bytes = Encoding.UTF8.GetBytes(Signature.PublicKey);
-        Signature.PublicKeyBytes = bytes;
-        SignMessageAsync();
-
-    }
-
-
-    public async Task LoadData()
-    {
-        GetGamerData();
-        // StartCoroutine(GetLeaderboardCoroutine());
-        await GetAmountOfChipsWeb3Async(true);
-        await GetSolanaBalance();
-        StartCoroutine(GetUnclaimedChipsAfterSeconds(5));
+        Signature.PublicKeyBytes = Encoding.UTF8.GetBytes(Signature.PublicKey);
+        _ = SignMessageAsync();
     }
 
     public async Task SignMessageAsync()
     {
         try
         {
-            string signedMessageId = Signature.Poruka + " - ";
-            DateTime utcNow = DateTime.UtcNow;
-            DateTime unixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-            long timestampInSeconds = (long)(utcNow - unixEpoch).TotalSeconds;
-            signedMessageId += timestampInSeconds.ToString();
+            string signedMessageId = Signature.Poruka + " - " + ((long)(DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds);
             byte[] bytes = Encoding.UTF8.GetBytes(signedMessageId);
 
-            // 1) Sign (user could reject here)
             byte[] response = await Web3.Wallet.SignMessage(bytes);
-
             string base58Result = Solana.Unity.Wallet.Utilities.Encoders.Base58.EncodeData(response);
+
             Signature.SignedMessage = signedMessageId;
             Signature.SignatureString = base58Result;
 
@@ -175,75 +202,49 @@ public class SolanaUIHandler : MonoBehaviour
         catch (OperationCanceledException)
         {
             Debug.Log("User rejected the sign message operation.");
-            // Optionally, show a notification or update UI here
         }
         catch (Exception ex)
         {
             SignAgainHolder.SetActive(true);
             notificationController.ShowWarning();
             Debug.LogWarning($"Wallet sign message failed: {ex.Message}");
-            // Optionally, show a notification or update UI here
         }
     }
 
     public void SingMessageAgain()
     {
         SignAgainHolder.SetActive(false);
-        SignMessageAsync();
+        _ = SignMessageAsync();
     }
 
     public void OnBalanceChange(double amount)
     {
         Signature.SolanaBalance = amount;
-        solanaBalanceText.text = "SOL BALANCE : " + Signature.SolanaBalance.ToString();
-
+        solanaBalanceText.text = $"SOL BALANCE : {Signature.SolanaBalance}";
         Debug.Log("sol balance: " + amount);
     }
 
-    [ContextMenu("TESTGET")]
-    public void Test()
+    #endregion
+
+    #region Data Loading
+
+    public async Task LoadData()
     {
-        GetAmountOfChipsWeb3Async();
+        GetGamerData();
+        await GetAmountOfChipsWeb3Async(true);
+        await GetSolanaBalance();
+        StartCoroutine(GetUnclaimedChipsAfterSeconds(5));
     }
 
-    [ContextMenu("ReserveTest")]
-    public void ReserveTest()
-    {
-        Reserve(1000000000 * (ulong)chipsToReserveAmount);
-    }
-
-    [ContextMenu("BuyTest")]
-    public void BuyTest()
-    {
-        Buy((ulong)chipsToBuywithSOL * 1000000000);
-    }
-    [ContextMenu("SellTest")]
-    public void SellTest()
-    {
-        Sell((ulong)chisToRedeem * 1000000000);
-    }
-    [ContextMenu("ClaimTest")]
-    public void ClaimTest()
-    {
-        Claim();
-    }
     [ContextMenu("GetGamerData")]
     public void GetGamerData() => StartCoroutine(GetGamerDataCoroutine());
-    private string baseUrl = "https://api.solstrike.xyz/api/gamers/";
-    public GameObject lederboardElementsHolder;
-    public GameObject leaderboadElementPref;
-    public GameObject leaderboadHeaderPref;
-
 
     private IEnumerator GetGamerDataCoroutine()
     {
         string url = baseUrl + Web3.Account.PublicKey.Key;
-        //Debug.Log("Sending GET request to: " + url);
-
         using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
         {
             webRequest.SetRequestHeader("accept", "application/json");
-
             yield return webRequest.SendWebRequest();
 
             switch (webRequest.result)
@@ -256,176 +257,129 @@ public class SolanaUIHandler : MonoBehaviour
                     Debug.LogError($"HTTP Error: {webRequest.error}\nCode: {webRequest.responseCode}\nURL: {url}");
                     break;
                 case UnityWebRequest.Result.Success:
-                    //  Debug.Log($"Success! Response Code: {webRequest.responseCode}");
-                    string responseJson = webRequest.downloadHandler.text;
-                    //    Debug.Log("Received JSON:\n" + responseJson);
-
                     try
                     {
-                        GamerData gamerData = JsonUtility.FromJson<GamerData>(responseJson);
+                        GamerData gamerData = JsonUtility.FromJson<GamerData>(webRequest.downloadHandler.text);
                         Signature.GamerData = gamerData;
-
-                        // TODO: Parse responseJson here
-                        break;
                     }
                     catch (Exception ex)
                     {
-                        // Debug.LogError("Error parsing JSON: " + ex.Message);
-                        break;
+                        Debug.LogError("Error parsing JSON: " + ex.Message);
                     }
+                    break;
             }
         }
-
     }
+
     public async Task GetSolanaBalance()
     {
-        //  Debug.Log("Solana balance before: " + Signature.SolanaBalance);
-
         Signature.SolanaBalance = await Web3.Wallet.GetBalance();
-        //   Debug.Log("Solana balance after: " + Signature.SolanaBalance);
     }
-    public async Task GetAmountOfChipsWeb3Async(bool a = true)
+
+    public async Task GetAmountOfChipsWeb3Async(bool updateUnclaimed = true)
     {
-
-
         PublicKey chipMint;
         PublicKey publicKeyProgram = new PublicKey(SolStrike.Program.SolStrikeProgram.ID);
-        PublicKey.TryFindProgramAddress(new[] { Encoding.UTF8.GetBytes("CHIP_MINT") }, publicKeyProgram, out chipMint, out var bump2);
+        PublicKey.TryFindProgramAddress(new[] { Encoding.UTF8.GetBytes("CHIP_MINT") }, publicKeyProgram, out chipMint, out var _);
         var tokenABalance = await Web3.Rpc.GetTokenAccountBalanceAsync(Web3.Account.PublicKey.DeriveAssociatedTokenAccount(chipMint, TokenProgram22), Commitment.Confirmed);
-        //  Debug.Log("tokenABalance : " + tokenABalance.WasSuccessful.ToString());
 
         if (tokenABalance.WasSuccessful)
         {
-            //     Debug.Log(tokenABalance.Result.Value.UiAmountString);
             Signature.StandardChipsAmount = tokenABalance.Result.Value.AmountDouble;
-            chipsText.text = "CHIPS BALANCE : " + Signature.StandardChipsAmount.ToString();
-            solanaBalanceText.text = "SOL BALANCE : " + Signature.SolanaBalance.ToString();
-            //Debug.Log("tokenABalance : " + tokenABalance.Result.Value.Amount.ToString());
-            // balance.text = "CHIPS:" + tokenABalance.Result.Value.Amount.ToString();
+            chipsText.text = $"CHIPS BALANCE : {Signature.StandardChipsAmount}";
+            solanaBalanceText.text = $"SOL BALANCE : {Signature.SolanaBalance}";
         }
         else
         {
-            chipsText.text = "CHIPS BALANCE : " + Signature.StandardChipsAmount.ToString();
+            chipsText.text = $"CHIPS BALANCE : {Signature.StandardChipsAmount}";
             Signature.StandardChipsAmount = 0;
-            //     Debug.Log("Error: " + tokenABalance.Reason);
         }
 
-        if (!a)
+        if (updateUnclaimed)
         {
-            return;
+            bl_Lobby.GPN();
+            await GetAmountOfUnclaimedChipsWeb3Async();
         }
-        bl_Lobby.GPN();
-        await GetAmountOfUnclaimedChipsWeb3Async();
-
     }
 
-
-    IEnumerator GetUnclaimedChipsAfterSeconds(int seconds)
+    private IEnumerator GetUnclaimedChipsAfterSeconds(int seconds)
     {
         yield return new WaitForSeconds(seconds);
-        GetAmountOfUnclaimedChipsWeb3Async();
+        _ = GetAmountOfUnclaimedChipsWeb3Async();
     }
 
     public async Task GetAmountOfUnclaimedChipsWeb3Async()
     {
         PublicKey claimableRewardsPDA;
-        //Debug.Log("GetAmountOfUnclaimedChipsWeb3Async");
-        //TODO LUKA
-        //        holder.SetActive(false);
-
         SolStrikeClient solStrikeClient = new SolStrikeClient(Web3.Rpc, Web3.Base.ActiveStreamingRpcClient, new PublicKey(SolStrike.Program.SolStrikeProgram.ID));
-        PublicKey.TryFindProgramAddress(new[] { Web3.Base.Account.PublicKey.KeyBytes }, new PublicKey(SolStrike.Program.SolStrikeProgram.ID), out claimableRewardsPDA, out var bump2);
+        PublicKey.TryFindProgramAddress(new[] { Web3.Base.Account.PublicKey.KeyBytes }, new PublicKey(SolStrike.Program.SolStrikeProgram.ID), out claimableRewardsPDA, out var _);
 
         try
         {
-            Solana.Unity.Programs.Models.AccountResultWrapper<ClaimableRewards> a = await solStrikeClient.GetClaimableRewardsAsync(claimableRewardsPDA, Commitment.Confirmed);
-
-
-            if (a.WasSuccessful == false)
+            var a = await solStrikeClient.GetClaimableRewardsAsync(claimableRewardsPDA, Commitment.Confirmed);
+            if (!a.WasSuccessful)
             {
                 Signature.UnclaimedChipsAmount = 0;
-                unclaimedChipsText.text = "UNCLAIMED CHIPS : " + Signature.UnclaimedChipsAmount.ToString();
-                // Debug.Log("Error: " + a.WasSuccessful);
+                unclaimedChipsText.text = $"UNCLAIMED CHIPS : {Signature.UnclaimedChipsAmount}";
                 return;
             }
-            else
-            {
-
-                ulong amountUlong = a.ParsedResult.Amount;
-                double amountInDesiredUnit = (double)amountUlong / 1_000_000_000.0;
-                string formattedAmount = amountInDesiredUnit.ToString("F0");
-                //   Debug.Log(amountUlong);
-                //   Debug.Log("f:" + amountInDesiredUnit);
-                //   Debug.Log("Formatted Amount: " + formattedAmount);
-                //   Debug.Log(a.WasSuccessful + "  UnclaimedChips:" + ((float)a.ParsedResult.Amount).ToString() + "     a.OriginalRequest: " + a.OriginalRequest);
-                Signature.UnclaimedChipsAmount = amountInDesiredUnit;
-                unclaimedChipsText.text = "UNCLAIMED CHIPS : " + Signature.UnclaimedChipsAmount.ToString();
-
-            }
+            ulong amountUlong = a.ParsedResult.Amount;
+            double amountInDesiredUnit = (double)amountUlong / 1_000_000_000.0;
+            Signature.UnclaimedChipsAmount = amountInDesiredUnit;
+            unclaimedChipsText.text = $"UNCLAIMED CHIPS : {Signature.UnclaimedChipsAmount}";
         }
         catch (Exception ex)
         {
-
-
-            // Debug.LogError("ERR GetAmountOfUnclaimedChipsWeb3Async:" + ex.ToString());
-            //Debug.Log("tokenABalance : " + tokenABalance.Result.Value.Amount.ToString());
-            // balance.text = "CHIPS:" + tokenABalance.Result.Value.Amount.ToString();
-
+            Debug.LogError("ERR GetAmountOfUnclaimedChipsWeb3Async:" + ex);
         }
 
         StartCoroutine(GetLeaderboardCoroutine());
-
     }
+
+    #endregion
+
+    #region Transaction Methods
 
     public async void Buy(ulong chipsAmount)
     {
         double oldValue = Signature.StandardChipsAmount;
-
         string ProgramId = SolStrike.Program.SolStrikeProgram.ID;
-        PublicKey globalConfig;
-        PublicKey treasury;
-        PublicKey chipMint;
-
-
+        PublicKey globalConfig, treasury, chipMint;
         PublicKey publicKeyProgram = new PublicKey(ProgramId);
 
-        PublicKey.TryFindProgramAddress(new[] { Encoding.UTF8.GetBytes("GLOBAL_CONFIG") }, publicKeyProgram, out globalConfig, out var bump1);
-        PublicKey.TryFindProgramAddress(new[] { Encoding.UTF8.GetBytes("TREASURY") }, publicKeyProgram, out treasury, out var bump2);
-        PublicKey.TryFindProgramAddress(new[] { Encoding.UTF8.GetBytes("CHIP_MINT") }, publicKeyProgram, out chipMint, out var bump3);
+        PublicKey.TryFindProgramAddress(new[] { Encoding.UTF8.GetBytes("GLOBAL_CONFIG") }, publicKeyProgram, out globalConfig, out var _);
+        PublicKey.TryFindProgramAddress(new[] { Encoding.UTF8.GetBytes("TREASURY") }, publicKeyProgram, out treasury, out var _);
+        PublicKey.TryFindProgramAddress(new[] { Encoding.UTF8.GetBytes("CHIP_MINT") }, publicKeyProgram, out chipMint, out var _);
 
-        BuyChipWithSolAccounts account = new BuyChipWithSolAccounts();
-        account.Buyer = Web3.Account.PublicKey;
-        account.GlobalConfig = globalConfig;
-        account.Treasury = treasury;
-        account.ChipMint = chipMint;
-        account.BuyerChipAccount = Web3.Account.PublicKey.DeriveAssociatedTokenAccount(chipMint, TokenProgram22);
-        account.TokenProgram = TokenProgram22;
-        account.AssociatedTokenProgram = AssociatedTokenAccountProgram.ProgramIdKey;
-        account.SystemProgram = SystemProgram.ProgramIdKey;
+        BuyChipWithSolAccounts account = new BuyChipWithSolAccounts
+        {
+            Buyer = Web3.Account.PublicKey,
+            GlobalConfig = globalConfig,
+            Treasury = treasury,
+            ChipMint = chipMint,
+            BuyerChipAccount = Web3.Account.PublicKey.DeriveAssociatedTokenAccount(chipMint, TokenProgram22),
+            TokenProgram = TokenProgram22,
+            AssociatedTokenProgram = AssociatedTokenAccountProgram.ProgramIdKey,
+            SystemProgram = SystemProgram.ProgramIdKey
+        };
+
         TransactionInstruction buyChipInstruction = SolStrike.Program.SolStrikeProgram.BuyChipWithSol(account, chipsAmount, publicKeyProgram);
-
         string blockHash = await Web3.Base.GetBlockHash(Commitment.Confirmed);
 
+        Transaction transaction = new Transaction
+        {
+            FeePayer = Web3.Account.PublicKey,
+            RecentBlockHash = blockHash,
+            Signatures = new List<SignaturePubKeyPair>(),
+            Instructions = new List<TransactionInstruction> { buyChipInstruction }
+        };
 
-
-        Transaction transaction = new Transaction();
-        transaction.FeePayer = Web3.Account.PublicKey;
-        transaction.RecentBlockHash = blockHash;
-        transaction.Signatures = new List<SignaturePubKeyPair>();
-        transaction.Instructions = new List<TransactionInstruction>();
-        transaction.Instructions.Add(buyChipInstruction);
         waitingForTransactionHolder.SetActive(true);
         try
         {
-            // 1) Sign (user could reject here)
             Transaction signedTransaction = await Base.SignTransaction(transaction);
-
-            // 2) Send (network/rpc errors could happen here)
             RequestResult<string> signature = await Base.ActiveRpcClient.SendTransactionAsync(
-                Convert.ToBase64String(signedTransaction.Serialize()),
-                true,
-                Commitment.Confirmed
-            );
+                Convert.ToBase64String(signedTransaction.Serialize()), true, Commitment.Confirmed);
 
             if (signature.WasSuccessful)
             {
@@ -434,7 +388,6 @@ public class SolanaUIHandler : MonoBehaviour
             }
             else
             {
-                // RPC returned an error
                 Debug.LogError($"RPC error: {signature.Reason}");
                 waitingForTransactionHolder.SetActive(false);
                 buyChipsScreenHolder.SetActive(false);
@@ -443,38 +396,26 @@ public class SolanaUIHandler : MonoBehaviour
         }
         catch (OperationCanceledException)
         {
-            // Typically thrown if the user explicitly cancels
             Debug.Log("User rejected the transaction.");
             waitingForTransactionHolder.SetActive(false);
         }
         catch (Exception ex)
         {
-            // If your wallet SDK throws a specific WalletException on reject
             Debug.LogWarning($"Wallet rejected: {ex.Message}");
             waitingForTransactionHolder.SetActive(false);
         }
-
-
-
-
-        //Debug.Log("signature: " + signature.Result);
-        // GetSolanaBalance();
-        // GetAmountOfChipsWeb3Async(true);
-
     }
+
     public async void Reserve(ulong vhipsAmount)
     {
         double oldValue = Signature.StandardChipsAmount;
         string programId = SolStrike.Program.SolStrikeProgram.ID;
-        PublicKey treasury;
-        PublicKey chipMint;
+        PublicKey treasury, chipMint;
         PublicKey publicKeyProgram = new PublicKey(programId);
 
-        // Derive program addresses for Treasury and Chip Mint
-        PublicKey.TryFindProgramAddress(new[] { Encoding.UTF8.GetBytes("TREASURY") }, publicKeyProgram, out treasury, out var bump1);
-        PublicKey.TryFindProgramAddress(new[] { Encoding.UTF8.GetBytes("CHIP_MINT") }, publicKeyProgram, out chipMint, out var bump2);
+        PublicKey.TryFindProgramAddress(new[] { Encoding.UTF8.GetBytes("TREASURY") }, publicKeyProgram, out treasury, out var _);
+        PublicKey.TryFindProgramAddress(new[] { Encoding.UTF8.GetBytes("CHIP_MINT") }, publicKeyProgram, out chipMint, out var _);
 
-        // Prepare accounts for the ReserveChips instruction
         ReserveChipsAccounts accounts = new ReserveChipsAccounts
         {
             Signer = Web3.Account.PublicKey,
@@ -491,7 +432,6 @@ public class SolanaUIHandler : MonoBehaviour
         try
         {
             string blockHash = await Web3.Base.GetBlockHash(Commitment.Confirmed);
-
             Transaction transaction = new Transaction
             {
                 FeePayer = Web3.Account.PublicKey,
@@ -500,13 +440,9 @@ public class SolanaUIHandler : MonoBehaviour
                 Instructions = new List<TransactionInstruction> { reserveVhipsInstruction }
             };
 
-            // 1) Sign (user could reject here)
             Transaction signedTransaction = await Web3.Base.SignTransaction(transaction);
-
-            // 2) Send (network/rpc errors could happen here)
             RequestResult<string> signature = await Web3.Base.ActiveRpcClient.SendTransactionAsync(
-                Convert.ToBase64String(signedTransaction.Serialize()),
-                true, Commitment.Confirmed);
+                Convert.ToBase64String(signedTransaction.Serialize()), true, Commitment.Confirmed);
 
             if (signature.WasSuccessful)
             {
@@ -533,80 +469,17 @@ public class SolanaUIHandler : MonoBehaviour
         }
     }
 
-
-    IEnumerator waitReservedChipsToChange(double ChipsOldValue)
-    {
-        Signature.GamerData.reservedChips = 0.ToString();
-        while (int.Parse(Signature.GamerData.reservedChips) < 1)
-        {
-            GetGamerData();
-            yield return new WaitForSeconds(1f);
-        }
-        reserveChipsScreenHolder.SetActive(false);
-
-        StartCoroutine(waitForChipsToChange(ChipsOldValue));
-    }
-
-
-
-    //USE AFTER REDEEM
-    IEnumerator waitForSolanaBalanceToChange(double oldValue)
-    {
-        while (Signature.SolanaBalance == oldValue)
-        {
-            GetSolanaBalance();
-            yield return new WaitForSeconds(1f);
-        }
-        GetAmountOfChipsWeb3Async(false);
-        waitingForTransactionHolder.SetActive(false);
-    }
-
-    //USE AFTER CLAIM
-    IEnumerator waitForChipsToChange(double oldValue)
-    {
-        while (Signature.StandardChipsAmount == oldValue)
-        {
-            GetAmountOfChipsWeb3Async(false);
-            yield return new WaitForSeconds(1f);
-        }
-        GetAmountOfUnclaimedChipsWeb3Async();
-        redeemChipsScreenHolder.SetActive(false);
-        claimChipsScreenHolder.SetActive(false);
-        waitingForTransactionHolder.SetActive(false);
-    }
-
-    //USE AFTER BUY
-    IEnumerator waitForChipsToChangeAfterBuy(double oldValue)
-    {
-        while (Signature.StandardChipsAmount == oldValue)
-        {
-            GetAmountOfChipsWeb3Async(false);
-            yield return new WaitForSeconds(1f);
-        }
-        GetSolanaBalance();
-        waitingForTransactionHolder.SetActive(false);
-        buyChipsScreenHolder.SetActive(false);
-        redeemChipsScreenHolder.SetActive(false);
-    }
-
-
     public async void Sell(ulong chipsAmount)
     {
         double oldValue = Signature.StandardChipsAmount;
-
         string programId = SolStrike.Program.SolStrikeProgram.ID;
-        PublicKey globalConfig;
-        PublicKey treasury;
-        PublicKey chipMint;
-
+        PublicKey globalConfig, treasury, chipMint;
         PublicKey publicKeyProgram = new PublicKey(programId);
 
-        // Derive program addresses for GlobalConfig, Treasury, and Chip Mint
-        PublicKey.TryFindProgramAddress(new[] { Encoding.UTF8.GetBytes("GLOBAL_CONFIG") }, publicKeyProgram, out globalConfig, out var bump1);
-        PublicKey.TryFindProgramAddress(new[] { Encoding.UTF8.GetBytes("TREASURY") }, publicKeyProgram, out treasury, out var bump2);
-        PublicKey.TryFindProgramAddress(new[] { Encoding.UTF8.GetBytes("CHIP_MINT") }, publicKeyProgram, out chipMint, out var bump3);
+        PublicKey.TryFindProgramAddress(new[] { Encoding.UTF8.GetBytes("GLOBAL_CONFIG") }, publicKeyProgram, out globalConfig, out var _);
+        PublicKey.TryFindProgramAddress(new[] { Encoding.UTF8.GetBytes("TREASURY") }, publicKeyProgram, out treasury, out var _);
+        PublicKey.TryFindProgramAddress(new[] { Encoding.UTF8.GetBytes("CHIP_MINT") }, publicKeyProgram, out chipMint, out var _);
 
-        // Prepare accounts for the SellChip instruction
         SellChipAccounts accounts = new SellChipAccounts
         {
             Seller = Web3.Account.PublicKey,
@@ -618,13 +491,9 @@ public class SolanaUIHandler : MonoBehaviour
             AssociatedTokenProgram = AssociatedTokenAccountProgram.ProgramIdKey
         };
 
-        // Create the SellChip instruction
         TransactionInstruction sellChipInstruction = SolStrike.Program.SolStrikeProgram.SellChip(accounts, chipsAmount, publicKeyProgram);
-
-        // Fetch the recent block hash
         string blockHash = await Web3.Base.GetBlockHash(Commitment.Confirmed);
 
-        // Create and sign the transaction
         Transaction transaction = new Transaction
         {
             FeePayer = Web3.Account.PublicKey,
@@ -637,15 +506,9 @@ public class SolanaUIHandler : MonoBehaviour
 
         try
         {
-            // 1) Sign (user could reject here)
             Transaction signedTransaction = await Web3.Base.SignTransaction(transaction);
-
-            // 2) Send (network/rpc errors could happen here)
             RequestResult<string> signature = await Web3.Base.ActiveRpcClient.SendTransactionAsync(
-                Convert.ToBase64String(signedTransaction.Serialize()),
-                true,
-                Commitment.Confirmed
-            );
+                Convert.ToBase64String(signedTransaction.Serialize()), true, Commitment.Confirmed);
 
             if (signature.WasSuccessful)
             {
@@ -654,7 +517,6 @@ public class SolanaUIHandler : MonoBehaviour
             }
             else
             {
-                // RPC returned an error
                 Debug.LogError($"RPC error: {signature.Reason}");
                 waitingForTransactionHolder.SetActive(false);
                 redeemChipsScreenHolder.SetActive(false);
@@ -663,13 +525,11 @@ public class SolanaUIHandler : MonoBehaviour
         }
         catch (OperationCanceledException)
         {
-            // Typically thrown if the user explicitly cancels
             Debug.Log("User rejected the transaction.");
             waitingForTransactionHolder.SetActive(false);
         }
         catch (Exception ex)
         {
-            // If your wallet SDK throws a specific WalletException on reject
             Debug.LogWarning($"Wallet rejected: {ex.Message}");
             waitingForTransactionHolder.SetActive(false);
         }
@@ -678,20 +538,14 @@ public class SolanaUIHandler : MonoBehaviour
     public async void Claim()
     {
         double oldValue = Signature.StandardChipsAmount;
-
         string programId = SolStrike.Program.SolStrikeProgram.ID;
-        PublicKey treasury;
-        PublicKey chipMint;
-        PublicKey claimableRewardsAccount;
-
+        PublicKey treasury, chipMint, claimableRewardsAccount;
         PublicKey publicKeyProgram = new PublicKey(programId);
 
-        // Derive program addresses for Treasury, Chip Mint, and Claimable Rewards
-        PublicKey.TryFindProgramAddress(new[] { Encoding.UTF8.GetBytes("TREASURY") }, publicKeyProgram, out treasury, out var bump1);
-        PublicKey.TryFindProgramAddress(new[] { Encoding.UTF8.GetBytes("CHIP_MINT") }, publicKeyProgram, out chipMint, out var bump2);
-        PublicKey.TryFindProgramAddress(new[] { Web3.Account.PublicKey.KeyBytes }, publicKeyProgram, out claimableRewardsAccount, out var bump3);
+        PublicKey.TryFindProgramAddress(new[] { Encoding.UTF8.GetBytes("TREASURY") }, publicKeyProgram, out treasury, out var _);
+        PublicKey.TryFindProgramAddress(new[] { Encoding.UTF8.GetBytes("CHIP_MINT") }, publicKeyProgram, out chipMint, out var _);
+        PublicKey.TryFindProgramAddress(new[] { Web3.Account.PublicKey.KeyBytes }, publicKeyProgram, out claimableRewardsAccount, out var _);
 
-        // Prepare accounts for the ClaimChips instruction
         ClaimChipsAccounts accounts = new ClaimChipsAccounts
         {
             Signer = Web3.Account.PublicKey,
@@ -703,13 +557,9 @@ public class SolanaUIHandler : MonoBehaviour
             TokenProgram = TokenProgram22
         };
 
-        // Create the ClaimChips instruction
         TransactionInstruction claimChipsInstruction = SolStrike.Program.SolStrikeProgram.ClaimChips(accounts, publicKeyProgram);
-
-        // Fetch the recent block hash
         string blockHash = await Web3.Base.GetBlockHash(Commitment.Confirmed);
 
-        // Create and sign the transaction
         Transaction transaction = new Transaction
         {
             FeePayer = Web3.Account.PublicKey,
@@ -722,15 +572,9 @@ public class SolanaUIHandler : MonoBehaviour
 
         try
         {
-            // 1) Sign (user could reject here)
             Transaction signedTransaction = await Web3.Base.SignTransaction(transaction);
-
-            // 2) Send (network/rpc errors could happen here)
             RequestResult<string> signature = await Web3.Base.ActiveRpcClient.SendTransactionAsync(
-                Convert.ToBase64String(signedTransaction.Serialize()),
-                true,
-                Commitment.Confirmed
-            );
+                Convert.ToBase64String(signedTransaction.Serialize()), true, Commitment.Confirmed);
 
             if (signature.WasSuccessful)
             {
@@ -739,7 +583,6 @@ public class SolanaUIHandler : MonoBehaviour
             }
             else
             {
-                // RPC returned an error
                 Debug.LogError($"RPC error: {signature.Reason}");
                 notificationController.ShowNotification(errorSprite);
                 claimChipsScreenHolder.SetActive(false);
@@ -748,29 +591,26 @@ public class SolanaUIHandler : MonoBehaviour
         }
         catch (OperationCanceledException)
         {
-            // Typically thrown if the user explicitly cancels
             Debug.Log("User rejected the transaction.");
             waitingForTransactionHolder.SetActive(false);
         }
         catch (Exception ex)
         {
-            // If your wallet SDK throws a specific WalletException on reject
             Debug.LogWarning($"Wallet rejected: {ex.Message}");
             waitingForTransactionHolder.SetActive(false);
         }
     }
 
+    #endregion
 
+    #region UI/Leaderboard/Helpers
 
     private IEnumerator GetLeaderboardCoroutine()
     {
         string url = Signature.baseUrl + "gamers/leaderboard/" + Web3.Account.PublicKey.Key;
-        //  Debug.Log("Sending GET  leaderboard request to: " + url);
-
         using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
         {
             webRequest.SetRequestHeader("accept", "application/json");
-
             yield return webRequest.SendWebRequest();
 
             switch (webRequest.result)
@@ -783,70 +623,37 @@ public class SolanaUIHandler : MonoBehaviour
                     Debug.LogError($"HTTP Error: {webRequest.error}\nCode: {webRequest.responseCode}\nURL: {url}");
                     break;
                 case UnityWebRequest.Result.Success:
-                    // Debug.Log($"Success! Response Code: {webRequest.responseCode}");
-                    //  Debug.Log($"Response: {webRequest.downloadHandler.text}");
                     string wrappedJsonString = "{ \"players\": " + webRequest.downloadHandler.text + "}";
-                    //   Debug.Log("wrappedJsonString JSON:\n" + wrappedJsonString);
                     PlayerListWrapper players = JsonUtility.FromJson<PlayerListWrapper>(wrappedJsonString);
-                    // Now you can access the array of player data
-                    PlayerData[] playersList = players.players;
-                    // Example of how to access the parsed data
-                    /*   if (players != null)
-                       {
-                           Debug.Log("Parsed " + players.players + " players.");
-                           foreach (var player in playersList)
-                           {
-                               Debug.Log($"Account ID: {player.accountId}, Username: {player.username}, Points: {player.points}, Place: {player.place}");
-                           }
-                       }
-                       else
-                       {
-                           Debug.LogError("Failed to parse player data.");
-                       }*/
-                    Signature.LeaderBoardPlayers = playersList;
-                    // TODO: Parse responseJson here
+                    Signature.LeaderBoardPlayers = players.players;
                     break;
             }
         }
         SetLeaderboard();
-        //SetChipsText();
         holder.SetActive(false);
     }
 
-
     public void SetChipsText()
     {
-        chipsText.text = "CHIPS : " + Signature.StandardChipsAmount.ToString();
-        unclaimedChipsText.text = "UNCLAIMED CHIPS : " + Signature.UnclaimedChipsAmount.ToString();
-        //  matchCostText.text = "MATCH COST : 0.001 SOL";
-        Points.text = "POINTS : " + Signature.GamerData.party.ToString();
-        solanaBalanceText.text = "SOL BALANCE : " + Signature.SolanaBalance.ToString();
+        chipsText.text = $"CHIPS : {Signature.StandardChipsAmount}";
+        unclaimedChipsText.text = $"UNCLAIMED CHIPS : {Signature.UnclaimedChipsAmount}";
+        Points.text = $"POINTS : {Signature.GamerData.party}";
+        solanaBalanceText.text = $"SOL BALANCE : {Signature.SolanaBalance}";
     }
 
     public void SetLeaderboard()
     {
         foreach (Transform child in lederboardElementsHolder.transform)
-        {
             Destroy(child.gameObject);
-        }
-        GameObject header = Instantiate(leaderboadHeaderPref, lederboardElementsHolder.transform);
+
+        Instantiate(leaderboadHeaderPref, lederboardElementsHolder.transform);
+
         foreach (var player in Signature.LeaderBoardPlayers)
         {
             GameObject go = Instantiate(leaderboadElementPref, lederboardElementsHolder.transform);
             go.GetComponent<LeaderboardElement>().SetData(player);
         }
     }
-
-
-    [Header("BUY CHIPS SCREEN")]
-    public TMP_InputField buyChipsInputFieldBuyScreen;
-    public Button buyChipsButtonBuyScreen;
-    public TextMeshProUGUI InvalidInputText;
-    public TextMeshProUGUI solToSpendTextBuyScreen;
-    public TextMeshProUGUI balanceTextBuyScreen;
-    public TextMeshProUGUI chipCostTextBuyScreen;
-    private float chipCost = 0.01f;
-
 
     public void SetBuyChipsScreen()
     {
@@ -856,129 +663,77 @@ public class SolanaUIHandler : MonoBehaviour
         buyChipsInputFieldBuyScreen.text = "0";
     }
 
-
-    private int chipsToBuywithSOL = 0;
     void OnInputFieldValueChanged(string newValue)
     {
-
         if (int.TryParse(newValue, out int chipsToBuy) && chipsToBuy > 0 && Signature.SolanaBalance >= chipsToBuy * chipCost)
         {
             solToSpendTextBuyScreen.text = "Amount to spend:<color=white> " + (chipsToBuy * chipCost).ToString() + " SOL";
             buyChipsButtonBuyScreen.gameObject.SetActive(true);
-
             InvalidInputText.gameObject.SetActive(false);
-            //   Debug.Log("Parsed integer: " + chipsToBuy);
             chipsToBuywithSOL = chipsToBuy;
         }
         else
         {
-
             if (int.TryParse(newValue, out int chipsToBuy2))
             {
-                solToSpendTextBuyScreen.text = "Amount to spend:<color=white> " + (chipsToBuy * chipCost).ToString() + " SOL";
+                solToSpendTextBuyScreen.text = "Amount to spend:<color=white> " + (chipsToBuy2 * chipCost).ToString() + " SOL";
             }
-
             buyChipsButtonBuyScreen.gameObject.SetActive(false);
             InvalidInputText.gameObject.SetActive(true);
-            // Debug.Log("Invalid input, not an integer.");
         }
     }
 
+    public void SetRedeeomChips()
+    {
+        redeemChipsInputField.text = "0";
+        chipBlanceRedeemText.text = "CHIP BALANCE : <color=white>\"" + Signature.StandardChipsAmount.ToString();
+    }
 
-    [Header("REDEEM SCREEN")]
-    public TextMeshProUGUI chipBlanceRedeemText;
-    public TMP_InputField redeemChipsInputField;
-    public TextMeshProUGUI solToReciveText;
-    public Button redeemChipsButton;
-    public GameObject InvalidInputTextRedeem;
-    private float chisToRedeem = 0;
     public void OnRedeemInputFieldValueChanged(string newValue)
     {
-        //  Debug.Log(newValue);
+        bool valid = false;
+        float value = 0;
 
-        if (int.TryParse(newValue, out int chipsToSell))
+        // Try integer
+        if (int.TryParse(newValue, out int intValue))
         {
-            // Debug.Log("1 Parsed integer: " + chipsToSell);
+            value = intValue;
+            valid = intValue > 0 && value <= Signature.StandardChipsAmount;
+            solToReciveText.text = $"SOL to receive: <color=white>{value * chipCost}";
 
-            if (chipsToSell > 0)
-            {
-                //   Debug.Log(Signature.StandardChipsAmount + " 2 Parsed integer: " + chipsToSell);
-
-
-                if (Signature.StandardChipsAmount >= chipsToSell)
-                {
-                    solToReciveText.text = "SOL to receive: <color=white>" + (chipsToSell * chipCost).ToString();
-                    redeemChipsButton.gameObject.SetActive(true);
-
-                    InvalidInputTextRedeem.gameObject.SetActive(false);
-                    //     Debug.Log("3 Parsed integer: " + chipsToSell);
-                    chisToRedeem = chipsToSell;
-                }
-            }
         }
+        // Try decimal with exactly one decimal place
         else if (IsNonNegativeNumberWithExactlyOneDecimalPlace(newValue))
         {
-            float.TryParse(newValue, out float chipsToSell3);
-            if (Signature.StandardChipsAmount <= chipsToSell3)
-            {
-                solToReciveText.text = "SOL to receive: <color=white>" + (chipsToSell3 * chipCost).ToString();
-                redeemChipsButton.gameObject.SetActive(true);
-                InvalidInputTextRedeem.SetActive(false);
-                //   Debug.Log("4 Parsed integer: " + chipsToSell3);
-                chisToRedeem = chipsToSell3;
-            }
-            else
-            {
-                redeemChipsButton.gameObject.SetActive(false);
-                InvalidInputTextRedeem.SetActive(true);
-            }
+            float.TryParse(newValue, NumberStyles.Float, CultureInfo.InvariantCulture, out value);
+            valid = value > 0 && value <= (float)Signature.StandardChipsAmount;
+            solToReciveText.text = $"SOL to receive: <color=white>{value * chipCost}";
+
+        }
+
+        if (valid)
+        {
+            solToReciveText.text = $"SOL to receive: <color=white>{value * chipCost}";
+            redeemChipsButton.gameObject.SetActive(true);
+            InvalidInputTextRedeem.gameObject.SetActive(false);
+            chisToRedeem = value;
         }
         else
         {
             redeemChipsButton.gameObject.SetActive(false);
             InvalidInputTextRedeem.gameObject.SetActive(true);
-            //   Debug.Log("Invalid input, not an integer.");
         }
-
-    }
-    public void SetRedeeomChips()
-    {
-        redeemChipsInputField.text = "0";
-        chipBlanceRedeemText.text = "CHIP BALANCE : <color=white>\"" + Signature.StandardChipsAmount.ToString();
-
     }
 
-
-
-
-    [Header("CLAIM CHIPS SCREEN")]
-    public GameObject claimChipsButton;
-    public TextMeshProUGUI chipsToClaim;
-    public TextMeshProUGUI ChipsBalance;
 
     public void SetClaimScreen()
     {
         chipsToClaim.text = "Chips to claim: <color=white>" + Signature.UnclaimedChipsAmount.ToString();
-        // ChipsBalance.text = "CHIPS BALANCE: " + Signature.StandardChipsAmount.ToString();
-
     }
-
-
-    [Header("Reserve SCREEN")]
-    public GameObject reserveChipsButton;
-    public TextMeshProUGUI reserveChipsWarningText;
-    public TMP_InputField reserveChipsInputField;
-
-    [Header("SCREEN HOLDERS")]
-    public GameObject buyChipsScreenHolder;
-    public GameObject redeemChipsScreenHolder;
-    public GameObject claimChipsScreenHolder;
-    public GameObject reserveChipsScreenHolder;
 
     public void SetReserveScreen()
     {
         ReserveScreenState();
-
     }
 
     public void ReserveScreenState()
@@ -995,9 +750,7 @@ public class SolanaUIHandler : MonoBehaviour
             reserveChipsButton.SetActive(true);
             reserveChipsInputField.text = 1.ToString();
         }
-
     }
-
 
     public void SetResrveChipsWarningText()
     {
@@ -1011,15 +764,12 @@ public class SolanaUIHandler : MonoBehaviour
         }
     }
 
-    private int chipsToReserveAmount = 0;
     public void OnReserveInputfieldChanged(string newValue)
     {
-        //  Debug.Log(newValue);
         if (int.TryParse(newValue, out int chipsToReserve))
         {
             if (chipsToReserve > 0 && Signature.StandardChipsAmount >= chipsToReserve)
             {
-
                 reserveChipsButton.gameObject.SetActive(true);
                 reserveChipsWarningText.gameObject.SetActive(false);
                 chipsToReserveAmount = chipsToReserve;
@@ -1039,74 +789,124 @@ public class SolanaUIHandler : MonoBehaviour
         }
     }
 
-
-
     public static bool IsNonNegativeNumberWithExactlyOneDecimalPlace(string s)
     {
-
-        CultureInfo cultureInfo = CultureInfo.InvariantCulture; // Use InvariantCulture for consistent parsing
-
-        if (s == null) // Guard against null input before trimming
-        {
+        if (string.IsNullOrWhiteSpace(s))
             return false;
-        }
-        string trimmedString = s.Trim(); // Trim whitespace once at the beginning
 
-        if (string.IsNullOrEmpty(trimmedString)) // Check after trimming
-        {
+        var culture = CultureInfo.InvariantCulture;
+        var trimmed = s.Trim();
+
+        // Must contain a single decimal separator
+        int sep = trimmed.IndexOf(culture.NumberFormat.NumberDecimalSeparator, StringComparison.Ordinal);
+        if (sep == -1)
             return false;
-        }
 
-        string decimalSeparatorString = cultureInfo.NumberFormat.NumberDecimalSeparator;
-        if (string.IsNullOrEmpty(decimalSeparatorString)) // Cannot have a decimal place if no separator defined
-        {
+        // Only one decimal separator allowed
+        if (trimmed.IndexOf(culture.NumberFormat.NumberDecimalSeparator, sep + 1, StringComparison.Ordinal) != -1)
             return false;
-        }
 
-        // NumberStyles.Float allows leading/trailing whitespace (already handled by Trim for structure checks),
-        // sign (which we'll check via parsed value), decimal point, and exponent.
-        // It does NOT allow thousands separators by default.
-        NumberStyles styles = NumberStyles.Float;
+        // Must be a valid float
+        if (!float.TryParse(trimmed, NumberStyles.Float, culture, out float value))
+            return false;
 
-        if (decimal.TryParse(trimmedString, styles, cultureInfo, out decimal parsedValue))
-        {
-            // New Check: Ensure the parsed value is not negative.
-            if (parsedValue < 0)
-            {
-                return false;
-            }
+        if (value < 0)
+            return false;
 
-            int separatorIndex = trimmedString.IndexOf(decimalSeparatorString, StringComparison.Ordinal);
+        // Check for exactly one digit after the decimal separator
+        string[] parts = trimmed.Split(culture.NumberFormat.NumberDecimalSeparator[0]);
+        if (parts.Length != 2)
+            return false;
 
-            if (separatorIndex == -1) // No decimal separator means it's an integer
-            {
-                return false; // Integers do not have "one decimal place"
-            }
-
-            // Ensure there isn't a second occurrence of the decimal separator
-            if (trimmedString.IndexOf(decimalSeparatorString, separatorIndex + decimalSeparatorString.Length, StringComparison.Ordinal) != -1)
-            {
-                return false; // More than one decimal separator
-            }
-
-            string fractionPart = trimmedString.Substring(separatorIndex + decimalSeparatorString.Length);
-
-            // Check if there is exactly one character after the decimal separator AND it's a digit.
-            if (fractionPart.Length == 1 && char.IsDigit(fractionPart[0]))
-            {
-                return true;
-            }
-        }
-        return false;
+        return parts[1].Length == 1 && int.TryParse(parts[1], out _);
     }
 
+    #endregion
 
+    #region Coroutines
 
-
-    void OnDestroy()
+    IEnumerator waitReservedChipsToChange(double ChipsOldValue)
     {
-        // Remove the listener when the object is destroyed
-        buyChipsInputFieldBuyScreen.onValueChanged.RemoveListener(OnInputFieldValueChanged);
+        Signature.GamerData.reservedChips = 0.ToString();
+        while (int.Parse(Signature.GamerData.reservedChips) < 1)
+        {
+            GetGamerData();
+            yield return new WaitForSeconds(1f);
+        }
+        reserveChipsScreenHolder.SetActive(false);
+        StartCoroutine(waitForChipsToChange(ChipsOldValue));
     }
 
+    IEnumerator waitForSolanaBalanceToChange(double oldValue)
+    {
+        while (Signature.SolanaBalance == oldValue)
+        {
+            GetSolanaBalance();
+            yield return new WaitForSeconds(1f);
+        }
+        GetAmountOfChipsWeb3Async(false);
+        waitingForTransactionHolder.SetActive(false);
+    }
+
+    IEnumerator waitForChipsToChange(double oldValue)
+    {
+        while (Signature.StandardChipsAmount == oldValue)
+        {
+            GetAmountOfChipsWeb3Async(false);
+            yield return new WaitForSeconds(1f);
+        }
+        GetAmountOfUnclaimedChipsWeb3Async();
+        redeemChipsScreenHolder.SetActive(false);
+        claimChipsScreenHolder.SetActive(false);
+        waitingForTransactionHolder.SetActive(false);
+    }
+
+    IEnumerator waitForChipsToChangeAfterBuy(double oldValue)
+    {
+        while (Signature.StandardChipsAmount == oldValue)
+        {
+            GetAmountOfChipsWeb3Async(false);
+            yield return new WaitForSeconds(1f);
+        }
+        GetSolanaBalance();
+        waitingForTransactionHolder.SetActive(false);
+        buyChipsScreenHolder.SetActive(false);
+        redeemChipsScreenHolder.SetActive(false);
+    }
+
+    #endregion
+
+    #region ContextMenu Test Methods
+
+    [ContextMenu("TESTGET")]
+    public void Test()
+    {
+        GetAmountOfChipsWeb3Async();
+    }
+
+    [ContextMenu("ReserveTest")]
+    public void ReserveTest()
+    {
+        Reserve(1000000000 * (ulong)chipsToReserveAmount);
+    }
+
+    [ContextMenu("BuyTest")]
+    public void BuyTest()
+    {
+        Buy((ulong)chipsToBuywithSOL * 1000000000);
+    }
+
+    [ContextMenu("SellTest")]
+    public void SellTest()
+    {
+        Sell((ulong)chisToRedeem * 1000000000);
+    }
+
+    [ContextMenu("ClaimTest")]
+    public void ClaimTest()
+    {
+        Claim();
+    }
+
+    #endregion
 }
