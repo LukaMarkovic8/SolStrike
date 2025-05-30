@@ -55991,7 +55991,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 114864534692449311}
   m_HandleRect: {fileID: 224409472488390773}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -58971,7 +58971,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -340}
+  m_AnchoredPosition: {x: 0, y: -375}
   m_SizeDelta: {x: 0, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224136280454889823
@@ -60328,7 +60328,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.0000038146973}
+  m_AnchoredPosition: {x: 0, y: -0.000045776367}
   m_SizeDelta: {x: 0, y: 28}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!224 &224641010382577813
@@ -66888,6 +66888,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c76b30758cf9b0f4e9d7a8ba8c20a754, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dropdown: {fileID: 0}
   descriptionText: {fileID: 0}
   descriptionTextTMP: {fileID: 1831801792424996}
   confirmationTextTMP: {fileID: 1403648298157062}
@@ -69673,6 +69674,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c76b30758cf9b0f4e9d7a8ba8c20a754, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dropdown: {fileID: 0}
   descriptionText: {fileID: 0}
   descriptionTextTMP: {fileID: 1658674849}
   confirmationTextTMP: {fileID: 0}
@@ -70653,6 +70655,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c76b30758cf9b0f4e9d7a8ba8c20a754, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dropdown: {fileID: 3831432450117464224}
   descriptionText: {fileID: 0}
   descriptionTextTMP: {fileID: 4081353940389074146}
   confirmationTextTMP: {fileID: 0}
@@ -71987,6 +71990,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c76b30758cf9b0f4e9d7a8ba8c20a754, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dropdown: {fileID: 0}
   descriptionText: {fileID: 0}
   descriptionTextTMP: {fileID: 0}
   confirmationTextTMP: {fileID: 0}

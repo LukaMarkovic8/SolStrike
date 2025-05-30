@@ -45,7 +45,7 @@ namespace MFPS.Runtime.UI.Bindings
         /// </summary>
         void OnKillMessage(KillFeed info)
         {
-            KillerText.text = Signature.GetJustUsername( info.Killer);
+            KillerText.text = Signature.GetJustUsername(info.Killer);
             KilledText.text = Signature.GetJustUsername(info.Killed);
             KillerText.color = isLocalPlayerName(info.Killer) ? bl_GameData.Instance.highLightColor : info.KillerTeam.GetTeamColor();
             KilledText.color = isLocalPlayerName(info.Killed) ? bl_GameData.Instance.highLightColor : GetOppositeTeam(info.KillerTeam).GetTeamColor();
@@ -88,8 +88,8 @@ namespace MFPS.Runtime.UI.Bindings
         void OnMessage(KillFeed info)
         {
             DisableAll();
-           // KillerText.gameObject.SetActive(true);
-           // KillerText.text = info.Message;
+            // KillerText.gameObject.SetActive(true);
+            // KillerText.text = info.Message;
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace MFPS.Runtime.UI.Bindings
             DisableAll();
             KillerText.gameObject.SetActive(true);
             string hex = ColorUtility.ToHtmlStringRGB(info.KillerTeam.GetTeamColor());
-            KillerText.text = string.Format("<color=#{0}>{1}</color> {2}", hex, info.Killer, info.Message);
+            KillerText.text = string.Format("<color=#{0}>{1}</color> {2}", hex, Signature.GetJustUsername(info.Killer), info.Message);
         }
 
         /// <summary>

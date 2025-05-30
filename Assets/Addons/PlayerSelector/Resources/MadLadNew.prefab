@@ -111424,6 +111424,8 @@ MonoBehaviour:
   InjuredSounds:
   - {fileID: 8300000, guid: e7f702b86a9744649ab00f031fab816c, type: 3}
   - {fileID: 8300000, guid: 9abaf7cd7ad0fac4dabec80aa8693001, type: 3}
+  MaterialsParent: {fileID: 4554658368012412544}
+  Transp: {fileID: 2100000, guid: fa10b56ac29145841bdee3a5d1a8ec9a, type: 2}
 --- !u!114 &5913754858014437704
 MonoBehaviour:
   m_ObjectHideFlags: 0

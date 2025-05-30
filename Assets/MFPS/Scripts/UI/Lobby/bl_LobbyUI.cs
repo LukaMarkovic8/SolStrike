@@ -443,7 +443,7 @@ public class bl_LobbyUI : MonoBehaviour
         confirmationWindow.AskConfirmation(bl_GameTexts.ChangeRegionAsk.Localized(200), () =>
          {
              bl_Lobby.Instance.ConnectToServerRegion(id);
-         });
+         },null,true);
     }
 
     public void LoadLocalLevel(string level)
