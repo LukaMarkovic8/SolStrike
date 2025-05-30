@@ -4,6 +4,7 @@ using MFPSEditor;
 using Photon.Pun;
 using Photon.Realtime;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -87,8 +88,69 @@ public class bl_PlayerHealthManager : bl_PlayerHealthManagerBase
     /// <summary>
     /// 
     /// </summary>
+    /// 
+    private Dictionary<Renderer, Material[]> originalMaterials = new Dictionary<Renderer, Material[]>();
+
+    /// <summary>
+    /// Collects and returns all materials from all child objects of MaterialsParent.
+    /// Stores the original materials for later restoration.
+    /// </summary>
+    public List<Material> GetAllChildMaterials()
+    {
+        originalMaterials.Clear();
+        List<Material> allMaterials = new List<Material>();
+
+        if (MaterialsParent == null) return allMaterials;
+
+        Renderer[] renderers = MaterialsParent.GetComponentsInChildren<Renderer>(true);
+        foreach (var renderer in renderers)
+        {
+            if (renderer == null) continue;
+            // Store original materials for restoration
+            originalMaterials[renderer] = renderer.sharedMaterials;
+            allMaterials.AddRange(renderer.sharedMaterials);
+        }
+        return allMaterials;
+    }
+
+
+    public void SetAllMaterialsToTransparent()
+    {
+        if (MaterialsParent == null || Transp == null) return;
+
+        Renderer[] renderers = MaterialsParent.GetComponentsInChildren<Renderer>(true);
+        foreach (var renderer in renderers)
+        {
+            if (renderer == null) continue;
+            // Create a new array with the same length as the original
+            Material[] newMats = new Material[renderer.sharedMaterials.Length];
+            for (int i = 0; i < newMats.Length; i++)
+            {
+                newMats[i] = Transp;
+            }
+            renderer.sharedMaterials = newMats;
+        }
+    }
+    /// <summary>
+    /// Restores the original materials to all child objects of MaterialsParent.
+    /// </summary>
+    public void RestoreOriginalMaterials()
+    {
+        foreach (var kvp in originalMaterials)
+        {
+            if (kvp.Key != null)
+            {
+                kvp.Key.sharedMaterials = kvp.Value;
+            }
+        }
+    }
+    public GameObject MaterialsParent;
+    public Material Transp;
+
     void Start()
     {
+        GetAllChildMaterials();
+
         if (!isConnected)
             return;
 
@@ -599,8 +661,16 @@ public class bl_PlayerHealthManager : bl_PlayerHealthManagerBase
     /// <summary>
     /// 
     /// </summary>
+    /// 
+    bool didSetMaterials = false;
     void OnProtectCount()
     {
+        if (!didSetMaterials)
+        {
+            SetAllMaterialsToTransparent();
+            didSetMaterials = true;
+        }
+
         protecTime--;
         if (isMine)
         {
@@ -608,6 +678,9 @@ public class bl_PlayerHealthManager : bl_PlayerHealthManagerBase
         }
         if (protecTime <= 0)
         {
+            RestoreOriginalMaterials();
+            didSetMaterials = false;
+
             CancelInvoke(nameof(OnProtectCount));
         }
     }
