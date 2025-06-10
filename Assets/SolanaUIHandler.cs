@@ -153,6 +153,7 @@ public class SolanaUIHandler : MonoBehaviour
     {
         try
         {
+            Web3.OnWalletChangeState += OnWalletChangeState;
             Web3.OnLogin += OnLogin;
             Web3.OnBalanceChange += OnBalanceChange;
             await Web3.Instance.LoginWalletAdapter();
@@ -169,7 +170,10 @@ public class SolanaUIHandler : MonoBehaviour
             Debug.LogWarning($"Wallet login failed: {ex.Message}");
         }
     }
+    public void OnWalletChangeState()
+    {
 
+    }
     IEnumerator DelayReconnect(float delay)
     {
         yield return new WaitForSeconds(delay);
@@ -179,6 +183,7 @@ public class SolanaUIHandler : MonoBehaviour
     public void LoginAgain()
     {
         ConncetAgainHolder.SetActive(false);
+
         Web3.OnLogin -= OnLogin;
         Web3.OnBalanceChange -= OnBalanceChange;
         _ = DoLogin();
